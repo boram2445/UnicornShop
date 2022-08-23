@@ -1,9 +1,12 @@
 import React from "react";
-import "./styles/reset.css";
-import "./styles/global.css";
+import GlobalStyle from "./styles/globalStyle";
 
-function App() {
-  return <div className="App"></div>;
-}
+const App: React.FC = () => {
+  return (
+    <div className="App">
+      <GlobalStyle />
+    </div>
+  );
+};
 
 export default App;
