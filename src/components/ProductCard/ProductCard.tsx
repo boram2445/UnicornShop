@@ -7,19 +7,7 @@ import {
   ProductPrice,
   WordWon,
 } from "./productCardStyle";
-
-type ProductProps = {
-  image: string;
-  price: number;
-  product_id: number;
-  product_info: string;
-  product_name: string;
-  seller: number;
-  seller_store: string;
-  shipping_fee: number;
-  shipping_method: string;
-  stock: number;
-};
+import { ProductProps } from "../../reducers/getProductSlice";
 
 const ProductCard = ({ product }: { product: ProductProps }) => {
   return (
