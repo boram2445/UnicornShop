@@ -16,8 +16,13 @@
   },
   "plugins": ["react", "@typescript-eslint"],
   "rules": {
+    //var 키워드 금지
     "no-var": "error",
-    "quotes": ["error", "double"],
-    "semi": ["error", "always"]
+    // ==, != 대신 ===, !== 사용
+    "eqeqeq": "error",
+    // 호출되지 않는 변수 무시
+    "no-unused-vars": 0,
+    // 이스케이프 문자 허용
+    "no-useless-escape": 0
   }
 }
