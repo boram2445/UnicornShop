@@ -1,13 +1,16 @@
 import React from "react";
 import GlobalStyle from "./styles/globalStyle";
 import HomePage from "./pages/HomePage/HomePage";
+import { Routes, Route } from "react-router-dom";
 
 const App: React.FC = () => {
   return (
-    <div className="App">
+    <>
       <GlobalStyle />
-      <HomePage />
-    </div>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+      </Routes>
+    </>
   );
 };
 
