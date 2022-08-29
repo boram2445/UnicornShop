@@ -1,9 +1,9 @@
 import React from "react";
+import { Routes, Route } from "react-router-dom";
 import GlobalStyle from "./styles/globalStyle";
 import HomePage from "./pages/HomePage/HomePage";
-import { Routes, Route } from "react-router-dom";
 
-const App: React.FC = () => {
+function App() {
   return (
     <>
       <GlobalStyle />
@@ -12,6 +12,6 @@ const App: React.FC = () => {
       </Routes>
     </>
   );
-};
+}
 
 export default App;

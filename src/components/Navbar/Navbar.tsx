@@ -15,7 +15,7 @@ import cartIcon from "../../assets/icon-shopping-cart.svg";
 import userIcon from "../../assets/icon-user.svg";
 import searchIcon from "../../assets/search.svg";
 
-const Navbar = () => {
+function Navbar() {
   const navigate = useNavigate();
   return (
     <NavContainer>
@@ -42,6 +42,6 @@ const Navbar = () => {
       </NavContents>
     </NavContainer>
   );
-};
+}
 
 export default Navbar;

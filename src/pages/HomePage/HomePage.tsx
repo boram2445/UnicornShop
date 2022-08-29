@@ -5,8 +5,9 @@ import { ProductLists, ProductContainer } from "./homePageStyle";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { postProductAxios, selectProducts, getProductStatus } from "../../reducers/getProductSlice";
 import Navbar from "../../components/Navbar/Navbar";
+import Carousel from "../../components/Crousel/Carousel";
 
-const HomePage = () => {
+function HomePage() {
   const dispatch = useAppDispatch();
   const status = useAppSelector(getProductStatus);
   const products = useAppSelector(selectProducts);
@@ -18,6 +19,7 @@ const HomePage = () => {
   return (
     <>
       <Navbar />
+      <Carousel />
       <ProductContainer>
         <ProductLists>
           {products &&
@@ -32,6 +34,6 @@ const HomePage = () => {
       </ProductContainer>
     </>
   );
-};
+}
 
 export default HomePage;

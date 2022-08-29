@@ -9,7 +9,7 @@ import {
 } from "./productCardStyle";
 import { ProductProps } from "../../reducers/getProductSlice";
 
-const ProductCard = ({ product }: { product: ProductProps }) => {
+function ProductCard({ product }: { product: ProductProps }) {
   return (
     <>
       <ThumbContainer>
@@ -23,6 +23,6 @@ const ProductCard = ({ product }: { product: ProductProps }) => {
       </p>
     </>
   );
-};
+}
 
 export default ProductCard;
