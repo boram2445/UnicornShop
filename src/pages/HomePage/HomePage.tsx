@@ -5,7 +5,7 @@ import { ProductLists, ProductContainer } from "./homePageStyle";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { postProductAxios, selectProducts, getProductStatus } from "../../reducers/getProductSlice";
 import Navbar from "../../components/Navbar/Navbar";
-import Carousel from "../../components/Crousel/Carousel";
+import Carousel from "../../components/Carousel/Carousel";
 
 function HomePage() {
   const dispatch = useAppDispatch();
