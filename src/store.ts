@@ -1,10 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
 import getProductReducer from "./reducers/getProductSlice";
+import getDetailReducer from "./reducers/getDetailSlice";
 
 //state 저장소
 const store = configureStore({
   reducer: {
     getProduct: getProductReducer,
+    getDetail: getDetailReducer,
   },
 });
 
