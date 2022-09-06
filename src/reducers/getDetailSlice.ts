@@ -16,41 +16,44 @@ export interface Detail {
   shipping_fee?: number;
 }
 interface DetailSliceProps {
-  detail: [];
+  detail: Detail;
   status: string;
 }
 
 const initialState: DetailSliceProps = {
-  detail: [],
+  detail: {},
   status: "idle",
 };
 
-export const postDetail = createAsyncThunk("detailSlice/postDetail", async (productId?: string) => {
-  try {
-    const result = await axios.get(`${BASE_URL}/products/${productId}/`);
-    return result.data;
-  } catch (err) {
-    if (err instanceof Error) {
-      console.log(err.message);
-    } else {
-      console.log("Unexpected error", err);
+export const axiosGetDetail = createAsyncThunk(
+  "detail/axiosGetDetail",
+  async (productId?: string) => {
+    try {
+      const result = await axios.get(`${BASE_URL}/products/${productId}/`);
+      return result.data;
+    } catch (err) {
+      if (err instanceof Error) {
+        console.log(err.message);
+      } else {
+        console.log("Unexpected error", err);
+      }
     }
   }
-});
+);
 
 export const detailSlice = createSlice({
-  name: "getDetail",
+  name: "detail",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(postDetail.pending, (state) => {
+    builder.addCase(axiosGetDetail.pending, (state) => {
       state.status = "Loading";
     });
-    builder.addCase(postDetail.fulfilled, (state, action) => {
+    builder.addCase(axiosGetDetail.fulfilled, (state, action) => {
       state.detail = action.payload;
       state.status = "succeeded";
     });
-    builder.addCase(postDetail.rejected, (state) => {
+    builder.addCase(axiosGetDetail.rejected, (state) => {
       state.status = "failed";
     });
   },
