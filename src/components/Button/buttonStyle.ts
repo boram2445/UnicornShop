@@ -2,7 +2,8 @@ import styled from "styled-components";
 
 //type large
 const LargeBtn = styled.button<{ state?: string }>`
-  padding: 19px 87px;
+  width: 220px;
+  padding: 19px 0;
   font-size: 2.4rem;
   line-height: 3rem;
   background-color: ${({ state }) => (state === "disabled" ? "#C4C4C4" : "#FA897B")};
@@ -12,7 +13,8 @@ const LargeBtn = styled.button<{ state?: string }>`
 
 // type medium
 const MediumBtn = styled(LargeBtn)<{ color?: string }>`
-  padding: 19px 223px;
+  width: 480px;
+  padding: 19px 0;
   font-size: 1.8rem;
   line-height: 2.2rem;
   background-color: ${({ color, state }) =>
@@ -30,28 +32,31 @@ const MediumBtn = styled(LargeBtn)<{ color?: string }>`
 
 // type ms
 const MsBtn = styled(MediumBtn)`
-  padding: 17px 68px;
+  width: 166px;
+  padding: 17px 0;
 `;
 
 //type small
 const SmallBtn = styled(MediumBtn)`
-  padding: 10px 25px;
+  width: 80px;
+  padding: 10px 0;
 `;
 
 //type tabAcity
 const TabAcityBtn = styled.button<{ state?: string }>`
-  padding: 19px 142px 12px;
+  width: 320px;
+  padding: 19px 0 12px;
   background-color: #ffffff;
   font-size: 1.8rem;
   line-height: 2.2rem;
-  color: ${({ state }) => (state === "disabled" ? "#C4C4C4" : "#FA897B")};
-  border-bottom: ${({ state }) =>
-    state === "disabled" ? "#C4C4C4 6px solid" : "#FA897B 6px solid"};
+  color: ${({ state }) => (state === "disabled" ? "#767676" : "#FA897B")};
+  border-bottom: ${({ state }) => (state === "disabled" ? "#C4C4C4" : "#FA897B")} 6px solid;
 `;
 
 //type tabMenu
 const TabMenuBtn = styled.button`
-  padding: 15px 20px;
+  width: 250px;
+  padding: 15px 0;
   font-size: 1.6rem;
   line-height: 2rem;
   background-color: #ffffff;

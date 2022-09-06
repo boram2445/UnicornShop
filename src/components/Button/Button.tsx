@@ -28,7 +28,7 @@ function Button({ type, text, state, color }: ButtonProps) {
         </MsBtn>
       )}
       {type === "small" && <SmallBtn>{text}</SmallBtn>}
-      {type === "tabAcity" && <TabAcityBtn>{text}</TabAcityBtn>}
+      {type === "tabAcity" && <TabAcityBtn state={state}>{text}</TabAcityBtn>}
       {type === "tabMenu" && (
         <TabMenuBtn>
           {text}
