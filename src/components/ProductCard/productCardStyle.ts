@@ -1,5 +1,9 @@
 import styled from "styled-components";
 
+const ProductCardLayout = styled.article`
+  cursor: pointer;
+`;
+
 const ThumbContainer = styled.div`
   margin-bottom: 16px;
   width: 380px;
@@ -39,4 +43,12 @@ const WordWon = styled.span`
   line-height: 2rem;
 `;
 
-export { ThumbContainer, ThumbImg, ProductCorp, ProductName, ProductPrice, WordWon };
+export {
+  ProductCardLayout,
+  ThumbContainer,
+  ThumbImg,
+  ProductCorp,
+  ProductName,
+  ProductPrice,
+  WordWon,
+};

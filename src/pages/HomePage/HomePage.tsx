@@ -1,21 +1,25 @@
-import React from "react";
-import { useEffect } from "react";
-import ProductCard from "../../components/ProductCard/ProductCard";
+import React, { useEffect } from "react";
 import { ProductLists, ProductContainer } from "./homePageStyle";
 import { useAppDispatch, useAppSelector } from "../../hooks";
-import { postProductAxios, selectProducts, getProductStatus } from "../../reducers/getProductSlice";
+import {
+  axiosGetProducts,
+  selectAllProducts,
+  getProductStatus,
+} from "../../reducers/getProductSlice";
+import ProductCard from "../../components/ProductCard/ProductCard";
 import Navbar from "../../components/Navbar/Navbar";
 import Carousel from "../../components/Carousel/Carousel";
+import Footer from "../../components/Footer/Footer";
 
 function HomePage() {
   const dispatch = useAppDispatch();
   const status = useAppSelector(getProductStatus);
-  const products = useAppSelector(selectProducts);
+  const products = useAppSelector(selectAllProducts);
   useEffect(() => {
-    if (status === "init") {
-      dispatch(postProductAxios());
+    if (status === "idle") {
+      dispatch(axiosGetProducts());
     }
-  }, [status]);
+  }, [status, dispatch]);
   return (
     <>
       <Navbar />
@@ -32,6 +36,7 @@ function HomePage() {
             })}
         </ProductLists>
       </ProductContainer>
+      <Footer />
     </>
   );
 }

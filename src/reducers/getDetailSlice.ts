@@ -2,7 +2,8 @@ import { RootState } from "./../store";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-export type DetailProps = {
+const BASE_URL = "https://openmarket.weniv.co.kr";
+export interface Detail {
   product_id?: number;
   product_name?: string;
   image?: string;
@@ -13,40 +14,48 @@ export type DetailProps = {
   seller_store?: string;
   shipping_method?: string;
   shipping_fee?: number;
+}
+interface DetailSliceProps {
+  detail: [];
+  status: string;
+}
+
+const initialState: DetailSliceProps = {
+  detail: [],
+  status: "idle",
 };
 
-const initialState: { detail: DetailProps | null; status: string } = {
-  detail: null,
-  status: "init",
-};
-
-export const postDetailAxios = createAsyncThunk(
-  "getDetailSlice/postAxios",
-  async (productId?: string) => {
-    const result = await axios.get(`https://openmarket.weniv.co.kr/products/${productId}/`);
-    console.log(result.data);
+export const postDetail = createAsyncThunk("detailSlice/postDetail", async (productId?: string) => {
+  try {
+    const result = await axios.get(`${BASE_URL}/products/${productId}/`);
     return result.data;
+  } catch (err) {
+    if (err instanceof Error) {
+      console.log(err.message);
+    } else {
+      console.log("Unexpected error", err);
+    }
   }
-);
+});
 
-export const getDetail = createSlice({
+export const detailSlice = createSlice({
   name: "getDetail",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(postDetailAxios.pending, (state) => {
+    builder.addCase(postDetail.pending, (state) => {
       state.status = "Loading";
     });
-    builder.addCase(postDetailAxios.fulfilled, (state, action) => {
+    builder.addCase(postDetail.fulfilled, (state, action) => {
       state.detail = action.payload;
-      state.status = "complete";
+      state.status = "succeeded";
     });
-    builder.addCase(postDetailAxios.rejected, (state) => {
-      state.status = "fail";
+    builder.addCase(postDetail.rejected, (state) => {
+      state.status = "failed";
     });
   },
 });
 
-export const selectDetail = (state: RootState) => state.getDetail.detail;
-export const getDetailStatus = (state: RootState) => state.getDetail.status;
-export default getDetail.reducer;
+export const selectDetail = (state: RootState) => state.detail.detail;
+export const getDetailStatus = (state: RootState) => state.detail.status;
+export default detailSlice.reducer;

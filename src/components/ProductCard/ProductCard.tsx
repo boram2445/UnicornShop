@@ -1,5 +1,8 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
+import { Product } from "../../reducers/getProductSlice";
 import {
+  ProductCardLayout,
   ThumbContainer,
   ThumbImg,
   ProductCorp,
@@ -7,11 +10,11 @@ import {
   ProductPrice,
   WordWon,
 } from "./productCardStyle";
-import { ProductProps } from "../../reducers/getProductSlice";
 
-function ProductCard({ product }: { product: ProductProps }) {
+function ProductCard({ product }: { product: Product }) {
+  const navigate = useNavigate();
   return (
-    <>
+    <ProductCardLayout onClick={() => navigate(`/products/${product.product_id}`)}>
       <ThumbContainer>
         <ThumbImg src={product.image} alt="상품 이미지" />
       </ThumbContainer>
@@ -21,7 +24,7 @@ function ProductCard({ product }: { product: ProductProps }) {
         <ProductPrice>{product.price}</ProductPrice>
         <WordWon>원</WordWon>
       </p>
-    </>
+    </ProductCardLayout>
   );
 }
 
