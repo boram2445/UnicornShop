@@ -14,9 +14,9 @@ import {
   PriceAllText,
   OrderBox,
   DeleteBtn,
-} from "./cartListStyle";
+} from "./cartItemStyle";
 
-function CartList() {
+function CartItem() {
   return (
     <CartListBox>
       <RadioBtn type="radio" name="product" />
@@ -41,4 +41,4 @@ function CartList() {
   );
 }
 
-export default CartList;
+export default CartItem;
