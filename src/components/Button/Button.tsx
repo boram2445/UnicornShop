@@ -1,5 +1,13 @@
 import React from "react";
-import { LargeBtn, MediumBtn, MsBtn, SmallBtn, TabAcityBtn, TabMenuBtn } from "./buttonStyle";
+import {
+  LargeBtn,
+  MediumBtn,
+  SmBtn,
+  SmallBtn,
+  SsmallBtn,
+  TabAcityBtn,
+  TabMenuBtn,
+} from "./buttonStyle";
 
 type ButtonProps = {
   type: string;
@@ -22,12 +30,13 @@ function Button({ type, text, state, color }: ButtonProps) {
           {text}
         </MediumBtn>
       )}
-      {type === "ms" && (
-        <MsBtn type="button" state={state} color={color}>
+      {type === "smedium" && (
+        <SmBtn type="button" state={state} color={color}>
           {text}
-        </MsBtn>
+        </SmBtn>
       )}
       {type === "small" && <SmallBtn>{text}</SmallBtn>}
+      {type === "ssmall" && <SsmallBtn>{text}</SsmallBtn>}
       {type === "tabAcity" && <TabAcityBtn state={state}>{text}</TabAcityBtn>}
       {type === "tabMenu" && (
         <TabMenuBtn>

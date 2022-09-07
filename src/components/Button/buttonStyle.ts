@@ -30,14 +30,20 @@ const MediumBtn = styled(LargeBtn)<{ color?: string }>`
   }
 `;
 
-// type ms
-const MsBtn = styled(MediumBtn)`
+// type smedium
+const SmBtn = styled(MediumBtn)`
   width: 166px;
   padding: 17px 0;
 `;
 
 //type small
 const SmallBtn = styled(MediumBtn)`
+  width: 130px;
+  padding: 10px 0;
+`;
+
+//type small
+const SsmallBtn = styled(MediumBtn)`
   width: 80px;
   padding: 10px 0;
 `;
@@ -75,4 +81,4 @@ const TabMenuBtn = styled.button`
   }
 `;
 
-export { LargeBtn, MediumBtn, MsBtn, SmallBtn, TabAcityBtn, TabMenuBtn };
+export { LargeBtn, MediumBtn, SmBtn, SmallBtn, SsmallBtn, TabAcityBtn, TabMenuBtn };
