@@ -8,9 +8,9 @@ import {
   SnsBtnList,
   BottomWrap,
 } from "./footerStyle";
-import InstaIcon from "../../assets/icon-insta.svg";
-import FacebookIcon from "../../assets/icon-fb.svg";
-import YoutubeIcon from "../../assets/icon-yt.svg";
+import InstaIcon from "../../../assets/icons/icon-insta.svg";
+import FacebookIcon from "../../../assets/icons/icon-fb.svg";
+import YoutubeIcon from "../../../assets/icons/icon-yt.svg";
 
 function Footer() {
   return (

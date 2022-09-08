@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import plusIcon from "../../assets/icon-plus-line.svg";
-import minusIcon from "../../assets/icon-minus-line.svg";
-import plusDisableIcom from "../../assets/icon-plus-line-disabled.svg";
+import plusIcon from "../../../assets/icons/icon-plus-line.svg";
+import minusIcon from "../../../assets/icons/icon-minus-line.svg";
+import plusDisableIcom from "../../../assets/icons/icon-plus-line-disabled.svg";
 import { AmountBtnBox, MinusBtn, PlusBtn, AmountText } from "./amountStyle";
 function AmountBtn() {
   const [amount, setAmount] = useState<number>(1);

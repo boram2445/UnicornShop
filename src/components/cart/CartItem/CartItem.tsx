@@ -1,7 +1,7 @@
 import React from "react";
-import AmountBtn from "../AmountBtn/AmountBtn";
-import Button from "../Button/Button";
-import deleteIcon from "../../assets/icon-delete.svg";
+import AmountBtn from "../../common/AmountBtn/AmountBtn";
+import Button from "../../common/Button/Button";
+import deleteIcon from "../../../assets/icons/icon-delete.svg";
 import {
   CartListBox,
   RadioBtn,

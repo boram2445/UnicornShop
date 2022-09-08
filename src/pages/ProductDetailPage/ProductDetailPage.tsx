@@ -2,8 +2,8 @@ import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { axiosGetDetail, getDetailStatus, selectDetail } from "../../reducers/getDetailSlice";
-import Footer from "../../components/Footer/Footer";
-import Navbar from "../../components/Navbar/Navbar";
+import Footer from "../../components/common/Footer/Footer";
+import Navbar from "../../components/common/Navbar/Navbar";
 import {
   ProductSection,
   ImageBox,
@@ -22,8 +22,8 @@ import {
   PriceResultText,
   CountBox,
 } from "./productDetailPageStyle";
-import Button from "../../components/Button/Button";
-import AmountBtn from "../../components/AmountBtn/AmountBtn";
+import Button from "../../components/common/Button/Button";
+import AmountBtn from "../../components/common/AmountBtn/AmountBtn";
 
 function ProductDetailPage() {
   const { productId } = useParams();

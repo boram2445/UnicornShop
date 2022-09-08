@@ -1,8 +1,9 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-import GlobalStyle from "./styles/globalStyle";
+import GlobalStyle from "./assets/globalStyle";
 import HomePage from "./pages/HomePage/HomePage";
 import ProductDetailPage from "./pages/ProductDetailPage/ProductDetailPage";
+import CartPage from "./pages/CartPage/CartPage";
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/products/:productId" element={<ProductDetailPage />} />
+        <Route path="/cart" element={<CartPage />} />
       </Routes>
     </>
   );

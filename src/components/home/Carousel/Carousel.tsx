@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { CarouselLayout, ImgBox, ArrowBtn, DotBox, DotBtn } from "./carouselStyle";
 import { carouselData } from "./carouselData";
-import leftArrow from "../../assets/icon-swiper-1.svg";
-import rightArrow from "../../assets/icon-swiper-2.svg";
+import leftArrow from "../../../assets/icons/icon-swiper-1.svg";
+import rightArrow from "../../../assets/icons/icon-swiper-2.svg";
 
 function Carousel() {
   const [carouselIndex, setCarouselIndex] = useState(1);

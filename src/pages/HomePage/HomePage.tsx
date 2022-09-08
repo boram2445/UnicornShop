@@ -6,10 +6,10 @@ import {
   selectAllProducts,
   getProductStatus,
 } from "../../reducers/getProductSlice";
-import ProductCard from "../../components/ProductCard/ProductCard";
-import Navbar from "../../components/Navbar/Navbar";
-import Carousel from "../../components/Carousel/Carousel";
-import Footer from "../../components/Footer/Footer";
+import ProductCard from "../../components/home/ProductCard/ProductCard";
+import Navbar from "../../components/common/Navbar/Navbar";
+import Carousel from "../../components/home/Carousel/Carousel";
+import Footer from "../../components/common/Footer/Footer";
 
 function HomePage() {
   const dispatch = useAppDispatch();
