@@ -1,13 +1,14 @@
 import React from "react";
 import AmountBtn from "../../common/AmountBtn/AmountBtn";
 import { NormalBtn } from "../../common/Button/Button";
+import { CircleCheckBtn } from "../../common/CheckBtn/CheckBtn";
 import deleteIcon from "../../../assets/icons/icon-delete.svg";
 import * as S from "./cartItemStyle";
 
 function CartItem() {
   return (
     <S.CartListBox>
-      <S.RadioBtn type="radio" name="product" />
+      <CircleCheckBtn />
       <S.ImageBox>
         <img src="http://m.saladmarket.co.kr/web/product/big/201908/b5872cbfd6bf28354d227cbb63271993.jpg" />
       </S.ImageBox>
