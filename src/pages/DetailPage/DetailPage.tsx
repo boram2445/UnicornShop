@@ -6,9 +6,9 @@ import Footer from "../../components/common/Footer/Footer";
 import Navbar from "../../components/common/Navbar/Navbar";
 import { NormalBtn } from "../../components/common/Button/Button";
 import AmountBtn from "../../components/common/AmountBtn/AmountBtn";
-import * as S from "./productDetailPageStyle";
+import * as S from "./detailPageStyle";
 
-function ProductDetailPage() {
+function DetailPage() {
   const { productId } = useParams();
   const dispatch = useAppDispatch();
   // const status = useAppSelector(getDetailStatus);
@@ -93,4 +93,4 @@ function ProductDetailPage() {
   );
 }
 
-export default ProductDetailPage;
+export default DetailPage;
