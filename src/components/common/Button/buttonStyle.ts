@@ -1,84 +1,136 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
-//type large
-const LargeBtn = styled.button<{ state?: string }>`
-  width: 220px;
-  padding: 19px 0;
-  font-size: 2.4rem;
-  line-height: 3rem;
-  background-color: ${({ state }) => (state === "disabled" ? "#C4C4C4" : "#FA897B")};
-  color: #ffffff;
-  border-radius: 5px;
-`;
+interface NormalBtnProps {
+  size?: string;
+  color?: string;
+  icon?: string;
+  tab?: boolean;
+}
 
-// type medium
-const MediumBtn = styled(LargeBtn)<{ color?: string }>`
+const NormalBtn = styled.button<NormalBtnProps>`
   width: 480px;
   padding: 19px 0;
   font-size: 1.8rem;
   line-height: 2.2rem;
-  background-color: ${({ color, state }) =>
-    (color === "white" && "#ffffff") ||
-    (color === "dark" && "#767676") ||
-    (state === "disabled" && "#C4C4C4") ||
-    "#FA897B"};
-  border: ${({ color }) => color === "white" && "#C4C4C4 1px solid"};
-  color: ${({ color }) => (color === "white" ? "#767676" : "#ffffff")};
-  &:hover {
-    color: ${({ color }) => (color === "white" ? "#000000" : "#ffffff")};
-    border: ${({ color }) => (color === "white" ? "#000000" : "none")} 1px solid;
+  border-radius: 5px;
+  background-color: var(--color-main);
+  color: var(--color-white);
+  &:disabled {
+    background-color: var(--color-grey);
+    cursor: default;
   }
+  ${({ size, icon }) => {
+    if (size === "ssmall") {
+      return css`
+        width: 80px;
+        padding: 10px 0;
+      `;
+    }
+    if (size === "small") {
+      return css`
+        width: 130px;
+        padding: 10px 0;
+      `;
+    }
+    if (icon && size === "smedium") {
+      return css`
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        width: 166px;
+        padding: 11px 20px;
+      `;
+    }
+    if (size === "smedium") {
+      return css`
+        width: 166px;
+        padding: 17px 0;
+      `;
+    }
+    if (size === "medium") {
+      return css`
+        width: 480px;
+        padding: 19px 0;
+      `;
+    }
+    if (size === "large") {
+      return css`
+        width: 220px;
+        padding: 19px 0;
+        font-size: 2.4rem;
+        line-height: 3rem;
+      `;
+    }
+  }}
+  ${({ color }) => {
+    if (color === "white") {
+      return css`
+        background-color: var(--color-white);
+        color: var(--color-darkGrey);
+        border: var(--color-grey) 1px solid;
+        &:hover {
+          color: var(--color-black);
+          border-color: var(--color-black);
+        }
+      `;
+    }
+    if (color === "dark") {
+      return css`
+        background-color: var(--color-darkGrey);
+        color: var(--color-white);
+      `;
+    }
+  }}
+  ${({ tab }) => {
+    if (tab) {
+      return css`
+        width: 320px;
+        padding: 19px 0 12px;
+        background-color: var(--color-white);
+        color: var(--color-main);
+        border-bottom: var(--color-main) 6px solid;
+        border-radius: 0;
+        &:disabled {
+          color: var(--color-darkGrey);
+          border-bottom: var(--color-grey) 6px solid;
+          background-color: var(--color-white);
+          cursor: pointer;
+        }
+      `;
+    }
+  }}
 `;
 
-// type smedium
-const SmBtn = styled(MediumBtn)`
-  width: 166px;
-  padding: 17px 0;
-`;
-
-//type small
-const SmallBtn = styled(MediumBtn)`
-  width: 130px;
-  padding: 10px 0;
-`;
-
-//type small
-const SsmallBtn = styled(MediumBtn)`
-  width: 80px;
-  padding: 10px 0;
-`;
-
-//type tabAcity
-const TabAcityBtn = styled.button<{ state?: string }>`
-  width: 320px;
-  padding: 19px 0 12px;
-  background-color: #ffffff;
-  font-size: 1.8rem;
-  line-height: 2.2rem;
-  color: ${({ state }) => (state === "disabled" ? "#767676" : "#FA897B")};
-  border-bottom: ${({ state }) => (state === "disabled" ? "#C4C4C4" : "#FA897B")} 6px solid;
-`;
-
-//type tabMenu
-const TabMenuBtn = styled.button`
+const TabMenuBtn = styled.button<{ on?: boolean }>`
   width: 250px;
   padding: 15px 0;
+  color: var(--color-black);
   font-size: 1.6rem;
   line-height: 2rem;
-  background-color: #ffffff;
+  background-color: var(--color-white);
   border-radius: 5px;
   span {
     display: inline-block;
     width: 20px;
     height: 20px;
     margin-left: 77px;
-    color: #ffffff;
-    background-color: #eb5757;
+    color: var(--color-white);
+    background-color: var(--color-red);
     border-radius: 50%;
   }
-  &:hover {
-    background-color: #ffebee;
-  }
+  ${({ on }) => {
+    if (on) {
+      return css`
+        background-color: var(--color-main);
+      `;
+    } else {
+      return css`
+        &:hover {
+          background-color: var(--color-brigthPink);
+        }
+      `;
+    }
+  }}
 `;
 
-export { LargeBtn, MediumBtn, SmBtn, SmallBtn, SsmallBtn, TabAcityBtn, TabMenuBtn };
+export { NormalBtn, TabMenuBtn };

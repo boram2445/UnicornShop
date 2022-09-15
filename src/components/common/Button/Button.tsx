@@ -1,51 +1,37 @@
 import React from "react";
-import {
-  LargeBtn,
-  MediumBtn,
-  SmBtn,
-  SmallBtn,
-  SsmallBtn,
-  TabAcityBtn,
-  TabMenuBtn,
-} from "./buttonStyle";
+import * as S from "./buttonStyle";
 
-type ButtonProps = {
-  type: string;
-  text: string;
-  state?: string;
+interface NormalBtnProps {
+  children: React.ReactNode;
+  type?: "button" | "submit"; //literal type
   size?: string;
   color?: string;
-};
+  disabled?: boolean;
+  icon?: string;
+  tab?: boolean;
+}
 
-function Button({ type, text, state, color }: ButtonProps) {
+interface TabMenuBtnProps {
+  children: React.ReactNode;
+  on?: boolean;
+}
+
+//기본 버튼
+export function NormalBtn({ children, ...props }: NormalBtnProps) {
   return (
-    <>
-      {type === "large" && (
-        <LargeBtn type="button" state={state}>
-          {text}
-        </LargeBtn>
-      )}
-      {type === "medium" && (
-        <MediumBtn type="button" state={state}>
-          {text}
-        </MediumBtn>
-      )}
-      {type === "smedium" && (
-        <SmBtn type="button" state={state} color={color}>
-          {text}
-        </SmBtn>
-      )}
-      {type === "small" && <SmallBtn>{text}</SmallBtn>}
-      {type === "ssmall" && <SsmallBtn>{text}</SsmallBtn>}
-      {type === "tabAcity" && <TabAcityBtn state={state}>{text}</TabAcityBtn>}
-      {type === "tabMenu" && (
-        <TabMenuBtn>
-          {text}
-          <span>1</span>
-        </TabMenuBtn>
-      )}
-    </>
+    <S.NormalBtn {...props}>
+      {props.icon && <img src={props.icon} />}
+      {children}
+    </S.NormalBtn>
   );
 }
 
-export default Button;
+//탭 메뉴 버튼
+export function TabMenuBtn({ children, ...props }: TabMenuBtnProps) {
+  return (
+    <S.TabMenuBtn {...props}>
+      {children}
+      <span>1</span>
+    </S.TabMenuBtn>
+  );
+}
