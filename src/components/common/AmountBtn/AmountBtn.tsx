@@ -3,12 +3,22 @@ import plusIcon from "../../../assets/icons/icon-plus-line.svg";
 import minusIcon from "../../../assets/icons/icon-minus-line.svg";
 import plusDisableIcon from "../../../assets/icons/icon-plus-line-disabled.svg";
 import * as S from "./amountStyle";
-function AmountBtn() {
+
+interface AmountBtnProps {
+  getCount: (res: number) => void; //선택 개수를 반환하는 함수
+}
+
+function AmountBtn({ getCount }: AmountBtnProps) {
   const [amount, setAmount] = useState<number>(1);
-  const onIncrease = () => setAmount(amount + 1);
+  const onIncrease = () => {
+    const res = amount + 1;
+    setAmount(res);
+    getCount(res);
+  };
   const onDecrease = () => {
-    const res = amount - 1;
-    setAmount(res < 1 ? 1 : res);
+    const res = amount - 1 < 1 ? 1 : amount - 1;
+    setAmount(res);
+    getCount(res);
   };
   return (
     <S.AmountBtnBox>

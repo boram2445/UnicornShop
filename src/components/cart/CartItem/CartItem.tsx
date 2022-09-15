@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import AmountBtn from "../../common/AmountBtn/AmountBtn";
 import { NormalBtn } from "../../common/Button/Button";
 import { CircleCheckBtn } from "../../common/CheckBtn/CheckBtn";
@@ -6,6 +6,10 @@ import deleteIcon from "../../../assets/icons/icon-delete.svg";
 import * as S from "./cartItemStyle";
 
 function CartItem() {
+  const [selectedCount, setSelectedCount] = useState(1);
+  const getProductCount = (res: number) => {
+    setSelectedCount(res);
+  };
   return (
     <S.CartListBox>
       <CircleCheckBtn />
@@ -18,7 +22,8 @@ function CartItem() {
         <S.PriceText>17,500원</S.PriceText>
         <S.ShipText>택배배송 / 무료배송</S.ShipText>
       </S.InfoBox>
-      <AmountBtn />
+      {/* 상품 개수 버튼 */}
+      <AmountBtn getCount={getProductCount} />
       <S.OrderBox>
         <S.PriceAllText>17,500원</S.PriceAllText>
         <NormalBtn size="small">주문하기</NormalBtn>
