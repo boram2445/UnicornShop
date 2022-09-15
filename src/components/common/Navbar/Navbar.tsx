@@ -1,15 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  NavContainer,
-  NavContents,
-  LeftWrap,
-  NavLogo,
-  NavInput,
-  InputBtn,
-  RightWrap,
-  NavButton,
-} from "./navbarStyle";
+import * as S from "./navbarStyle";
 import logo from "../../../assets/icons/Logo-hodu.svg";
 import cartIcon from "../../../assets/icons/icon-shopping-cart.svg";
 import userIcon from "../../../assets/icons/icon-user.svg";
@@ -18,29 +9,29 @@ import searchIcon from "../../../assets/icons/search.svg";
 function Navbar() {
   const navigate = useNavigate();
   return (
-    <NavContainer>
-      <NavContents>
-        <LeftWrap>
-          <NavLogo onClick={() => navigate("/")}>
+    <S.NavContainer>
+      <S.NavContents>
+        <S.LeftWrap>
+          <S.NavLogo onClick={() => navigate("/")}>
             <img src={logo} alt="유니콘 마켓 로고" />
-          </NavLogo>
-          <NavInput type="text" placeholder="상품을 검색해보세요!" />
-          <InputBtn type="button">
+          </S.NavLogo>
+          <S.NavInput type="text" placeholder="상품을 검색해보세요!" />
+          <S.InputBtn type="button">
             <img src={searchIcon} alt="검색" />
-          </InputBtn>
-        </LeftWrap>
-        <RightWrap>
-          <NavButton onClick={() => navigate("/cart")}>
+          </S.InputBtn>
+        </S.LeftWrap>
+        <S.RightWrap>
+          <S.NavButton onClick={() => navigate("/cart")}>
             <img src={cartIcon} />
             <span>장바구니</span>
-          </NavButton>
-          <NavButton onClick={() => navigate("/")}>
+          </S.NavButton>
+          <S.NavButton onClick={() => navigate("/")}>
             <img src={userIcon} />
             <span>로그인</span>
-          </NavButton>
-        </RightWrap>
-      </NavContents>
-    </NavContainer>
+          </S.NavButton>
+        </S.RightWrap>
+      </S.NavContents>
+    </S.NavContainer>
   );
 }
 

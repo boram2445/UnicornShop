@@ -1,43 +1,31 @@
 import React from "react";
 import AmountBtn from "../../common/AmountBtn/AmountBtn";
-import Button from "../../common/Button/Button";
+import { NormalBtn } from "../../common/Button/Button";
 import deleteIcon from "../../../assets/icons/icon-delete.svg";
-import {
-  CartListBox,
-  RadioBtn,
-  ImageBox,
-  InfoBox,
-  ShopText,
-  ProductText,
-  PriceText,
-  ShipText,
-  PriceAllText,
-  OrderBox,
-  DeleteBtn,
-} from "./cartItemStyle";
+import * as S from "./cartItemStyle";
 
 function CartItem() {
   return (
-    <CartListBox>
-      <RadioBtn type="radio" name="product" />
-      <ImageBox>
+    <S.CartListBox>
+      <S.RadioBtn type="radio" name="product" />
+      <S.ImageBox>
         <img src="http://m.saladmarket.co.kr/web/product/big/201908/b5872cbfd6bf28354d227cbb63271993.jpg" />
-      </ImageBox>
-      <InfoBox>
-        <ShopText>백엔드글로벌</ShopText>
-        <ProductText>딥러닝 개발자 무릎 담요</ProductText>
-        <PriceText>17,500원</PriceText>
-        <ShipText>택배배송 / 무료배송</ShipText>
-      </InfoBox>
+      </S.ImageBox>
+      <S.InfoBox>
+        <S.ShopText>백엔드글로벌</S.ShopText>
+        <S.ProductText>딥러닝 개발자 무릎 담요</S.ProductText>
+        <S.PriceText>17,500원</S.PriceText>
+        <S.ShipText>택배배송 / 무료배송</S.ShipText>
+      </S.InfoBox>
       <AmountBtn />
-      <OrderBox>
-        <PriceAllText>17,500원</PriceAllText>
-        <Button type="small" text="주문하기" />
-      </OrderBox>
-      <DeleteBtn>
+      <S.OrderBox>
+        <S.PriceAllText>17,500원</S.PriceAllText>
+        <NormalBtn size="small">주문하기</NormalBtn>
+      </S.OrderBox>
+      <S.DeleteBtn>
         <img src={deleteIcon} />
-      </DeleteBtn>
-    </CartListBox>
+      </S.DeleteBtn>
+    </S.CartListBox>
   );
 }
 

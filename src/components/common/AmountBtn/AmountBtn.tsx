@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import plusIcon from "../../../assets/icons/icon-plus-line.svg";
 import minusIcon from "../../../assets/icons/icon-minus-line.svg";
-import plusDisableIcom from "../../../assets/icons/icon-plus-line-disabled.svg";
-import { AmountBtnBox, MinusBtn, PlusBtn, AmountText } from "./amountStyle";
+import plusDisableIcon from "../../../assets/icons/icon-plus-line-disabled.svg";
+import * as S from "./amountStyle";
 function AmountBtn() {
   const [amount, setAmount] = useState<number>(1);
   const onIncrease = () => setAmount(amount + 1);
@@ -11,15 +11,15 @@ function AmountBtn() {
     setAmount(res < 1 ? 1 : res);
   };
   return (
-    <AmountBtnBox>
-      <MinusBtn onClick={onDecrease}>
+    <S.AmountBtnBox>
+      <S.MinusBtn onClick={onDecrease}>
         <img src={minusIcon} />
-      </MinusBtn>
-      <AmountText>{amount}</AmountText>
-      <PlusBtn onClick={onIncrease}>
+      </S.MinusBtn>
+      <S.AmountText>{amount}</S.AmountText>
+      <S.PlusBtn onClick={onIncrease}>
         <img src={plusIcon} />
-      </PlusBtn>
-    </AmountBtnBox>
+      </S.PlusBtn>
+    </S.AmountBtnBox>
   );
 }
 

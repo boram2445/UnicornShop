@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import { ProductLists, ProductContainer } from "./homePageStyle";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import {
   axiosGetProducts,
@@ -10,6 +9,7 @@ import ProductCard from "../../components/home/ProductCard/ProductCard";
 import Navbar from "../../components/common/Navbar/Navbar";
 import Carousel from "../../components/home/Carousel/Carousel";
 import Footer from "../../components/common/Footer/Footer";
+import * as S from "./homePageStyle";
 
 function HomePage() {
   const dispatch = useAppDispatch();
@@ -24,18 +24,12 @@ function HomePage() {
     <>
       <Navbar />
       <Carousel />
-      <ProductContainer>
-        <ProductLists>
+      <S.ProductContainer>
+        <S.ProductLists>
           {products &&
-            products.map((product, index) => {
-              return (
-                <li key={index}>
-                  <ProductCard product={product} />
-                </li>
-              );
-            })}
-        </ProductLists>
-      </ProductContainer>
+            products.map((product) => <ProductCard key={product.product_id} product={product} />)}
+        </S.ProductLists>
+      </S.ProductContainer>
       <Footer />
     </>
   );

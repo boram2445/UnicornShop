@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { CarouselLayout, ImgBox, ArrowBtn, DotBox, DotBtn } from "./carouselStyle";
+import * as S from "./carouselStyle";
 import { carouselData } from "./carouselData";
 import leftArrow from "../../../assets/icons/icon-swiper-1.svg";
 import rightArrow from "../../../assets/icons/icon-swiper-2.svg";
@@ -27,34 +27,34 @@ function Carousel() {
     setCarouselIndex(index);
   };
   return (
-    <CarouselLayout>
+    <S.CarouselLayout>
       {carouselData.map((item, index) => {
         return (
-          <ImgBox key={item.id} opacity={carouselIndex === index + 1 ? "active" : "none"}>
+          <S.ImgBox key={item.id} opacity={carouselIndex === index + 1 ? "active" : "none"}>
             <img src={process.env.PUBLIC_URL + `/Imgs/CarouselSample/image${index + 1}.jpg`} />
-          </ImgBox>
+          </S.ImgBox>
         );
       })}
       {/* 캐러셀 화살표 이동 버튼 */}
-      <ArrowBtn type="button" direct="left" onClick={movePrevImg}>
+      <S.ArrowBtn type="button" direct="left" onClick={movePrevImg}>
         <img src={leftArrow} />
-      </ArrowBtn>
-      <ArrowBtn type="button" direct="right" onClick={moveNextImg}>
+      </S.ArrowBtn>
+      <S.ArrowBtn type="button" direct="right" onClick={moveNextImg}>
         <img src={rightArrow} />
-      </ArrowBtn>
+      </S.ArrowBtn>
       {/* 캐러셀 닷 버튼 */}
-      <DotBox>
+      <S.DotBox>
         {Array.from({ length: carouselData.length }).map((item, index) => {
           return (
-            <DotBtn
+            <S.DotBtn
               key={index}
               isActive={carouselIndex === index + 1 ? "active" : ""}
               onClick={() => moveDot(index + 1)}
             />
           );
         })}
-      </DotBox>
-    </CarouselLayout>
+      </S.DotBox>
+    </S.CarouselLayout>
   );
 }
 

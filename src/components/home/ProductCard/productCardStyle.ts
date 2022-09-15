@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-const ProductCardLayout = styled.article`
+const ProductItem = styled.li`
   cursor: pointer;
 `;
 
@@ -44,7 +44,7 @@ const WordWon = styled.span`
 `;
 
 export {
-  ProductCardLayout,
+  ProductItem,
   ThumbContainer,
   ThumbImg,
   ProductCorp,

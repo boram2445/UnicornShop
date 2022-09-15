@@ -1,30 +1,22 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Product } from "../../../reducers/getProductSlice";
-import {
-  ProductCardLayout,
-  ThumbContainer,
-  ThumbImg,
-  ProductCorp,
-  ProductName,
-  ProductPrice,
-  WordWon,
-} from "./productCardStyle";
+import * as S from "./productCardStyle";
 
 function ProductCard({ product }: { product: Product }) {
   const navigate = useNavigate();
   return (
-    <ProductCardLayout onClick={() => navigate(`/products/${product.product_id}`)}>
-      <ThumbContainer>
-        <ThumbImg src={product.image} alt="상품 이미지" />
-      </ThumbContainer>
-      <ProductCorp>{product.seller_store}</ProductCorp>
-      <ProductName>{product.product_name}</ProductName>
+    <S.ProductItem onClick={() => navigate(`/products/${product.product_id}`)}>
+      <S.ThumbContainer>
+        <S.ThumbImg src={product.image} alt="상품 이미지" />
+      </S.ThumbContainer>
+      <S.ProductCorp>{product.seller_store}</S.ProductCorp>
+      <S.ProductName>{product.product_name}</S.ProductName>
       <p>
-        <ProductPrice>{product.price}</ProductPrice>
-        <WordWon>원</WordWon>
+        <S.ProductPrice>{product.price}</S.ProductPrice>
+        <S.WordWon>원</S.WordWon>
       </p>
-    </ProductCardLayout>
+    </S.ProductItem>
   );
 }
 
