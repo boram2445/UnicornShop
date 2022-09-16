@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { axiosGetDetail, getDetailStatus, selectDetail } from "../../reducers/getDetailSlice";
+import { axiosPostCart, postCartItem } from "../../reducers/postCartSlice";
 import Footer from "../../components/common/Footer/Footer";
 import Navbar from "../../components/common/Navbar/Navbar";
 import { NormalBtn } from "../../components/common/Button/Button";
@@ -13,7 +14,9 @@ function DetailPage() {
   const dispatch = useAppDispatch();
   // const status = useAppSelector(getDetailStatus);
   const detail = useAppSelector(selectDetail);
-  const { image, seller_store, product_name, shipping_fee, price } = detail;
+  const TOKEN =
+    "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyLCJlbWFpbCI6IiIsInVzZXJuYW1lIjoiYnV5ZXIxIiwiZXhwIjoxNjYzOTE3MzU4fQ.eULwTjycmcIrbyWV4iokrHwKiX4ghxFMbi7OdQENo-s";
+  const { image, seller_store, product_id, product_name, shipping_fee, price } = detail;
   const [selectedCount, setSelectedCount] = useState(1);
   useEffect(() => {
     // if (status === "idle") {
@@ -23,6 +26,19 @@ function DetailPage() {
   }, [productId]);
   const getProductCount = (res: number) => {
     setSelectedCount(res);
+  };
+  const getProductNow = () => {
+    console.log("바로구매");
+  };
+
+  const getProductCart = () => {
+    console.log("장바구니");
+    if (confirm("장바구니에 등록되었습니다.\n확인하시겠습니까?") === true) {
+      console.log("장바구니로 이동");
+      dispatch(axiosPostCart({ TOKEN, product_id, quantity: selectedCount, check: true }));
+    } else {
+      return;
+    }
   };
 
   return (
@@ -65,8 +81,10 @@ function DetailPage() {
             </S.PriceBox>
             {/* 상품 구매 버튼 */}
             <S.ButtonBox>
-              <NormalBtn size="medium">바로 구매</NormalBtn>
-              <NormalBtn size="smedium" color="dark">
+              <NormalBtn size="medium" onClick={getProductNow}>
+                바로 구매
+              </NormalBtn>
+              <NormalBtn size="smedium" color="dark" onClick={getProductCart}>
                 장바구니
               </NormalBtn>
             </S.ButtonBox>
