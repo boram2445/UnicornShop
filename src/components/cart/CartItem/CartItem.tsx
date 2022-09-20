@@ -3,9 +3,16 @@ import AmountBtn from "../../common/AmountBtn/AmountBtn";
 import { NormalBtn } from "../../common/Button/Button";
 import { CircleCheckBtn } from "../../common/CheckBtn/CheckBtn";
 import deleteIcon from "../../../assets/icons/icon-delete.svg";
+import { Detail } from "../../../reducers/getDetailSlice";
 import * as S from "./cartItemStyle";
 
-function CartItem() {
+interface ItemProps {
+  id: number;
+  count: number;
+  detail: Detail;
+}
+
+function CartItem({ id, count, detail }: ItemProps) {
   const [selectedCount, setSelectedCount] = useState(1);
   const getProductCount = (res: number) => {
     setSelectedCount(res);
@@ -14,18 +21,18 @@ function CartItem() {
     <S.CartListBox>
       <CircleCheckBtn />
       <S.ImageBox>
-        <img src="http://m.saladmarket.co.kr/web/product/big/201908/b5872cbfd6bf28354d227cbb63271993.jpg" />
+        <img src={detail?.image} />
       </S.ImageBox>
       <S.InfoBox>
-        <S.ShopText>백엔드글로벌</S.ShopText>
-        <S.ProductText>딥러닝 개발자 무릎 담요</S.ProductText>
-        <S.PriceText>17,500원</S.PriceText>
+        <S.ShopText>{detail?.store_name}</S.ShopText>
+        <S.ProductText>{detail?.product_name}</S.ProductText>
+        <S.PriceText>{detail?.price}원</S.PriceText>
         <S.ShipText>택배배송 / 무료배송</S.ShipText>
       </S.InfoBox>
       {/* 상품 개수 버튼 */}
       <AmountBtn getCount={getProductCount} />
       <S.OrderBox>
-        <S.PriceAllText>17,500원</S.PriceAllText>
+        <S.PriceAllText>{detail?.price && detail.price * count}원</S.PriceAllText>
         <NormalBtn size="small">주문하기</NormalBtn>
       </S.OrderBox>
       <S.DeleteBtn>
