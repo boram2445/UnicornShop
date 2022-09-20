@@ -9,6 +9,7 @@ interface NormalBtnProps {
   disabled?: boolean;
   icon?: string;
   tab?: boolean;
+  onClick?: () => void;
 }
 
 interface TabMenuBtnProps {

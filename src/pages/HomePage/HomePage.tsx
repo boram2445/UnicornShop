@@ -15,6 +15,8 @@ function HomePage() {
   const dispatch = useAppDispatch();
   const status = useAppSelector(getProductStatus);
   const products = useAppSelector(selectAllProducts);
+  console.log(products);
+
   useEffect(() => {
     if (status === "idle") {
       dispatch(axiosGetProducts());
@@ -26,8 +28,9 @@ function HomePage() {
       <Carousel />
       <S.ProductContainer>
         <S.ProductLists>
-          {products &&
-            products.map((product) => <ProductCard key={product.product_id} product={product} />)}
+          {products?.map((product) => (
+            <ProductCard key={product.product_id} product={product} />
+          ))}
         </S.ProductLists>
       </S.ProductContainer>
       <Footer />

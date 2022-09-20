@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../hooks";
-import { axiosGetDetail, getDetailStatus, selectDetail } from "../../reducers/getDetailSlice";
+import {
+  reset,
+  axiosGetDetail,
+  getDetailStatus,
+  selectDetail,
+} from "../../reducers/getDetailSlice";
 import { axiosPostCart, postCartItem } from "../../reducers/postCartSlice";
 import Footer from "../../components/common/Footer/Footer";
 import Navbar from "../../components/common/Navbar/Navbar";
@@ -12,18 +17,17 @@ import * as S from "./detailPageStyle";
 function DetailPage() {
   const { productId } = useParams();
   const dispatch = useAppDispatch();
-  // const status = useAppSelector(getDetailStatus);
+  const status = useAppSelector(getDetailStatus);
   const detail = useAppSelector(selectDetail);
   const TOKEN =
     "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyLCJlbWFpbCI6IiIsInVzZXJuYW1lIjoiYnV5ZXIxIiwiZXhwIjoxNjYzOTE3MzU4fQ.eULwTjycmcIrbyWV4iokrHwKiX4ghxFMbi7OdQENo-s";
-  const { image, seller_store, product_id, product_name, shipping_fee, price } = detail;
+  const { image, store_name, product_id, product_name, shipping_fee, price } = detail;
   const [selectedCount, setSelectedCount] = useState(1);
   useEffect(() => {
-    // if (status === "idle") {
-    //   dispatch(axiosGetDetail(productId));
-    // }
-    dispatch(axiosGetDetail(productId));
-  }, [productId]);
+    dispatch(reset());
+    dispatch(axiosGetDetail(Number(productId)));
+  }, []);
+  console.log(detail);
   const getProductCount = (res: number) => {
     setSelectedCount(res);
   };
@@ -52,7 +56,7 @@ function DetailPage() {
           <S.CartBox>
             {/* 상품 정보 */}
             <S.InfoBox>
-              <S.SellerText>{seller_store}</S.SellerText>
+              <S.SellerText>{store_name}</S.SellerText>
               <S.ProductText>{product_name}</S.ProductText>
               <S.PriceText>
                 {price?.toLocaleString()}
