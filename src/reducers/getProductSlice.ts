@@ -18,28 +18,22 @@ export interface Product {
 }
 //state 초기값 타입
 interface ProductSliceState {
-  products: Product[];
   status: string; //idle | loading | succeeded | failed
+  error: string;
+  products: Product[];
 }
 
 //state 초기값
 const initialState: ProductSliceState = {
-  products: [],
   status: "idle",
+  error: "",
+  products: [],
 };
 
 //cretateAsyncThunk(액션명, 콜백함수-비동기로직)
 export const axiosGetProducts = createAsyncThunk("products/axiosPostProducts", async () => {
-  try {
-    const result = await axios.get(`${BASE_URL}/products/`);
-    return result.data.results;
-  } catch (err) {
-    if (err instanceof Error) {
-      console.log(err.message);
-    } else {
-      console.log("Unexpected error", err);
-    }
-  }
+  const result = await axios.get(`${BASE_URL}/products/`);
+  return result.data.results;
 });
 
 //state 저장
@@ -53,11 +47,14 @@ export const productSlice = createSlice({
       state.status = "Loading";
     });
     builder.addCase(axiosGetProducts.fulfilled, (state, action) => {
-      state.products = action.payload;
       state.status = "succeeded";
+      state.error = "";
+      state.products = action.payload;
     });
-    builder.addCase(axiosGetProducts.rejected, (state) => {
+    builder.addCase(axiosGetProducts.rejected, (state, action) => {
       state.status = "failed";
+      state.error = action.error.message || "Something is wrong";
+      state.products = [];
     });
   },
 });

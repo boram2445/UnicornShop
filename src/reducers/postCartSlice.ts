@@ -14,11 +14,13 @@ interface Item {
 interface CartSliceProps {
   item: Item;
   status: string;
+  error: string;
 }
 
 const initialState: CartSliceProps = {
   item: {},
   status: "idle",
+  error: "",
 };
 
 interface postCartType {
@@ -37,31 +39,28 @@ export const axiosPostCart = createAsyncThunk(
       },
     };
     const data = { product_id, quantity, check };
-    try {
-      const result = await axios.post(`${BASE_URL}/cart/`, data, config);
-      console.log(result.data);
-      return result.data;
-    } catch (err) {
-      if (err instanceof Error) {
-        console.log(err.message);
-      } else {
-        console.log("Unexpected error", err);
-      }
-    }
+    const result = await axios.post(`${BASE_URL}/cart/`, data, config);
+    console.log(result.data);
+    return result.data;
   }
 );
 
 export const cartSlice = createSlice({
   name: "cart",
   initialState,
-  reducers: {},
+  reducers: {
+    reset: () => initialState,
+  },
   extraReducers: (builder) => {
     builder.addCase(axiosPostCart.fulfilled, (state, action) => {
       state.item = action.payload;
       state.status = "succeeded";
+      state.error = "";
     });
-    builder.addCase(axiosPostCart.rejected, (state) => {
+    builder.addCase(axiosPostCart.rejected, (state, action) => {
       state.status = "failed";
+      state.error = action.error.message || "Something is wrong";
+      state.item = {};
     });
   },
 });
