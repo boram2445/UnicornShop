@@ -31,7 +31,7 @@ const initialState: ProductSliceState = {
 };
 
 //cretateAsyncThunk(액션명, 콜백함수-비동기로직)
-export const axiosGetProducts = createAsyncThunk("products/axiosPostProducts", async () => {
+export const fetchGetProducts = createAsyncThunk("products/fetchPostProducts", async () => {
   const result = await axios.get(`${BASE_URL}/products/`);
   return result.data.results;
 });
@@ -43,15 +43,15 @@ export const productSlice = createSlice({
   reducers: {},
   //redux thunk 관리
   extraReducers: (builder) => {
-    builder.addCase(axiosGetProducts.pending, (state) => {
+    builder.addCase(fetchGetProducts.pending, (state) => {
       state.status = "Loading";
     });
-    builder.addCase(axiosGetProducts.fulfilled, (state, action) => {
+    builder.addCase(fetchGetProducts.fulfilled, (state, action) => {
       state.status = "succeeded";
       state.error = "";
       state.products = action.payload;
     });
-    builder.addCase(axiosGetProducts.rejected, (state, action) => {
+    builder.addCase(fetchGetProducts.rejected, (state, action) => {
       state.status = "failed";
       state.error = action.error.message || "Something is wrong";
       state.products = [];

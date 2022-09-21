@@ -27,8 +27,8 @@ const initialState: DetailSliceProps = {
   error: "",
 };
 
-export const axiosGetDetail = createAsyncThunk(
-  "detail/axiosGetDetail",
+export const fetchGetDetail = createAsyncThunk(
+  "detail/fetchGetDetail",
   async (productId?: number) => {
     const result = await axios.get(`${BASE_URL}/products/${productId}/`);
     return result.data;
@@ -42,15 +42,15 @@ export const detailSlice = createSlice({
     reset: () => initialState,
   },
   extraReducers: (builder) => {
-    builder.addCase(axiosGetDetail.pending, (state) => {
+    builder.addCase(fetchGetDetail.pending, (state) => {
       state.status = "Loading";
     });
-    builder.addCase(axiosGetDetail.fulfilled, (state, action) => {
+    builder.addCase(fetchGetDetail.fulfilled, (state, action) => {
       state.detail = action.payload;
       state.status = "succeeded";
       state.error = "";
     });
-    builder.addCase(axiosGetDetail.rejected, (state, action) => {
+    builder.addCase(fetchGetDetail.rejected, (state, action) => {
       state.status = "failed";
       state.detail = {};
       state.error = action.error.message || "Something is wrong";

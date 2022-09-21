@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import {
-  axiosGetProducts,
+  fetchGetProducts,
   selectAllProducts,
   getProductStatus,
 } from "../../reducers/getProductSlice";
@@ -19,7 +19,7 @@ function HomePage() {
 
   useEffect(() => {
     if (status === "idle") {
-      dispatch(axiosGetProducts());
+      dispatch(fetchGetProducts());
     }
   }, [status, dispatch]);
   return (

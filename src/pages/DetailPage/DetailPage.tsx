@@ -3,11 +3,11 @@ import { useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import {
   reset,
-  axiosGetDetail,
+  fetchGetDetail,
   getDetailStatus,
   selectDetail,
 } from "../../reducers/getDetailSlice";
-import { axiosPostCart, postCartItem } from "../../reducers/postCartSlice";
+import { fetchPostCart, postCartItem } from "../../reducers/postCartSlice";
 import Footer from "../../components/common/Footer/Footer";
 import Navbar from "../../components/common/Navbar/Navbar";
 import { NormalBtn } from "../../components/common/Button/Button";
@@ -24,8 +24,10 @@ function DetailPage() {
   const { image, store_name, product_id, product_name, shipping_fee, price } = detail;
   const [selectedCount, setSelectedCount] = useState(1);
   useEffect(() => {
-    dispatch(reset());
-    dispatch(axiosGetDetail(Number(productId)));
+    dispatch(fetchGetDetail(Number(productId)));
+    return () => {
+      dispatch(reset());
+    };
   }, []);
   console.log(detail);
   const getProductCount = (res: number) => {
@@ -39,7 +41,7 @@ function DetailPage() {
     console.log("장바구니");
     if (confirm("장바구니에 등록되었습니다.\n확인하시겠습니까?") === true) {
       console.log("장바구니로 이동");
-      dispatch(axiosPostCart({ TOKEN, product_id, quantity: selectedCount, check: true }));
+      dispatch(fetchPostCart({ TOKEN, product_id, quantity: selectedCount, check: true }));
     } else {
       return;
     }

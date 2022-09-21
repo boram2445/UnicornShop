@@ -16,13 +16,6 @@ interface CartSliceProps {
   status: string;
   error: string;
 }
-
-const initialState: CartSliceProps = {
-  item: {},
-  status: "idle",
-  error: "",
-};
-
 interface postCartType {
   TOKEN?: string;
   product_id?: number;
@@ -30,7 +23,13 @@ interface postCartType {
   check?: boolean;
 }
 
-export const axiosPostCart = createAsyncThunk(
+const initialState: CartSliceProps = {
+  item: {},
+  status: "idle",
+  error: "",
+};
+
+export const fetchPostCart = createAsyncThunk(
   "cart/axiosPostCart",
   async ({ TOKEN, product_id, quantity, check }: postCartType) => {
     const config = {
@@ -52,12 +51,12 @@ export const cartSlice = createSlice({
     reset: () => initialState,
   },
   extraReducers: (builder) => {
-    builder.addCase(axiosPostCart.fulfilled, (state, action) => {
+    builder.addCase(fetchPostCart.fulfilled, (state, action) => {
       state.item = action.payload;
       state.status = "succeeded";
       state.error = "";
     });
-    builder.addCase(axiosPostCart.rejected, (state, action) => {
+    builder.addCase(fetchPostCart.rejected, (state, action) => {
       state.status = "failed";
       state.error = action.error.message || "Something is wrong";
       state.item = {};
