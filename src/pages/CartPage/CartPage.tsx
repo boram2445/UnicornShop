@@ -1,15 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Navbar from "../../components/common/Navbar/Navbar";
 import CartItem from "../../components/cart/CartItem/CartItem";
 import { CircleCheckBtn } from "../../components/common/CheckBtn/CheckBtn";
 import * as S from "./cartPageStyle";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import {
-  axiosGetProducts,
+  fetchGetProducts,
   selectAllProducts,
   getProductStatus,
 } from "../../reducers/getProductSlice";
-import { reset, axiosGetCartList, selectCartList } from "../../reducers/getCartListSlice";
+import {
+  reset,
+  fetchGetCartList,
+  fetchDeleteCartItem,
+  selectCartList,
+} from "../../reducers/cartListSlice";
+
 function CartPage() {
   const dispatch = useAppDispatch();
   const cartLists = useAppSelector(selectCartList);
@@ -20,16 +26,21 @@ function CartPage() {
   function getItemDetail(id: number) {
     return itemDetails.filter((item) => item.product_id === id)[0];
   }
+  function deleteCartItem(id: number) {
+    dispatch(fetchDeleteCartItem(id));
+  }
   useEffect(() => {
-    //장바구니 초기화
-    dispatch(reset());
     //상품목록 가져오기
     if (productStatus === "idle") {
-      dispatch(axiosGetProducts());
+      dispatch(fetchGetProducts());
     }
     //장바구니 데이터 불러오기
-    dispatch(axiosGetCartList(TOKEN));
+    dispatch(fetchGetCartList(TOKEN));
+    return () => {
+      dispatch(reset());
+    };
   }, []);
+
   return (
     <>
       <Navbar />
@@ -46,9 +57,10 @@ function CartPage() {
             return (
               <CartItem
                 key={item.cart_item_id}
-                id={item.product_id}
+                id={item.cart_item_id}
                 count={item.quantity}
                 detail={getItemDetail(item.product_id)}
+                deleteItem={deleteCartItem}
               />
             );
           })}

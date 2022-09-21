@@ -1,8 +1,10 @@
-import { RootState } from "./../store";
+import { RootState } from "../store";
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 
 const BASE_URL = "https://openmarket.weniv.co.kr";
+const TOKEN =
+  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyLCJlbWFpbCI6IiIsInVzZXJuYW1lIjoiYnV5ZXIxIiwiZXhwIjoxNjYzOTE3MzU4fQ.eULwTjycmcIrbyWV4iokrHwKiX4ghxFMbi7OdQENo-s";
 
 type CartInfo = {
   count: number;
@@ -20,19 +22,6 @@ type CartItem = {
   // item: Item;
 };
 
-// export type Item = {
-//   product_id: number;
-//   product_name: string;
-//   image: string;
-//   price: number;
-//   stock: number;
-//   products_info: string;
-//   seller: number;
-//   store_name: string;
-//   shipping_method: string;
-//   shipping_fee: number;
-// };
-
 type InitialState = {
   status: string;
   cartItems: CartItem[];
@@ -49,8 +38,9 @@ const initialState: InitialState = {
   error: "",
 };
 
-export const axiosGetCartList = createAsyncThunk(
-  "cartList/axiosGetCartList",
+//카트 상품 가져오기
+export const fetchGetCartList = createAsyncThunk(
+  "cartList/fetchGetCartList",
   async (TOKEN: string) => {
     const config = {
       headers: {
@@ -63,6 +53,21 @@ export const axiosGetCartList = createAsyncThunk(
   }
 );
 
+//카트 상품 삭제
+export const fetchDeleteCartItem = createAsyncThunk(
+  "cartList/fetchDeleteCartItem",
+  async (cart_item_id: number) => {
+    const config = {
+      headers: {
+        Authorization: `JWT ${TOKEN}`,
+      },
+    };
+    const result = await axios.delete(`${BASE_URL}/cart/${cart_item_id}`, config);
+    console.log(result.data);
+    return cart_item_id;
+  }
+);
+
 export const cartListSlice = createSlice({
   name: "cartList",
   initialState,
@@ -70,18 +75,24 @@ export const cartListSlice = createSlice({
     reset: () => initialState,
   },
   extraReducers: (builder) => {
-    builder.addCase(axiosGetCartList.pending, (state) => {
+    builder.addCase(fetchGetCartList.pending, (state) => {
       state.status = "Loading";
     });
-    builder.addCase(axiosGetCartList.fulfilled, (state, action: PayloadAction<CartInfo>) => {
+    builder.addCase(fetchGetCartList.fulfilled, (state, action: PayloadAction<CartInfo>) => {
       const { results } = action.payload;
       state.status = "succeeded";
       state.error = "";
       state.cartItems = results;
     });
-    builder.addCase(axiosGetCartList.rejected, (state, action) => {
+    builder.addCase(fetchGetCartList.rejected, (state, action) => {
       state.status = "failed";
       state.error = action.error.message || "Something was wrong";
+    });
+    builder.addCase(fetchDeleteCartItem.fulfilled, (state, action: PayloadAction<number>) => {
+      state.status = "succeeded";
+      state.error = "";
+      const cart_item_id = action.payload;
+      state.cartItems = state.cartItems.filter((item) => item.cart_item_id !== cart_item_id);
     });
   },
 });

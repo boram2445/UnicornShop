@@ -2,17 +2,20 @@ import React, { useState } from "react";
 import AmountBtn from "../../common/AmountBtn/AmountBtn";
 import { NormalBtn } from "../../common/Button/Button";
 import { CircleCheckBtn } from "../../common/CheckBtn/CheckBtn";
-import deleteIcon from "../../../assets/icons/icon-delete.svg";
 import { Detail } from "../../../reducers/getDetailSlice";
 import * as S from "./cartItemStyle";
+import deleteIcon from "../../../assets/icons/icon-delete.svg";
 
-interface ItemProps {
+type ItemProps = {
   id: number;
   count: number;
   detail: Detail;
-}
+  deleteItem: (id: number) => void;
+};
 
-function CartItem({ id, count, detail }: ItemProps) {
+function CartItem({ id, count, detail, deleteItem }: ItemProps) {
+  const TOKEN =
+    "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyLCJlbWFpbCI6IiIsInVzZXJuYW1lIjoiYnV5ZXIxIiwiZXhwIjoxNjYzOTE3MzU4fQ.eULwTjycmcIrbyWV4iokrHwKiX4ghxFMbi7OdQENo-s";
   const [selectedCount, setSelectedCount] = useState(1);
   const getProductCount = (res: number) => {
     setSelectedCount(res);
@@ -30,12 +33,18 @@ function CartItem({ id, count, detail }: ItemProps) {
         <S.ShipText>택배배송 / 무료배송</S.ShipText>
       </S.InfoBox>
       {/* 상품 개수 버튼 */}
-      <AmountBtn getCount={getProductCount} />
+      <AmountBtn count={count} getCount={getProductCount} />
       <S.OrderBox>
-        <S.PriceAllText>{detail?.price && detail.price * count}원</S.PriceAllText>
+        <S.PriceAllText>
+          {detail?.price && (detail.price * count).toLocaleString()}원
+        </S.PriceAllText>
         <NormalBtn size="small">주문하기</NormalBtn>
       </S.OrderBox>
-      <S.DeleteBtn>
+      <S.DeleteBtn
+        onClick={() => {
+          deleteItem(id);
+        }}
+      >
         <img src={deleteIcon} />
       </S.DeleteBtn>
     </S.CartListBox>
