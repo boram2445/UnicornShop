@@ -1,50 +1,40 @@
-import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import React, { useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../hooks";
-import {
-  reset,
-  fetchGetDetail,
-  getDetailStatus,
-  selectDetail,
-} from "../../reducers/getDetailSlice";
 import { fetchPostCart, postCartItem } from "../../reducers/postCartSlice";
 import Footer from "../../components/common/Footer/Footer";
 import Navbar from "../../components/common/Navbar/Navbar";
 import { NormalBtn } from "../../components/common/Button/Button";
 import AmountBtn from "../../components/common/AmountBtn/AmountBtn";
+import { selectProductById } from "../../reducers/productSlice";
 import * as S from "./detailPageStyle";
 
 function DetailPage() {
   const { productId } = useParams();
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const status = useAppSelector(getDetailStatus);
-  const detail = useAppSelector(selectDetail);
+  const detail = useAppSelector((state) => selectProductById(state, Number(productId)));
   const TOKEN =
     "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyLCJlbWFpbCI6IiIsInVzZXJuYW1lIjoiYnV5ZXIxIiwiZXhwIjoxNjYzOTE3MzU4fQ.eULwTjycmcIrbyWV4iokrHwKiX4ghxFMbi7OdQENo-s";
-  const { image, store_name, product_id, product_name, shipping_fee, price } = detail;
   const [selectedCount, setSelectedCount] = useState(1);
-  useEffect(() => {
-    dispatch(fetchGetDetail(Number(productId)));
-    return () => {
-      dispatch(reset());
-    };
-  }, []);
-  console.log(detail);
+
   const getProductCount = (res: number) => {
     setSelectedCount(res);
   };
+
   const getProductNow = () => {
     console.log("바로구매");
   };
 
   const getProductCart = () => {
     console.log("장바구니");
+    dispatch(
+      fetchPostCart({ TOKEN, product_id: detail?.product_id, quantity: selectedCount, check: true })
+    );
     if (confirm("장바구니에 등록되었습니다.\n확인하시겠습니까?") === true) {
-      console.log("장바구니로 이동");
-      dispatch(fetchPostCart({ TOKEN, product_id, quantity: selectedCount, check: true }));
-    } else {
-      return;
+      navigate("/cart");
     }
+    return;
   };
 
   return (
@@ -53,21 +43,22 @@ function DetailPage() {
       {detail && (
         <S.ProductSection>
           <S.ImageBox>
-            <img src={image} alt="상품 이미지" />
+            <img src={detail.image} alt="상품 이미지" />
           </S.ImageBox>
           <S.CartBox>
             {/* 상품 정보 */}
             <S.InfoBox>
-              <S.SellerText>{store_name}</S.SellerText>
-              <S.ProductText>{product_name}</S.ProductText>
+              <S.SellerText>{detail.seller_store}</S.SellerText>
+              <S.ProductText>{detail.product_name}</S.ProductText>
               <S.PriceText>
-                {price?.toLocaleString()}
+                {detail.price?.toLocaleString()}
                 <span>원</span>
               </S.PriceText>
             </S.InfoBox>
             {/* 상품 장바구니 담기 */}
             <S.ShiftText>
-              택배배송 / {shipping_fee === 0 ? "무료배송" : `배송비 ${shipping_fee}원`}
+              택배배송 /{" "}
+              {detail.shipping_fee === 0 ? "무료배송" : `배송비 ${detail.shipping_fee}원`}
             </S.ShiftText>
             {/* 상품 개수 버튼 */}
             <AmountBtn getCount={getProductCount} />
@@ -79,7 +70,7 @@ function DetailPage() {
                     총 수량<span>{selectedCount}</span>개
                   </S.CountText>
                   <S.PriceResultText>
-                    {price && (price * selectedCount).toLocaleString()}
+                    {detail.price && (detail.price * selectedCount).toLocaleString()}
                     <span>원</span>
                   </S.PriceResultText>
                 </S.CountBox>
@@ -111,14 +102,6 @@ function DetailPage() {
           반품/교환정보
         </NormalBtn>
       </S.TabSection>
-      {/* {detail && (
-        <div>
-          <p>{detail.seller_store}</p>
-          {detail.shipping_method === "DELIVERY" && <p>택배배송</p>}
-          <ProductName>{detail.product_name}</ProductName>
-        </div>
-      )} */}
-
       <Footer />
     </>
   );

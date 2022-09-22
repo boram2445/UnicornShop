@@ -1,15 +1,19 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import plusIcon from "../../../assets/icons/icon-plus-line.svg";
 import minusIcon from "../../../assets/icons/icon-minus-line.svg";
 import plusDisableIcon from "../../../assets/icons/icon-plus-line-disabled.svg";
 import * as S from "./amountStyle";
 
 interface AmountBtnProps {
+  count?: number;
   getCount: (res: number) => void; //선택 개수를 반환하는 함수
 }
 
-function AmountBtn({ getCount }: AmountBtnProps) {
+function AmountBtn({ count, getCount }: AmountBtnProps) {
   const [amount, setAmount] = useState<number>(1);
+  useEffect(() => {
+    count && setAmount(count);
+  }, []);
   const onIncrease = () => {
     const res = amount + 1;
     setAmount(res);

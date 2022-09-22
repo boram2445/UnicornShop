@@ -5,11 +5,6 @@ import { CircleCheckBtn } from "../../components/common/CheckBtn/CheckBtn";
 import * as S from "./cartPageStyle";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import {
-  fetchGetProducts,
-  selectAllProducts,
-  getProductStatus,
-} from "../../reducers/getProductSlice";
-import {
   reset,
   fetchGetCartList,
   fetchDeleteCartItem,
@@ -19,52 +14,47 @@ import {
 function CartPage() {
   const dispatch = useAppDispatch();
   const cartLists = useAppSelector(selectCartList);
-  const itemDetails = useAppSelector(selectAllProducts);
-  const productStatus = useAppSelector(getProductStatus);
   const TOKEN =
     "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyLCJlbWFpbCI6IiIsInVzZXJuYW1lIjoiYnV5ZXIxIiwiZXhwIjoxNjYzOTE3MzU4fQ.eULwTjycmcIrbyWV4iokrHwKiX4ghxFMbi7OdQENo-s";
-  function getItemDetail(id: number) {
-    return itemDetails.filter((item) => item.product_id === id)[0];
-  }
   function deleteCartItem(id: number) {
     dispatch(fetchDeleteCartItem(id));
   }
   useEffect(() => {
-    //상품목록 가져오기
-    if (productStatus === "idle") {
-      dispatch(fetchGetProducts());
-    }
-    //장바구니 데이터 불러오기
     dispatch(fetchGetCartList(TOKEN));
     return () => {
       dispatch(reset());
     };
   }, []);
 
+  const myCartLists =
+    cartLists.length !== 0 ? (
+      cartLists.map((item) => (
+        <CartItem
+          key={item.cart_item_id}
+          id={item.cart_item_id}
+          productId={item.product_id}
+          count={item.quantity}
+          deleteItem={deleteCartItem}
+        />
+      ))
+    ) : (
+      <p>장바구니 상품이 없습니다</p>
+    );
+
   return (
     <>
       <Navbar />
       <S.CartPageLayout>
-        <S.CartPageText>장바구니</S.CartPageText>
-        <S.CartInfoBox>
-          <CircleCheckBtn />
-          <strong>상품정보</strong>
-          <strong>수량</strong>
-          <strong>상품금액</strong>
-        </S.CartInfoBox>
-        <S.CartList>
-          {cartLists?.map((item) => {
-            return (
-              <CartItem
-                key={item.cart_item_id}
-                id={item.cart_item_id}
-                count={item.quantity}
-                detail={getItemDetail(item.product_id)}
-                deleteItem={deleteCartItem}
-              />
-            );
-          })}
-        </S.CartList>
+        <div>
+          <S.CartPageText>장바구니</S.CartPageText>
+          <S.CartInfoBox>
+            <CircleCheckBtn />
+            <strong>상품정보</strong>
+            <strong>수량</strong>
+            <strong>상품금액</strong>
+          </S.CartInfoBox>
+        </div>
+        <S.CartList>{myCartLists}</S.CartList>
       </S.CartPageLayout>
     </>
   );
