@@ -6,23 +6,24 @@ import * as S from "./amountStyle";
 
 interface AmountBtnProps {
   count?: number;
-  getCount: (res: number) => void; //선택 개수를 반환하는 함수
+  getCount: (res: number) => void; //선택 개수를 반환
 }
 
 function AmountBtn({ count, getCount }: AmountBtnProps) {
-  const [amount, setAmount] = useState<number>(1);
-  useEffect(() => {
-    count && setAmount(count);
-  }, []);
+  const [amount, setAmount] = useState(count || 1);
   const onIncrease = () => {
     const res = amount + 1;
+    if (count) {
+      getCount(res);
+    }
     setAmount(res);
-    getCount(res);
   };
   const onDecrease = () => {
     const res = amount - 1 < 1 ? 1 : amount - 1;
+    if (count) {
+      getCount(res);
+    }
     setAmount(res);
-    getCount(res);
   };
   return (
     <S.AmountBtnBox>

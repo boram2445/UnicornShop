@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { useAppSelector } from "../../../hooks";
+import { useAppDispatch, useAppSelector } from "../../../hooks";
 import AmountBtn from "../../common/AmountBtn/AmountBtn";
 import { NormalBtn } from "../../common/Button/Button";
 import { CircleCheckBtn } from "../../common/CheckBtn/CheckBtn";
 import { selectProductById } from "../../../reducers/productSlice";
 import * as S from "./cartItemStyle";
 import deleteIcon from "../../../assets/icons/icon-delete.svg";
+import { handleCheckedItem } from "../../../reducers/cartListSlice";
 
 type ItemProps = {
   id: number;
@@ -15,16 +16,16 @@ type ItemProps = {
 };
 
 function CartItem({ id, count, productId, deleteItem }: ItemProps) {
-  const TOKEN =
-    "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyLCJlbWFpbCI6IiIsInVzZXJuYW1lIjoiYnV5ZXIxIiwiZXhwIjoxNjYzOTE3MzU4fQ.eULwTjycmcIrbyWV4iokrHwKiX4ghxFMbi7OdQENo-s";
-  const [selectedCount, setSelectedCount] = useState(1);
+  const dispatch = useAppDispatch();
+  const [selectedCount, setSelectedCount] = useState(count);
+  const detail = useAppSelector((state) => selectProductById(state, Number(productId)));
   const getProductCount = (res: number) => {
     setSelectedCount(res);
   };
-  const detail = useAppSelector((state) => selectProductById(state, Number(productId)));
+
   return (
     <S.CartListBox>
-      <CircleCheckBtn />
+      <CircleCheckBtn productId={productId} price={detail?.price} count={selectedCount} />
       <S.ImageBox>
         <img src={detail?.image} />
       </S.ImageBox>
@@ -35,10 +36,10 @@ function CartItem({ id, count, productId, deleteItem }: ItemProps) {
         <S.ShipText>택배배송 / 무료배송</S.ShipText>
       </S.InfoBox>
       {/* 상품 개수 버튼 */}
-      <AmountBtn count={count} getCount={getProductCount} />
+      <AmountBtn count={selectedCount} getCount={getProductCount} />
       <S.OrderBox>
         <S.PriceAllText>
-          {detail?.price && (detail?.price * count).toLocaleString()}원
+          {detail?.price && (detail?.price * selectedCount).toLocaleString()}원
         </S.PriceAllText>
         <NormalBtn size="small">주문하기</NormalBtn>
       </S.OrderBox>

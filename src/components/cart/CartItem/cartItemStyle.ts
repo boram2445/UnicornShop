@@ -1,6 +1,7 @@
 import styled from "styled-components";
 
 const CartListBox = styled.div`
+  margin: 5px auto;
   display: flex;
   align-items: center;
   width: 1280px;
