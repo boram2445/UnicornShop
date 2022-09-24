@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
 import AmountBtn from "../../common/AmountBtn/AmountBtn";
 import { NormalBtn } from "../../common/Button/Button";
@@ -6,26 +6,33 @@ import { CircleCheckBtn } from "../../common/CheckBtn/CheckBtn";
 import { selectProductById } from "../../../reducers/productSlice";
 import * as S from "./cartItemStyle";
 import deleteIcon from "../../../assets/icons/icon-delete.svg";
-import { handleCheckedItem } from "../../../reducers/cartListSlice";
-
+import { getDetail, CartItem as Item } from "../../../reducers/cartListSlice";
 type ItemProps = {
-  id: number;
-  productId: number;
-  count: number;
+  item: Item;
   deleteItem: (id: number) => void;
+  checkHandler: (e: React.ChangeEvent<HTMLInputElement>, productId?: number) => void;
 };
 
-function CartItem({ id, count, productId, deleteItem }: ItemProps) {
+function CartItem({ item, deleteItem, checkHandler }: ItemProps) {
   const dispatch = useAppDispatch();
-  const [selectedCount, setSelectedCount] = useState(count);
-  const detail = useAppSelector((state) => selectProductById(state, Number(productId)));
+  const { cart_item_id, product_id, quantity, isChecked } = item;
+  const [selectedCount, setSelectedCount] = useState(quantity);
+  const detail = useAppSelector((state) => selectProductById(state, Number(product_id)));
   const getProductCount = (res: number) => {
     setSelectedCount(res);
   };
+  useEffect(() => {
+    dispatch(getDetail(detail));
+  }, []);
 
   return (
     <S.CartListBox>
-      <CircleCheckBtn productId={productId} price={detail?.price} count={selectedCount} />
+      <CircleCheckBtn
+        name="item"
+        productId={product_id}
+        checkHandler={checkHandler}
+        isChecked={isChecked}
+      />
       <S.ImageBox>
         <img src={detail?.image} />
       </S.ImageBox>
@@ -45,7 +52,7 @@ function CartItem({ id, count, productId, deleteItem }: ItemProps) {
       </S.OrderBox>
       <S.DeleteBtn
         onClick={() => {
-          deleteItem(id);
+          deleteItem(cart_item_id);
         }}
       >
         <img src={deleteIcon} />
