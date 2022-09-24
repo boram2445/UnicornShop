@@ -1,25 +1,30 @@
-import React, { useState } from "react";
-import { handleCheckedItem } from "../../../reducers/cartListSlice";
-import * as S from "./CheckBtnStyle";
+import React, { useEffect } from "react";
 import { useAppDispatch } from "../../../hooks";
+import { checkItem } from "../../../reducers/cartListSlice";
+import * as S from "./CheckBtnStyle";
 
 type CheckBtnProps = {
-  price?: number;
-  count: number;
-  productId: number;
+  name: "item" | "allSelect";
+  productId?: number;
+  checkHandler: (e: React.ChangeEvent<HTMLInputElement>, productId?: number) => void;
+  isChecked: boolean;
 };
 
-export function CircleCheckBtn({ price, count, productId }: CheckBtnProps) {
-  const [checked, setChecked] = useState(false);
+export function CircleCheckBtn({ name, productId, checkHandler, isChecked }: CheckBtnProps) {
   const dispatch = useAppDispatch();
-  const checkHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setChecked(!checked);
-    const isChecked = e.target.checked;
-    dispatch(handleCheckedItem({ productId, isChecked, price, count }));
-  };
+  useEffect(() => {
+    if (name !== "allSelect") {
+      dispatch(checkItem({ productId, isChecked: true }));
+    }
+  }, []);
   return (
     <>
-      <S.CircleCheckBtn type="checkbox" name="product" onChange={checkHandler} />
+      <S.CircleCheckBtn
+        type="checkbox"
+        name={name}
+        checked={isChecked}
+        onChange={(e) => checkHandler(e, productId)}
+      />
     </>
   );
 }
