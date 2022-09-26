@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "../../../hooks";
-import AmountBtn from "../../common/AmountBtn/AmountBtn";
 import { NormalBtn } from "../../common/Button/Button";
 import { CircleCheckBtn } from "../../common/CheckBtn/CheckBtn";
 import { selectProductById } from "../../../reducers/productSlice";
-import * as S from "./cartItemStyle";
+import AmountBtn from "../../common/AmountBtn/AmountBtn";
 import deleteIcon from "../../../assets/icons/icon-delete.svg";
+import { useAppDispatch, useAppSelector } from "../../../hooks";
 import { getDetail, CartItem as Item } from "../../../reducers/cartListSlice";
+import * as S from "./cartItemStyle";
+
 type ItemProps = {
   item: Item;
   deleteItem: (id: number) => void;
@@ -16,17 +17,22 @@ type ItemProps = {
 function CartItem({ item, deleteItem, checkHandler }: ItemProps) {
   const dispatch = useAppDispatch();
   const { cart_item_id, product_id, quantity, isChecked } = item;
-  const [selectedCount, setSelectedCount] = useState(quantity);
+
   const detail = useAppSelector((state) => selectProductById(state, Number(product_id)));
+  const [selectedCount, setSelectedCount] = useState(quantity);
+
+  //상품 선택 개수
   const getProductCount = (res: number) => {
     setSelectedCount(res);
   };
+
+  //상품 디테일 가져오기
   useEffect(() => {
     dispatch(getDetail(detail));
   }, []);
 
   return (
-    <S.CartListBox>
+    <S.CartItemArticle>
       <CircleCheckBtn
         name="item"
         productId={product_id}
@@ -43,7 +49,12 @@ function CartItem({ item, deleteItem, checkHandler }: ItemProps) {
         <S.ShipText>택배배송 / 무료배송</S.ShipText>
       </S.InfoBox>
       {/* 상품 개수 버튼 */}
-      <AmountBtn count={selectedCount} getCount={getProductCount} />
+      <AmountBtn
+        count={selectedCount}
+        getCount={getProductCount}
+        product_id={product_id}
+        cart_item_id={cart_item_id}
+      />
       <S.OrderBox>
         <S.PriceAllText>
           {detail?.price && (detail?.price * selectedCount).toLocaleString()}원
@@ -57,7 +68,7 @@ function CartItem({ item, deleteItem, checkHandler }: ItemProps) {
       >
         <img src={deleteIcon} />
       </S.DeleteBtn>
-    </S.CartListBox>
+    </S.CartItemArticle>
   );
 }
 

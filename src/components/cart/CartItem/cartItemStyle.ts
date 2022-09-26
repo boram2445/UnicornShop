@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-const CartListBox = styled.div`
+const CartItemArticle = styled.article`
   margin: 5px auto;
   display: flex;
   align-items: center;
@@ -74,7 +74,7 @@ const DeleteBtn = styled.button`
 `;
 
 export {
-  CartListBox,
+  CartItemArticle,
   ImageBox,
   InfoBox,
   ShopText,
