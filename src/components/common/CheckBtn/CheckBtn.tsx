@@ -10,7 +10,7 @@ type CheckBtnProps = {
   isChecked: boolean;
 };
 
-export function CircleCheckBtn({ name, productId, checkHandler, isChecked }: CheckBtnProps) {
+export function CircleCheckBtn({ name, productId, checkHandler, isChecked = true }: CheckBtnProps) {
   const dispatch = useAppDispatch();
   useEffect(() => {
     if (name !== "allSelect") {

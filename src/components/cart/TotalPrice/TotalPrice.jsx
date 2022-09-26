@@ -6,9 +6,11 @@ import { getTotalPrice, selectTotalPrice } from "../../../reducers/cartListSlice
 function TotalPrice() {
   const dispatch = useAppDispatch();
   const totalPrice = useAppSelector(selectTotalPrice);
+
   useEffect(() => {
     dispatch(getTotalPrice());
   }, [dispatch]);
+
   return (
     <S.TotalPriceBox>
       <S.PriceBox>
