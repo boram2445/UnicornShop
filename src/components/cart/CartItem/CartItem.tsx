@@ -42,7 +42,7 @@ function CartItem({ item, deleteItem, checkHandler }: ItemProps) {
         <S.ShipText>택배배송 / 무료배송</S.ShipText>
       </S.InfoBox>
       {/* 상품 개수 버튼 */}
-      <AmountBtn item={item} />
+      <AmountBtn count={quantity} item={item} />
       <S.OrderBox>
         <S.PriceAllText>
           {detail?.price && (detail?.price * quantity).toLocaleString()}원
