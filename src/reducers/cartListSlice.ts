@@ -36,6 +36,13 @@ export type CartItem = {
   item: Item;
 };
 
+type PutItemCount = {
+  is_active: boolean;
+  cart_item_id: number;
+  product_id: number;
+  quantity: number;
+};
+
 type InitialState = {
   status: string;
   cartItems: CartItem[];
@@ -83,14 +90,23 @@ export const fetchDeleteCartItem = createAsyncThunk(
 //장바구니 수량 수정
 export const fetchPutCartQuantity = createAsyncThunk(
   "cartList/fetchPutCartQuantity",
-  async (cart_item_id: number) => {
-    const config = {
-      headers: {
-        Authorization: `JWT ${TOKEN}`,
-      },
-    };
-    const result = await axios.put(`${BASE_URL}/cart/${cart_item_id}`, config);
-    console.log(result.data);
+  async ({ product_id, quantity, cart_item_id, is_active }: PutItemCount) => {
+    try {
+      const config = {
+        headers: {
+          Authorization: `JWT ${TOKEN}`,
+        },
+      };
+      const data = { product_id, quantity, is_active };
+      const result = await axios.put(`${BASE_URL}/cart/${cart_item_id}/`, data, config);
+      return result.data;
+    } catch (err) {
+      if (err instanceof Error) {
+        console.log(err.message);
+      } else {
+        console.log("Unexpected error", err);
+      }
+    }
   }
 );
 
@@ -142,12 +158,6 @@ export const cartListSlice = createSlice({
       });
       state.totalPrice = totalPrice;
     },
-
-    // onIncrease: (state, { payload }) => {
-    //   //만약 체크가 되어있다면 count, quantity둘다 변경 => api 호출
-    //   //체크가 안되어있다면 cart quantity만 변경
-    // },
-    // onDecrease: (state, { payload }) => {},
   },
   extraReducers: (builder) => {
     builder.addCase(fetchGetCartList.pending, (state) => {
@@ -174,14 +184,38 @@ export const cartListSlice = createSlice({
       });
       state.cartItems = state.cartItems.filter((item) => item.cart_item_id !== cart_item_id);
     });
+    builder.addCase(fetchPutCartQuantity.fulfilled, (state, action) => {
+      state.status = "succeeded";
+      const { product_id, quantity } = action.payload;
+      state.cartItems.map((item, index) => {
+        if (item.product_id === product_id) {
+          if (item.isChecked) {
+            state.totalPrice -= item.quantity * item.item.price;
+            state.cartItems[index].quantity = quantity;
+            state.totalPrice += quantity * item.item.price;
+          } else {
+            state.cartItems[index].quantity = quantity;
+          }
+        }
+      });
+    });
   },
 });
 
 export const selectCartList = (state: RootState) => state.cartList.cartItems;
 export const getCartListStatus = (state: RootState) => state.cartList.status;
+export const getCartListError = (state: RootState) => state.cartList.error;
+
 export const selectTotalPrice = (state: RootState) => state.cartList.totalPrice;
 export const selectCheckAllState = (state: RootState) =>
   state.cartList.cartItems.every((item) => item.isChecked === true);
-
-export const { reset, checkItem, checkAllItem, getTotalPrice, getDetail } = cartListSlice.actions;
+export const {
+  reset,
+  checkItem,
+  checkAllItem,
+  getTotalPrice,
+  getDetail,
+  // increaseQuantity,
+  // decreaseQuantity,
+} = cartListSlice.actions;
 export default cartListSlice.reducer;

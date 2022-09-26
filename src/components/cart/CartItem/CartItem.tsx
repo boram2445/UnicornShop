@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { NormalBtn } from "../../common/Button/Button";
 import { CircleCheckBtn } from "../../common/CheckBtn/CheckBtn";
 import { selectProductById } from "../../../reducers/productSlice";
@@ -17,14 +17,7 @@ type ItemProps = {
 function CartItem({ item, deleteItem, checkHandler }: ItemProps) {
   const dispatch = useAppDispatch();
   const { cart_item_id, product_id, quantity, isChecked } = item;
-
   const detail = useAppSelector((state) => selectProductById(state, Number(product_id)));
-  const [selectedCount, setSelectedCount] = useState(quantity);
-
-  //상품 선택 개수
-  const getProductCount = (res: number) => {
-    setSelectedCount(res);
-  };
 
   //상품 디테일 가져오기
   useEffect(() => {
@@ -45,19 +38,14 @@ function CartItem({ item, deleteItem, checkHandler }: ItemProps) {
       <S.InfoBox>
         <S.ShopText>{detail?.seller_store}</S.ShopText>
         <S.ProductText>{detail?.product_name}</S.ProductText>
-        <S.PriceText>{detail?.price}원</S.PriceText>
+        <S.PriceText>{detail?.price.toLocaleString()}원</S.PriceText>
         <S.ShipText>택배배송 / 무료배송</S.ShipText>
       </S.InfoBox>
       {/* 상품 개수 버튼 */}
-      <AmountBtn
-        count={selectedCount}
-        getCount={getProductCount}
-        product_id={product_id}
-        cart_item_id={cart_item_id}
-      />
+      <AmountBtn item={item} />
       <S.OrderBox>
         <S.PriceAllText>
-          {detail?.price && (detail?.price * selectedCount).toLocaleString()}원
+          {detail?.price && (detail?.price * quantity).toLocaleString()}원
         </S.PriceAllText>
         <NormalBtn size="small">주문하기</NormalBtn>
       </S.OrderBox>
