@@ -4,9 +4,13 @@ import DeliveryInfo from "../../components/payment/DeliveryInfo/DeliveryInfo";
 import FinalPayCheck from "../../components/payment/FinalPayCheck/FinalPayCheck";
 import OrderItem from "../../components/payment/OrderItem/OrderItem";
 import PayMethod from "../../components/payment/PayMethod/PayMethod";
+import { useAppSelector } from "../../hooks";
 import * as S from "./paymentPageStyle";
+import { selectCheckedItems, selectTotalPrice } from "../../reducers/cartListSlice";
 
 function PaymentPage() {
+  const cartItems = useAppSelector(selectCheckedItems);
+  const totalPrice = useAppSelector(selectTotalPrice);
   return (
     <>
       <Navbar />
@@ -20,9 +24,11 @@ function PaymentPage() {
             <S.Text>수량</S.Text>
             <S.Text>상품금액</S.Text>
           </S.CartInfoBox>
-          <OrderItem />
+          {cartItems?.map((item) => (
+            <OrderItem key={item.product_id} item={item.item} quantity={item.quantity} />
+          ))}
           <S.TotalPayText>
-            총 주문금액 <strong>46,500원</strong>
+            총 주문금액 <strong>{totalPrice.toLocaleString()}원</strong>
           </S.TotalPayText>
         </S.CartBox>
         <DeliveryInfo />

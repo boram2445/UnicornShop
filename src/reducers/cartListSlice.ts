@@ -4,7 +4,7 @@ import axios from "axios";
 
 const BASE_URL = "https://openmarket.weniv.co.kr";
 const TOKEN =
-  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjozLCJlbWFpbCI6IiIsInVzZXJuYW1lIjoiYnV5ZXIyIiwiZXhwIjoxNjY0NTIyNzIyfQ.yEWd9zVjAw3Kt-7XYs6xEvIqcMXVjn-08jpjIylRZ5Q";
+  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjozLCJlbWFpbCI6IiIsInVzZXJuYW1lIjoiYnV5ZXIyIiwiZXhwIjoxNjY1MjkzMTI1fQ.10ww9mxTc0rtOXazt9sMxsxNVgcbnqiOJpEFhNWcQN4";
 
 export interface Item {
   image: string;
@@ -209,13 +209,7 @@ export const getCartListError = (state: RootState) => state.cartList.error;
 export const selectTotalPrice = (state: RootState) => state.cartList.totalPrice;
 export const selectCheckAllState = (state: RootState) =>
   state.cartList.cartItems.every((item) => item.isChecked === true);
-export const {
-  reset,
-  checkItem,
-  checkAllItem,
-  getTotalPrice,
-  getDetail,
-  // increaseQuantity,
-  // decreaseQuantity,
-} = cartListSlice.actions;
+export const selectCheckedItems = (state: RootState) =>
+  state.cartList.cartItems.filter((item) => item.isChecked === true);
+export const { reset, checkItem, checkAllItem, getTotalPrice, getDetail } = cartListSlice.actions;
 export default cartListSlice.reducer;
