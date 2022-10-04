@@ -25,7 +25,7 @@ function Navbar() {
             <img src={cartIcon} />
             <span>장바구니</span>
           </S.NavButton>
-          <S.NavButton onClick={() => navigate("/")}>
+          <S.NavButton onClick={() => navigate("/login")}>
             <img src={userIcon} />
             <span>로그인</span>
           </S.NavButton>
