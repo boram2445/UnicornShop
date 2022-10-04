@@ -1,12 +1,12 @@
 import styled from "styled-components";
 
 const LoginSection = styled.section`
-  /* width: 550px; */
+  position: relative;
 `;
 
 const LoginForm = styled.form`
-  position: absolute;
   top: 60px;
+  margin-top: 60px;
   padding: 35px 34px;
   display: flex;
   flex-direction: column;

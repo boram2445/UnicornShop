@@ -1,8 +1,8 @@
 import styled, { css } from "styled-components";
 
 const ToggleBox = styled.div`
+  position: absolute;
   width: 550px;
-  position: relative;
   display: grid;
   grid-template-columns: 1fr 1fr;
 `;
@@ -23,6 +23,7 @@ const ToggleBtn = styled.button<{ on: string }>`
         z-index: 0;
         padding: 19px 0 37px;
         background-color: var(--color-brightGrey);
+        border-bottom-color: var(--color-grey);
         color: var(--color-black);
       `;
     }
