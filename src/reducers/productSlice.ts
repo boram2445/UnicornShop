@@ -20,6 +20,7 @@ export interface Product {
 interface ProductSliceState {
   status: string; //idle | loading | succeeded | failed
   error: string;
+  totalPage: number;
   products: Product[];
 }
 
@@ -27,14 +28,18 @@ interface ProductSliceState {
 const initialState: ProductSliceState = {
   status: "idle",
   error: "",
+  totalPage: 1,
   products: [],
 };
 
 //cretateAsyncThunk(액션명, 콜백함수-비동기로직)
-export const fetchGetProducts = createAsyncThunk("products/fetchPostProducts", async () => {
-  const result = await axios.get(`${BASE_URL}/products/`);
-  return result.data.results;
-});
+export const fetchGetProducts = createAsyncThunk(
+  "products/fetchPostProducts",
+  async (pageParam: number) => {
+    const result = await axios.get(`${BASE_URL}/products/?page=${pageParam}`);
+    return result.data;
+  }
+);
 
 //state 저장
 export const productSlice = createSlice({
@@ -49,7 +54,8 @@ export const productSlice = createSlice({
     builder.addCase(fetchGetProducts.fulfilled, (state, action) => {
       state.status = "succeeded";
       state.error = "";
-      state.products = action.payload;
+      state.totalPage = Number(Number(action.payload.count) / 15) + 1;
+      state.products = action.payload.results;
     });
     builder.addCase(fetchGetProducts.rejected, (state, action) => {
       state.status = "failed";
@@ -63,6 +69,7 @@ export const productSlice = createSlice({
 //리턴:state.reducer이름.state값
 export const selectAllProducts = (state: RootState) => state.products.products;
 export const getProductStatus = (state: RootState) => state.products.status;
+export const getTotalPageCount = (state: RootState) => state.products.totalPage;
 
 export const selectProductById = (state: RootState, postId: number) =>
   state.products.products.find((product) => product.product_id === postId);
