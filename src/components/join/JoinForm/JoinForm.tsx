@@ -6,7 +6,7 @@ import * as S from "./joinFormStyle";
 function JoinForm() {
   return (
     <S.JoinFormSection>
-      {/* <ToggleBtn /> */}
+      <ToggleBtn />
       <S.JoinForm>
         <InputForm type="text" name="id" label="아이디" width="346px" />
         <InputForm type="password" name="password" label="비밀번호" icon="off" />

@@ -14,7 +14,7 @@ function LoginPage() {
       </Link>
       <LoginForm />
       <S.LinkBox>
-        <Link to="/">
+        <Link to="/join">
           <span>회원가입</span>
         </Link>
         <Link to="/">
