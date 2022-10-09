@@ -1,4 +1,4 @@
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 
 const LabelText = styled.label`
   margin-bottom: 10px;
@@ -10,7 +10,7 @@ const LabelText = styled.label`
 
 const Input = styled.input<{ width: string; icon?: string }>`
   width: ${({ width }) => width};
-  padding: 16px 6px;
+  padding: 16px;
   font-size: 1.6rem;
   line-height: 2rem;
   border-radius: 5px;
@@ -19,12 +19,14 @@ const Input = styled.input<{ width: string; icon?: string }>`
   background: url(${({ icon }) => icon}) no-repeat right 15px center;
 `;
 
-const InputPhone = styled(Input)`
-  &:nth-child(2),
-  &:nth-child(3) {
-    margin-right: 12px;
+const InputPhoneBox = styled.div`
+  div {
+    display: flex;
+    gap: 12px;
   }
 `;
+
+const InputPhone = styled(Input)``;
 
 const InputEmailBox = styled.div`
   span {
@@ -36,4 +38,4 @@ const InputEmailBox = styled.div`
   }
 `;
 
-export { LabelText, Input, InputPhone, InputEmailBox };
+export { LabelText, Input, InputPhoneBox, InputPhone, InputEmailBox };

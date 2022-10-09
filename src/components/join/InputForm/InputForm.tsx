@@ -3,6 +3,7 @@ import { NormalBtn } from "../../common/Button/Button";
 import * as S from "./inputFormStyle";
 import checkOnIcon from "../../../assets/icons/icon-check-on.svg";
 import checkOffIcon from "../../../assets/icons/icon-check-off.svg";
+import DropDown from "../../common/SelectInput/SelectInput";
 
 type InputProps = {
   type: string;
@@ -34,12 +35,14 @@ function InputForm({ type, name, label, icon, width }: InputProps) {
 
 function InputPhone() {
   return (
-    <div>
+    <S.InputPhoneBox>
       <S.LabelText>휴대폰번호</S.LabelText>
-      <S.InputPhone type="text" name="phone" width="150px" />
-      <S.InputPhone type="text" name="phone" width="150px" />
-      <S.InputPhone type="text" name="phone" width="150px" />
-    </div>
+      <div>
+        <DropDown />
+        <S.InputPhone type="text" name="phone" width="150px" />
+        <S.InputPhone type="text" name="phone" width="150px" />
+      </div>
+    </S.InputPhoneBox>
   );
 }
 
