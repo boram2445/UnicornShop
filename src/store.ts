@@ -2,12 +2,15 @@ import { configureStore } from "@reduxjs/toolkit";
 import productSliceReducer from "./reducers/productSlice";
 import cartSliceReducer from "./reducers/postCartSlice";
 import cartListSliceReducer from "./reducers/cartListSlice";
+import joinSliceReducer from "./reducers/joinSlice";
+
 //state 저장소
 const store = configureStore({
   reducer: {
     products: productSliceReducer,
     cart: cartSliceReducer,
     cartList: cartListSliceReducer,
+    join: joinSliceReducer,
   },
 });
 
