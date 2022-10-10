@@ -4,7 +4,7 @@ const SelectArticle = styled.article`
   width: 150px;
 `;
 
-const SelectedBtn = styled.button<{ on: boolean; icon: string }>`
+const SelectedBtn = styled.button<{ icon: string }>`
   display: grid;
   grid-template-columns: 1fr 20px;
   width: 100%;
@@ -21,7 +21,7 @@ const SelectedBtn = styled.button<{ on: boolean; icon: string }>`
   }
 `;
 
-const SelectList = styled.ul<{ on: boolean }>`
+const SelectList = styled.ul<{ on: string }>`
   margin-top: 6px;
   position: absolute;
   border: 1px solid var(--color-grey);
@@ -41,7 +41,7 @@ const SelectList = styled.ul<{ on: boolean }>`
       background-color: var(--color-brightGrey);
     }
   }
-  display: ${({ on }) => (on ? "block" : "none")};
+  display: ${({ on }) => (on === "true" ? "block" : "none")};
 `;
 
 export { SelectArticle, SelectedBtn, SelectList };

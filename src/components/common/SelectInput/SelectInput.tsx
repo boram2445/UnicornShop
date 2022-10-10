@@ -15,13 +15,12 @@ function DropDown() {
     <S.SelectArticle>
       <S.SelectedBtn
         type="button"
-        on={onToggle}
         icon={onToggle ? ArrowDownIcon : ArrowUpIcon}
         onClick={() => setOnToggle(!onToggle)}
       >
         {selected}
       </S.SelectedBtn>
-      <S.SelectList on={onToggle}>
+      <S.SelectList on={onToggle.toString()}>
         <li>
           <button type="button" onClick={() => handleItemClick("010")}>
             010
