@@ -42,7 +42,12 @@ export const fetchPostUserName = createAsyncThunk(
 export const joinSlice = createSlice({
   name: "join",
   initialState,
-  reducers: {},
+  reducers: {
+    resetUsernameStatus: (state) => {
+      state.status = "idle";
+      state.error = "";
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(fetchPostUserName.fulfilled, (state) => {
       state.status = "succeeded";
@@ -57,5 +62,7 @@ export const joinSlice = createSlice({
   },
 });
 
+export const getUserNameStatus = (state: RootState) => state.join.status;
 export const getUserNameError = (state: RootState) => state.join.error;
+export const { resetUsernameStatus } = joinSlice.actions;
 export default joinSlice.reducer;
