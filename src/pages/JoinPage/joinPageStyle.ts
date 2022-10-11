@@ -8,11 +8,6 @@ const JoinSection = styled.section`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-
-  div:nth-child(3) {
-    width: 480px;
-    margin: 34px auto;
-  }
 `;
 
 export { JoinSection, Logo, CheckBox };
