@@ -8,7 +8,7 @@ const LabelText = styled.label`
   color: var(--color-darkGrey);
 `;
 
-const Input = styled.input<{ width: string; onIcon?: string; offIcon?: string }>`
+const Input = styled.input<{ width: string; icon?: string }>`
   width: ${({ width }) => width};
   padding: 16px;
   font-size: 1.6rem;
@@ -16,17 +16,12 @@ const Input = styled.input<{ width: string; onIcon?: string; offIcon?: string }>
   border-radius: 5px;
   border: 1px solid var(--color-grey);
   outline-color: var(--color-main);
-  &:invalid ~ small {
-    display: block;
-  }
-  background: url(${({ onIcon }) => onIcon}) no-repeat right 15px center;
-  &:invalid {
-    background: url(${({ offIcon }) => offIcon}) no-repeat right 15px center;
-  }
+
+  background: ${({ icon }) => icon && `url(${icon}) no-repeat right 15px center`};
 `;
 
-const ErrorText = styled.small`
-  display: none;
+const ErrorText = styled.small<{ error?: string }>`
+  display: block;
   margin: 6px 0 0 10px;
   font-size: 1.4rem;
   font-weight: 500;

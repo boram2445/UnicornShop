@@ -6,6 +6,16 @@ const JoinFormSection = styled.section`
 `;
 
 const JoinForm = styled.form`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  & > div:nth-child(2) {
+    margin: 34px auto;
+    width: 480px;
+  }
+`;
+
+const InputBoxs = styled.div`
   margin-top: 60px;
   padding: 35px 34px;
   border: 1px solid var(--color-grey);
@@ -21,4 +31,4 @@ const JoinForm = styled.form`
   }
 `;
 
-export { JoinFormSection, JoinForm };
+export { JoinFormSection, InputBoxs, JoinForm };
