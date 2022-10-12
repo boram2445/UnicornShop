@@ -1,9 +1,7 @@
 import React, { useRef, useEffect } from "react";
 import { NormalBtn } from "../../common/Button/Button";
-import * as S from "./inputFormStyle";
-import checkOnIcon from "../../../assets/icons/icon-check-on.svg";
-import checkOffIcon from "../../../assets/icons/icon-check-off.svg";
 import SelectInput from "../../common/SelectInput/SelectInput";
+import * as S from "./inputFormStyle";
 
 type InputProps = {
   label: string;
@@ -56,29 +54,75 @@ function InputForm({ icon, width, onClick, onChange, onButton, error, ...props }
   );
 }
 
+type InputPhoneProps = {
+  onClick: (selected: string) => void;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  value2: string;
+  value3: string;
+};
+
 //휴대폰 번호 입력 폼
-function InputPhone() {
+function InputPhone({ onClick, onChange, value2, value3 }: InputPhoneProps) {
   const selectItems = ["010", "011", "016", "017", "018", "019"];
+
   return (
     <S.InputPhoneBox>
       <S.LabelText>휴대폰번호</S.LabelText>
       <div>
-        <SelectInput selectItems={selectItems} />
-        <S.InputPhone type="text" name="phone" width="150px" autoComplete="off" required />
-        <S.InputPhone type="text" name="phone" width="150px" autoComplete="off" required />
+        <SelectInput selectItems={selectItems} onClick={onClick} />
+        <S.InputPhone
+          type="text"
+          name="phone2"
+          width="150px"
+          autoComplete="off"
+          required
+          onChange={onChange}
+          value={value2}
+        />
+        <S.InputPhone
+          type="text"
+          name="phone3"
+          width="150px"
+          autoComplete="off"
+          required
+          onChange={onChange}
+          value={value3}
+        />
       </div>
     </S.InputPhoneBox>
   );
 }
 
+type InputEmailProps = {
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  value1: string;
+  value2: string;
+};
+
 //이메일 입력 폼
-function InputEmail() {
+function InputEmail({ onChange, value1, value2 }: InputEmailProps) {
   return (
     <S.InputEmailBox>
       <S.LabelText>이메일</S.LabelText>
-      <S.Input type="text" name="email" width="218px" autoComplete="off" required />
+      <S.Input
+        type="text"
+        name="email1"
+        width="218px"
+        autoComplete="off"
+        required
+        onChange={onChange}
+        value={value1}
+      />
       <span>@</span>
-      <S.Input type="text" name="email" width="218px" autoComplete="off" required />
+      <S.Input
+        type="text"
+        name="email2"
+        width="218px"
+        autoComplete="off"
+        required
+        onChange={onChange}
+        value={value2}
+      />
     </S.InputEmailBox>
   );
 }

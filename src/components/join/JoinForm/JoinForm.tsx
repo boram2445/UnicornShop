@@ -25,13 +25,25 @@ function JoinForm() {
     password: "",
     confirmPassword: "",
     name: "",
+    phone1: "010",
+    phone2: "",
+    phone3: "",
+    email1: "",
+    email2: "",
+    checkBox: "",
+  };
+  const initialError = {
+    username: "",
+    password: "",
+    confirmPassword: "",
+    name: "",
     phone: "",
     email: "",
   };
   //아이디, 비밀번호, 이름, 전화번호, 이메일 확인
   const [formValues, setFormValues] = useState(initialValues);
   //오류 메세지 상태 저장
-  const [errorMessage, setErrorMessage] = useState(initialValues);
+  const [errorMessage, setErrorMessage] = useState(initialError);
   //아이디 중복 확인 버튼
   const [onButton, setOnButton] = useState(false);
 
@@ -44,6 +56,15 @@ function JoinForm() {
       dispatch(resetUsernameStatus());
     };
   }, [nameStatus]);
+
+  //가입하기 버튼 활성화
+  const canJoin =
+    Object.values(formValues).every(Boolean) &&
+    errorMessage.username.includes("사용 가능") &&
+    formValues.checkBox === "true" &&
+    Object.entries(errorMessage)
+      .filter((item) => item[0] !== "username")
+      .every((item) => item[1] === "");
 
   //아이디 중복 확인 버튼
   const checkUserNameVaild = (username: string) => {
@@ -114,6 +135,30 @@ function JoinForm() {
     }
   };
 
+  //휴대폰 번호
+  const onClickPhone = (selected: string) => {
+    setFormValues({ ...formValues, ["phone1"]: selected });
+  };
+
+  const onChangePhone = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    const newValue = handleInputLength(name, value, 4);
+    setFormValues({ ...formValues, [name]: newValue });
+  };
+
+  //이메일
+  const onChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(e.target.value);
+    const { name, value } = e.target;
+    setFormValues({ ...formValues, [name]: value });
+  };
+
+  //체크박스
+  const onChangeCheckbox = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.checked.toString();
+    setFormValues({ ...formValues, ["checkBox"]: value });
+  };
+
   //form 제출
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -165,13 +210,22 @@ function JoinForm() {
             onChange={onChangeName}
             error={errorMessage.name}
           />
-          <InputPhone />
-          <InputEmail />
+          <InputPhone
+            onClick={onClickPhone}
+            onChange={onChangePhone}
+            value2={formValues.phone2}
+            value3={formValues.phone3}
+          />
+          <InputEmail
+            onChange={onChangeEmail}
+            value1={formValues.email1}
+            value2={formValues.email2}
+          />
         </S.InputBoxs>
-        <CheckLabel color="#767676">
+        <CheckLabel color="#767676" onChange={onChangeCheckbox}>
           유니콘샵의 <u>이용약관</u> 및 <u>개인정보처리방침</u>에 대한 내용을 확인하였고 동의합니다.
         </CheckLabel>
-        <NormalBtn type="submit" size="medium" disabled={true}>
+        <NormalBtn type="submit" size="medium" disabled={!canJoin}>
           가입하기
         </NormalBtn>
       </S.JoinForm>
