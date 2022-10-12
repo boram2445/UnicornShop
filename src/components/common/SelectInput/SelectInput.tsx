@@ -5,15 +5,17 @@ import * as S from "./selectInputStyle";
 
 type SelectInputProps = {
   selectItems: string[];
+  onClick: (selected: string) => void;
 };
 
-function SelectInput({ selectItems }: SelectInputProps) {
+function SelectInput({ selectItems, onClick }: SelectInputProps) {
   const [onToggle, setOnToggle] = useState(false);
   const [selected, setSelected] = useState(selectItems[0]);
 
   const handleItemClick = (item: string) => {
     setSelected(item);
     setOnToggle(!onToggle);
+    onClick(selected);
   };
 
   return (
