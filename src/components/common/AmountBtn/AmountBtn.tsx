@@ -3,7 +3,7 @@ import plusIcon from "../../../assets/icons/icon-plus-line.svg";
 import minusIcon from "../../../assets/icons/icon-minus-line.svg";
 import plusDisableIcon from "../../../assets/icons/icon-plus-line-disabled.svg";
 import * as S from "./amountStyle";
-import { fetchPutCartQuantity, CartItem } from "../../../reducers/cartListSlice";
+import { fetchPutCartQuantity, CartItem } from "../../../features/cartListSlice";
 import { useAppDispatch } from "../../../hooks";
 
 interface AmountBtnProps {
@@ -18,8 +18,7 @@ function AmountBtn({ count, getCount, item }: AmountBtnProps) {
   const dispatch = useAppDispatch();
   const [amount, setAmount] = useState(count || 1);
   const TOKEN =
-    "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjozLCJlbWFpbCI6IiIsInVzZXJuYW1lIjoiYnV5ZXIyIiwiZXhwIjoxNjY0NTIyNzIyfQ.yEWd9zVjAw3Kt-7XYs6xEvIqcMXVjn-08jpjIylRZ5Q";
-
+    "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjozLCJlbWFpbCI6IiIsInVzZXJuYW1lIjoiYnV5ZXIyIiwiZXhwIjoxNjY1OTgyNjQ4fQ.MlGGZy8nMKNX9UnxsI2K_puyPWygnIhB-aC5gQjJc4U";
   const onIncrease = () => {
     const quantity = amount + 1;
     setAmount(quantity);

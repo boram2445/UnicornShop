@@ -9,7 +9,7 @@ import {
   getUserNameError,
   getUserNameStatus,
   resetUsernameStatus,
-} from "../../../reducers/joinSlice";
+} from "../../../features/joinSlice";
 import * as S from "./joinFormStyle";
 
 import checkOnIcon from "../../../assets/icons/icon-check-on.svg";

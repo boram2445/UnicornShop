@@ -1,11 +1,11 @@
 import React, { useEffect } from "react";
 import { NormalBtn } from "../../common/Button/Button";
 import { CircleCheckBtn } from "../../common/CheckBtn/CheckBtn";
-import { selectProductById } from "../../../reducers/productSlice";
+import { selectProductById } from "../../../features/productSlice";
 import AmountBtn from "../../common/AmountBtn/AmountBtn";
 import deleteIcon from "../../../assets/icons/icon-delete.svg";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
-import { getDetail, CartItem as Item } from "../../../reducers/cartListSlice";
+import { getDetail, CartItem as Item } from "../../../features/cartListSlice";
 import * as S from "./cartItemStyle";
 
 type ItemProps = {

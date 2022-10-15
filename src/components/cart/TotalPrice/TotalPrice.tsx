@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import * as S from "./totalPriceStyle";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
-import { getTotalPrice, selectTotalPrice } from "../../../reducers/cartListSlice";
+import { getTotalPrice, selectTotalPrice } from "../../../features/cartListSlice";
 import plusIcon from "../../../assets/icons/icon-plus-line.svg";
 import minusIcon from "../../../assets/icons/icon-minus-line.svg";
 

@@ -4,7 +4,7 @@ import {
   selectAllProducts,
   getTotalPageCount,
   fetchGetProducts,
-} from "../../reducers/productSlice";
+} from "../../features/productSlice";
 import ProductCard from "../../components/home/ProductCard/ProductCard";
 import Header from "../../components/common/Header/Header";
 import Carousel from "../../components/home/Carousel/Carousel";

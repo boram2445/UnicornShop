@@ -6,7 +6,7 @@ import OrderItem from "../../components/payment/OrderItem/OrderItem";
 import PayMethod from "../../components/payment/PayMethod/PayMethod";
 import { useAppSelector } from "../../hooks";
 import * as S from "./paymentPageStyle";
-import { selectCheckedItems, selectTotalPrice } from "../../reducers/cartListSlice";
+import { selectCheckedItems, selectTotalPrice } from "../../features/cartListSlice";
 
 function PaymentPage() {
   const cartItems = useAppSelector(selectCheckedItems);

@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useAppDispatch } from "../../../hooks";
-import { checkItem } from "../../../reducers/cartListSlice";
+import { checkItem } from "../../../features/cartListSlice";
 import * as S from "./CheckBtnStyle";
 
 type CheckBtnProps = {

@@ -1,6 +1,6 @@
 import React from "react";
 import * as S from "./orderItemStyle";
-import { Item } from "../../../reducers/cartListSlice";
+import { Item } from "../../../features/cartListSlice";
 
 type OrderProps = {
   item: Item;

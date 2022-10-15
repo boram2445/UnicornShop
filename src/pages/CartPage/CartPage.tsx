@@ -17,7 +17,7 @@ import {
   checkAllItem,
   checkItem,
   reset,
-} from "../../reducers/cartListSlice";
+} from "../../features/cartListSlice";
 import { Link } from "react-router-dom";
 
 function CartPage() {
