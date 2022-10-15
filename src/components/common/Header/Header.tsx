@@ -1,12 +1,12 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import * as S from "./navbarStyle";
+import * as S from "./headerStyle";
 import logo from "../../../assets/icons/Logo-hodu.svg";
 import cartIcon from "../../../assets/icons/icon-shopping-cart.svg";
 import userIcon from "../../../assets/icons/icon-user.svg";
 import searchIcon from "../../../assets/icons/search.svg";
 
-function Navbar() {
+function Header() {
   const navigate = useNavigate();
   return (
     <S.NavContainer>
@@ -35,4 +35,4 @@ function Navbar() {
   );
 }
 
-export default Navbar;
+export default Header;

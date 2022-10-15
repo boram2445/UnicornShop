@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks";
-import Navbar from "../../components/common/Navbar/Navbar";
+import Header from "../../components/common/Header/Header";
 import CartItem from "../../components/cart/CartItem/CartItem";
 import TotalPrice from "../../components/cart/TotalPrice/TotalPrice";
 import { CircleCheckBtn } from "../../components/common/CheckBtn/CheckBtn";
@@ -18,6 +18,7 @@ import {
   checkItem,
   reset,
 } from "../../reducers/cartListSlice";
+import { Link } from "react-router-dom";
 
 function CartPage() {
   const dispatch = useAppDispatch();
@@ -30,17 +31,16 @@ function CartPage() {
   useEffect(() => {
     dispatch(fetchGetCartList(TOKEN));
 
-    return () => {
-      dispatch(reset());
-    };
+    // return () => {
+    //   dispatch(reset());
+    // };
   }, [dispatch]);
 
   //임시 토큰
   const TOKEN =
-    "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjozLCJlbWFpbCI6IiIsInVzZXJuYW1lIjoiYnV5ZXIyIiwiZXhwIjoxNjY0NTIyNzIyfQ.yEWd9zVjAw3Kt-7XYs6xEvIqcMXVjn-08jpjIylRZ5Q";
+    "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjozLCJlbWFpbCI6IiIsInVzZXJuYW1lIjoiYnV5ZXIyIiwiZXhwIjoxNjY1OTgyNjQ4fQ.MlGGZy8nMKNX9UnxsI2K_puyPWygnIhB-aC5gQjJc4U";
 
   //카트 상품 가져오기
-
   function deleteCartItem(id: number) {
     dispatch(fetchDeleteCartItem(id));
   }
@@ -75,7 +75,9 @@ function CartPage() {
             ))}
           </S.CartList>
           <TotalPrice />
-          <NormalBtn size="large">주문하기</NormalBtn>
+          <Link to="/payment">
+            <NormalBtn size="large">주문하기</NormalBtn>
+          </Link>
         </>
       ) : (
         <S.NoItemBox>
@@ -89,7 +91,7 @@ function CartPage() {
 
   return (
     <>
-      <Navbar />
+      <Header />
       <S.CartPageLayout>
         <S.CartPageText>장바구니</S.CartPageText>
         <S.CartInfoBox>

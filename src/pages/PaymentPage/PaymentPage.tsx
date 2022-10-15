@@ -1,5 +1,5 @@
 import React from "react";
-import Navbar from "../../components/common/Navbar/Navbar";
+import Header from "../../components/common/Header/Header";
 import DeliveryInfo from "../../components/payment/DeliveryInfo/DeliveryInfo";
 import FinalPayCheck from "../../components/payment/FinalPayCheck/FinalPayCheck";
 import OrderItem from "../../components/payment/OrderItem/OrderItem";
@@ -13,7 +13,7 @@ function PaymentPage() {
   const totalPrice = useAppSelector(selectTotalPrice);
   return (
     <>
-      <Navbar />
+      <Header />
       <S.Title>주문/결제하기</S.Title>
       <S.PaymentSection>
         <S.CartBox>

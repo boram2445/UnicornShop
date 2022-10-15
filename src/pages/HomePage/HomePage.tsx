@@ -6,7 +6,7 @@ import {
   fetchGetProducts,
 } from "../../reducers/productSlice";
 import ProductCard from "../../components/home/ProductCard/ProductCard";
-import Navbar from "../../components/common/Navbar/Navbar";
+import Header from "../../components/common/Header/Header";
 import Carousel from "../../components/home/Carousel/Carousel";
 import Footer from "../../components/common/Footer/Footer";
 import * as S from "./homePageStyle";
@@ -26,7 +26,7 @@ function HomePage() {
   }, [page]);
   return (
     <>
-      <Navbar />
+      <Header />
       <Carousel />
       <S.ProductContainer>
         <S.ProductLists>

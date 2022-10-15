@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { fetchPostCart, postCartItem } from "../../reducers/postCartSlice";
 import Footer from "../../components/common/Footer/Footer";
-import Navbar from "../../components/common/Navbar/Navbar";
+import Header from "../../components/common/Header/Header";
 import { NormalBtn } from "../../components/common/Button/Button";
 import AmountBtn from "../../components/common/AmountBtn/AmountBtn";
 import { selectProductById } from "../../reducers/productSlice";
@@ -15,7 +15,7 @@ function DetailPage() {
   const dispatch = useAppDispatch();
   const detail = useAppSelector((state) => selectProductById(state, Number(productId)));
   const TOKEN =
-    "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjozLCJlbWFpbCI6IiIsInVzZXJuYW1lIjoiYnV5ZXIyIiwiZXhwIjoxNjY0NTIyNzIyfQ.yEWd9zVjAw3Kt-7XYs6xEvIqcMXVjn-08jpjIylRZ5Q";
+    "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjozLCJlbWFpbCI6IiIsInVzZXJuYW1lIjoiYnV5ZXIyIiwiZXhwIjoxNjY1OTgyNjQ4fQ.MlGGZy8nMKNX9UnxsI2K_puyPWygnIhB-aC5gQjJc4U";
   const [selectedCount, setSelectedCount] = useState(1);
 
   const getProductCount = (res: number) => {
@@ -39,7 +39,7 @@ function DetailPage() {
 
   return (
     <>
-      <Navbar />
+      <Header />
       {detail && (
         <S.ProductSection>
           <S.ImageBox>
