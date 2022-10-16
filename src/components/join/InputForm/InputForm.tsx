@@ -59,10 +59,11 @@ type InputPhoneProps = {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   value2: string;
   value3: string;
+  error: string;
 };
 
 //휴대폰 번호 입력 폼
-function InputPhone({ onClick, onChange, value2, value3 }: InputPhoneProps) {
+function InputPhone({ onClick, onChange, value2, value3, error }: InputPhoneProps) {
   const selectItems = ["010", "011", "016", "017", "018", "019"];
 
   return (
@@ -89,6 +90,7 @@ function InputPhone({ onClick, onChange, value2, value3 }: InputPhoneProps) {
           value={value3}
         />
       </div>
+      {error && <S.ErrorText>{error}</S.ErrorText>}
     </S.InputPhoneBox>
   );
 }
@@ -97,10 +99,11 @@ type InputEmailProps = {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   value1: string;
   value2: string;
+  error: string;
 };
 
 //이메일 입력 폼
-function InputEmail({ onChange, value1, value2 }: InputEmailProps) {
+function InputEmail({ onChange, value1, value2, error }: InputEmailProps) {
   return (
     <S.InputEmailBox>
       <S.LabelText>이메일</S.LabelText>
@@ -123,6 +126,7 @@ function InputEmail({ onChange, value1, value2 }: InputEmailProps) {
         onChange={onChange}
         value={value2}
       />
+      {error && <S.ErrorText>{error}</S.ErrorText>}
     </S.InputEmailBox>
   );
 }

@@ -1,24 +1,23 @@
 import React, { useState, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
-import { InputEmail, InputForm, InputPhone } from "../InputForm/InputForm";
-import ToggleBtn from "../../common/ToggleBtn/ToggleBtn";
-import CheckLabel from "../../common/CheckLabel/CheckLabel";
-import { NormalBtn } from "../../common/Button/Button";
 import {
   fetchPostUserName,
-  getUserNameError,
+  getUserNameMessage,
   getUserNameStatus,
   resetUsernameStatus,
 } from "../../../features/joinSlice";
-import * as S from "./joinFormStyle";
-
+import { InputEmail, InputForm, InputPhone } from "../InputForm/InputForm";
+import { NormalBtn } from "../../common/Button/Button";
+import ToggleBtn from "../../common/ToggleBtn/ToggleBtn";
+import CheckLabel from "../../common/CheckLabel/CheckLabel";
 import checkOnIcon from "../../../assets/icons/icon-check-on.svg";
 import checkOffIcon from "../../../assets/icons/icon-check-off.svg";
+import * as S from "./joinFormStyle";
 
 function JoinForm() {
   const dispatch = useAppDispatch();
   const nameStatus = useAppSelector(getUserNameStatus);
-  const nameError = useAppSelector(getUserNameError);
+  const usernameMessage = useAppSelector(getUserNameMessage);
 
   const initialValues = {
     username: "",
@@ -40,17 +39,17 @@ function JoinForm() {
     phone: "",
     email: "",
   };
-  //아이디, 비밀번호, 이름, 전화번호, 이메일 확인
+  //아이디, 비밀번호, 이름, 전화번호, 이메일
   const [formValues, setFormValues] = useState(initialValues);
-  //오류 메세지 상태 저장
+  //오류 메세지 상태
   const [errorMessage, setErrorMessage] = useState(initialError);
-  //아이디 중복 확인 버튼
-  const [onButton, setOnButton] = useState(false);
+  //아이디 중복 확인 버튼 상태
+  const [onNameVaildBtn, setNameVaildBtn] = useState(false);
 
   useEffect(() => {
     //처음 한번 클릭되었을때 변하고 변경되면
     if (nameStatus !== "idle") {
-      setErrorMessage({ ...errorMessage, ["username"]: nameError });
+      setErrorMessage({ ...errorMessage, ["username"]: usernameMessage });
     }
     return () => {
       dispatch(resetUsernameStatus());
@@ -66,14 +65,14 @@ function JoinForm() {
       .filter((item) => item[0] !== "username")
       .every((item) => item[1] === "");
 
-  //아이디 중복 확인 버튼
+  //아이디 중복 확인 버튼 클릭 이벤트
   const checkUserNameVaild = (username: string) => {
     dispatch(resetUsernameStatus());
     dispatch(fetchPostUserName(username));
   };
 
   //글자수 제한
-  const handleInputLength = (name: string, value: string, maxLen: number) => {
+  const handleInputLength = (value: string, maxLen: number) => {
     if (value.length > maxLen) {
       value = value.substring(0, maxLen);
     }
@@ -83,37 +82,47 @@ function JoinForm() {
   //아이디
   const onChangeUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    const newValue = handleInputLength(name, value, 20);
+    const newValue = handleInputLength(value, 20);
     setFormValues({ ...formValues, [name]: newValue });
     const pattern = "^[A-Za-z0-9]{3,21}$";
-    //아이디가 유효성 검사에서 통과하면, 중복 확인 버튼 활성화
+    //아이디 패턴 검사 통과하면, 중복 확인 버튼 활성화
     if (value.match(pattern)) {
       setErrorMessage({ ...errorMessage, [name]: "" });
-      setOnButton(true);
+      setNameVaildBtn(true);
     } else {
       const message = "아이디는 3-20자 이내의 영어 소문자, 대문자, 숫자만 가능합니다.";
       setErrorMessage({ ...errorMessage, [name]: message });
-      setOnButton(false);
+      setNameVaildBtn(false);
     }
   };
 
   //비밀번호
   const onChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormValues({ ...formValues, [name]: value });
+    const newValue = handleInputLength(value, 20);
+    setFormValues({ ...formValues, [name]: newValue });
     const pattern = "^(?=.*[a-zA-Z])(?=.*[0-9]).{8,20}$";
-    if (value.match(pattern)) {
-      setErrorMessage({ ...errorMessage, [name]: "" });
-    } else {
-      const message = "비밀번호는 영문, 숫자 조합 8-20자리를 입력해주세요.";
-      setErrorMessage({ ...errorMessage, [name]: message });
+    let passwordMessage = "";
+    let comfirmMessage = "";
+    if (!value.match(pattern)) {
+      passwordMessage = "비밀번호는 영문, 숫자 조합 8-20자리를 입력해주세요.";
     }
+    //비밀번호 재확인 칸에 값이 있을 경우 검사
+    if (formValues.confirmPassword && value !== formValues.confirmPassword) {
+      comfirmMessage = "비밀번호가 일치하지 않습니다.";
+    }
+    setErrorMessage({
+      ...errorMessage,
+      ["password"]: passwordMessage,
+      ["confirmPassword"]: comfirmMessage,
+    });
   };
 
-  //비밀번호 확인
+  //비밀번호 재확인
   const onChangeConfirmPassword = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormValues({ ...formValues, [name]: value });
+    const newValue = handleInputLength(value, 20);
+    setFormValues({ ...formValues, [name]: newValue });
     if (value === formValues.password) {
       setErrorMessage({ ...errorMessage, [name]: "" });
     } else {
@@ -125,12 +134,13 @@ function JoinForm() {
   //이름
   const onChangeName = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormValues({ ...formValues, [name]: value });
-    const pattern = "^[가-힣a-zA-Z]+$";
+    const newValue = handleInputLength(value, 10);
+    setFormValues({ ...formValues, [name]: newValue });
+    const pattern = "^[ㄱ-ㅎ가-힣a-zA-Z]{1,10}$";
     if (value.match(pattern)) {
       setErrorMessage({ ...errorMessage, [name]: "" });
     } else {
-      const message = "이름은 한글 혹은 영어 조합이어야 합니다.";
+      const message = "이름은 한글 혹은 영어로 10자리까지 가능합니다.";
       setErrorMessage({ ...errorMessage, [name]: message });
     }
   };
@@ -142,15 +152,38 @@ function JoinForm() {
 
   const onChangePhone = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    const newValue = handleInputLength(name, value, 4);
+    //숫자만 입력 가능
+    const newValue = handleInputLength(value, 4).replace(/[^0-9]/g, "");
     setFormValues({ ...formValues, [name]: newValue });
+
+    let message = "";
+    if (formValues.phone2 && formValues.phone3) {
+      if (
+        (name === "phone2" && !newValue.match("^[0-9]{3,4}$")) ||
+        (name === "phone3" && !newValue.match("^[0-9]{4}$"))
+      ) {
+        message = "휴대폰번호 입력 형식을 확인해 주세요";
+      }
+    }
+    setErrorMessage({ ...errorMessage, ["phone"]: message });
   };
 
   //이메일
   const onChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.value);
     const { name, value } = e.target;
+    const pattern1 = "^[a-zA-Z0-9]*$";
+    const pattern2 = "[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$";
+    let message = "";
+    if (formValues.email1 && formValues.email2) {
+      if (
+        (name === "email1" && !value.match(pattern1)) ||
+        (name === "email2" && !value.match(pattern2))
+      ) {
+        message = "이메일 형식을 확인해 주세요";
+      }
+    }
     setFormValues({ ...formValues, [name]: value });
+    setErrorMessage({ ...errorMessage, ["email"]: message });
   };
 
   //체크박스
@@ -162,7 +195,7 @@ function JoinForm() {
   //form 제출
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(e.target);
+    console.log(formValues);
   };
 
   return (
@@ -177,7 +210,7 @@ function JoinForm() {
             width="346px"
             onChange={onChangeUsername}
             onClick={checkUserNameVaild}
-            onButton={onButton}
+            onButton={onNameVaildBtn}
             error={errorMessage.username}
             value={formValues.username}
           />
@@ -190,6 +223,7 @@ function JoinForm() {
             }
             onChange={onChangePassword}
             error={errorMessage.password}
+            value={formValues.password}
           />
           <InputForm
             label="비밀번호 재확인"
@@ -202,6 +236,7 @@ function JoinForm() {
             }
             onChange={onChangeConfirmPassword}
             error={errorMessage.confirmPassword}
+            value={formValues.confirmPassword}
           />
           <InputForm
             label="이름"
@@ -209,17 +244,20 @@ function JoinForm() {
             name="name"
             onChange={onChangeName}
             error={errorMessage.name}
+            value={formValues.name}
           />
           <InputPhone
             onClick={onClickPhone}
             onChange={onChangePhone}
             value2={formValues.phone2}
             value3={formValues.phone3}
+            error={errorMessage.phone}
           />
           <InputEmail
             onChange={onChangeEmail}
             value1={formValues.email1}
             value2={formValues.email2}
+            error={errorMessage.email}
           />
         </S.InputBoxs>
         <CheckLabel color="#767676" onChange={onChangeCheckbox}>
