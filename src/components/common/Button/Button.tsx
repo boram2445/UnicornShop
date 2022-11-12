@@ -5,11 +5,12 @@ interface NormalBtnProps {
   children: React.ReactNode;
   type?: "button" | "submit"; //literal type
   size?: string;
+  width?: string;
   color?: string;
   disabled?: boolean;
   icon?: string;
   tab?: boolean;
-  onClick?: () => void;
+  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 interface TabMenuBtnProps {

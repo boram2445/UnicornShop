@@ -5,6 +5,7 @@ interface NormalBtnProps {
   color?: string;
   icon?: string;
   tab?: boolean;
+  width?: string;
 }
 
 const NormalBtn = styled.button<NormalBtnProps>`
@@ -62,6 +63,7 @@ const NormalBtn = styled.button<NormalBtnProps>`
       `;
     }
   }}
+  width:${({ width }) => width}
   ${({ color }) => {
     if (color === "white") {
       return css`

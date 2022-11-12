@@ -1,10 +1,14 @@
 import React from "react";
 import { NormalBtn } from "../../common/Button/Button";
+import CheckLabel from "../../common/CheckLabel/CheckLabel";
 import * as S from "./finalPayCheckStyle";
 
 function FinalPayCheck() {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+  };
   return (
-    <S.FinalPaySection>
+    <S.FinalPayForm onSubmit={handleSubmit}>
       <S.Title>최종결제 정보</S.Title>
       <S.BoxWrap>
         <S.TopWrap>
@@ -34,18 +38,11 @@ function FinalPayCheck() {
           </S.TotalMoneyBox>
         </S.TopWrap>
         <S.BottomWrap>
-          <S.LabelBox>
-            <S.CheckBox type="checkbox" id="check"></S.CheckBox>
-            <S.LabelText htmlFor="check">
-              주문 내용을 확인하였으며, 정보 제공 등에 동의합니다.
-            </S.LabelText>
-          </S.LabelBox>
-          <NormalBtn size="large" disabled={true}>
-            결제하기
-          </NormalBtn>
+          <CheckLabel>주문 내용을 확인하였으며, 정보 제공 등에 동의합니다.</CheckLabel>
+          <NormalBtn size="large">결제하기</NormalBtn>
         </S.BottomWrap>
       </S.BoxWrap>
-    </S.FinalPaySection>
+    </S.FinalPayForm>
   );
 }
 

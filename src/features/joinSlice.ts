@@ -7,6 +7,7 @@ const BASE_URL = "https://openmarket.weniv.co.kr";
 interface JoinSliceProps {
   status: string;
   error: string;
+  usernameMessage: string;
   joinValue: {
     username: string;
     password: string;
@@ -20,6 +21,7 @@ interface JoinSliceProps {
 const initialState: JoinSliceProps = {
   status: "idle",
   error: "",
+  usernameMessage: "",
   joinValue: {
     username: "",
     password: "",
@@ -30,6 +32,7 @@ const initialState: JoinSliceProps = {
   },
 };
 
+//아이디 유효성 검증
 export const fetchPostUserName = createAsyncThunk(
   "join/fetchPostUserName",
   async (username: string) => {
@@ -51,18 +54,19 @@ export const joinSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(fetchPostUserName.fulfilled, (state) => {
       state.status = "succeeded";
-      state.error = "사용 가능한 아이디 입니다 :)";
+      state.usernameMessage = "사용 가능한 아이디 입니다 :)";
     });
     builder.addCase(fetchPostUserName.rejected, (state, action) => {
       state.status = "failed";
-      state.error = action.error.message?.includes("400")
+      state.error = action.error.message || "Something is wrong :<";
+      state.usernameMessage = action.error.message?.includes("400")
         ? "이미 사용중인 아이디 입니다 :<"
-        : "알 수 없는 에러";
+        : "에러";
     });
   },
 });
 
 export const getUserNameStatus = (state: RootState) => state.join.status;
-export const getUserNameError = (state: RootState) => state.join.error;
+export const getUserNameMessage = (state: RootState) => state.join.usernameMessage;
 export const { resetUsernameStatus } = joinSlice.actions;
 export default joinSlice.reducer;

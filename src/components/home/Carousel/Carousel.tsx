@@ -44,7 +44,7 @@ function Carousel() {
       </S.ArrowBtn>
       {/* 캐러셀 닷 버튼 */}
       <S.DotBox>
-        {Array.from({ length: carouselData.length }).map((item, index) => {
+        {Array.from({ length: carouselData.length }).map((_, index) => {
           return (
             <S.DotBtn
               key={index}

@@ -9,7 +9,7 @@ function LoginPage() {
     <S.LoginSection>
       <Link to="/">
         <S.Logo>
-          <img src={Logo} />
+          <img src={Logo} alt="유니콘 마켓" />
         </S.Logo>
       </Link>
       <LoginForm />
