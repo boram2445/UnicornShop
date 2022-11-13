@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from "react";
 import { NormalBtn } from "../../common/Button/Button";
 import SelectInput from "../../common/SelectInput/SelectInput";
-import * as S from "./inputFormStyle";
+import * as S from "./inputBoxStyle";
 
 type InputProps = {
   label: string;
@@ -17,7 +17,7 @@ type InputProps = {
 };
 
 //일반, 버튼, 아이콘 입력 폼
-function InputForm({ icon, width, onClick, onChange, onButton, error, ...props }: InputProps) {
+function InputBox({ icon, width, onClick, onChange, onButton, error, ...props }: InputProps) {
   const inputRef = useRef() as React.MutableRefObject<HTMLInputElement>;
   //페이지 렌더링시 아이디 input에 focus
   useEffect(() => {
@@ -131,4 +131,4 @@ function InputEmail({ onChange, value1, value2, error }: InputEmailProps) {
   );
 }
 
-export { InputForm, InputPhone, InputEmail };
+export { InputBox, InputPhone, InputEmail };
