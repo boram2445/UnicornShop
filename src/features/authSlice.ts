@@ -3,7 +3,9 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
 const BASE_URL = "https://openmarket.weniv.co.kr";
+const TOKEN = JSON.parse(localStorage.getItem("token") || "{}");
 
+//회원가입 타입
 interface RegisterProps {
   username: string;
   password: string;
@@ -12,19 +14,32 @@ interface RegisterProps {
   name: string;
   email?: string;
 }
-interface RegisterSliceProps {
+
+//로그인 타입
+interface LoginProps {
+  username: string;
+  password: string;
+  login_type: string;
+}
+interface AuthSliceProps {
+  token?: string;
   nameStatus: string;
   registerStatus: string;
+  loginStatus: string;
   error: string;
   usernameMessage: string;
+  loginMessage: string;
   registerValue: RegisterProps;
 }
 
-const initialState: RegisterSliceProps = {
+const initialState: AuthSliceProps = {
+  token: TOKEN ? TOKEN : null,
   nameStatus: "idle",
   registerStatus: "idle",
+  loginStatus: "idle",
   error: "",
   usernameMessage: "",
+  loginMessage: "",
   registerValue: {
     username: "",
     password: "",
@@ -47,7 +62,7 @@ export const fetchPostUserName = createAsyncThunk(
 
 //회원가입
 export const fetchPostRegister = createAsyncThunk(
-  "join/fetchPostRegister",
+  "auth/fetchPostRegister",
   async ({ username, password, password2, phone_number, name }: RegisterProps) => {
     try {
       const data = { username, password, password2, phone_number, name };
@@ -59,6 +74,22 @@ export const fetchPostRegister = createAsyncThunk(
       console.log(error.response);
       alert("이미 등록된 전화번호 입니다.");
     }
+  }
+);
+
+//로그인
+export const fetchPostLogin = createAsyncThunk(
+  "auth/fetchPostLogin",
+  async ({ username, password, login_type }: LoginProps) => {
+    const data = { username, password, login_type };
+    const result = await axios.post(`${BASE_URL}/accounts/login/`, data);
+    console.log(result.data);
+
+    if (result.data) {
+      localStorage.setItem("token", JSON.stringify(result.data.token));
+    }
+
+    return result.data;
   }
 );
 
@@ -92,11 +123,23 @@ export const authSlice = createSlice({
       state.registerStatus = "failed";
       state.error = action.error.message || "Something is wrong in register:<";
     });
+    builder.addCase(fetchPostLogin.fulfilled, (state) => {
+      state.loginStatus = "succeeded";
+    });
+    builder.addCase(fetchPostLogin.rejected, (state, action) => {
+      state.loginStatus = "failed";
+      state.error = action.error.message || "Something is wrong in Login:<";
+      state.loginMessage = action.error.message?.includes("400")
+        ? "아이디나 비번이 잘못되었습니다."
+        : "에러";
+    });
   },
 });
 
 export const getUserNameStatus = (state: RootState) => state.auth.nameStatus;
 export const getUserNameMessage = (state: RootState) => state.auth.usernameMessage;
 export const getRegisterStatus = (state: RootState) => state.auth.registerStatus;
+export const getLoginStatus = (state: RootState) => state.auth.loginStatus;
+export const getLoginMessage = (state: RootState) => state.auth.loginMessage;
 export const { reset } = authSlice.actions;
 export default authSlice.reducer;
