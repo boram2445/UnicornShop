@@ -4,7 +4,7 @@ import axios from "axios";
 
 const BASE_URL = "https://openmarket.weniv.co.kr";
 
-interface SignUpProps {
+interface RegisterProps {
   username: string;
   password: string;
   password2: string;
@@ -12,18 +12,20 @@ interface SignUpProps {
   name: string;
   email?: string;
 }
-interface JoinSliceProps {
-  status: string;
+interface RegisterSliceProps {
+  nameStatus: string;
+  registerStatus: string;
   error: string;
   usernameMessage: string;
-  joinValue: SignUpProps;
+  registerValue: RegisterProps;
 }
 
-const initialState: JoinSliceProps = {
-  status: "idle",
+const initialState: RegisterSliceProps = {
+  nameStatus: "idle",
+  registerStatus: "idle",
   error: "",
   usernameMessage: "",
-  joinValue: {
+  registerValue: {
     username: "",
     password: "",
     password2: "",
@@ -44,12 +46,19 @@ export const fetchPostUserName = createAsyncThunk(
 );
 
 //회원가입
-export const fetchPostSignUp = createAsyncThunk(
-  "join/fetchPostSignUp",
-  async ({ username, password, password2, phone_number, name }: SignUpProps) => {
-    const data = { username, password, password2, phone_number, name };
-    const result = await axios.post(`${BASE_URL}/accounts/signup`, data);
-    return result.data;
+export const fetchPostRegister = createAsyncThunk(
+  "join/fetchPostRegister",
+  async ({ username, password, password2, phone_number, name }: RegisterProps) => {
+    try {
+      const data = { username, password, password2, phone_number, name };
+      const result = await axios.post(`${BASE_URL}/accounts/signup/`, data);
+      console.log(result.data);
+      return result.data;
+    } catch (error: any) {
+      //사용자 에러 메세지 받아오기 -개선 필요
+      console.log(error.response);
+      alert("이미 등록된 전화번호 입니다.");
+    }
   }
 );
 
@@ -57,34 +66,37 @@ export const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    resetUsernameStatus: (state) => {
-      state.status = "idle";
+    reset: (state) => {
+      state.nameStatus = "idle";
+      state.registerStatus = "idle";
       state.error = "";
+      state.usernameMessage = "";
     },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchPostUserName.fulfilled, (state) => {
-      state.status = "succeeded";
+      state.nameStatus = "succeeded";
       state.usernameMessage = "사용 가능한 아이디 입니다 :)";
     });
     builder.addCase(fetchPostUserName.rejected, (state, action) => {
-      state.status = "failed";
+      state.nameStatus = "failed";
       state.error = action.error.message || "Something is wrong in check id:<";
       state.usernameMessage = action.error.message?.includes("400")
         ? "이미 사용중인 아이디 입니다 :<"
         : "에러";
     });
-    builder.addCase(fetchPostSignUp.fulfilled, (state) => {
-      state.status = "succeeded";
+    builder.addCase(fetchPostRegister.fulfilled, (state) => {
+      state.registerStatus = "succeeded";
     });
-    builder.addCase(fetchPostSignUp.rejected, (state, action) => {
-      state.status = "failed";
-      state.error = action.error.message || "Something is wrong in sign up:<";
+    builder.addCase(fetchPostRegister.rejected, (state, action) => {
+      state.registerStatus = "failed";
+      state.error = action.error.message || "Something is wrong in register:<";
     });
   },
 });
 
-export const getUserNameStatus = (state: RootState) => state.auth.status;
+export const getUserNameStatus = (state: RootState) => state.auth.nameStatus;
 export const getUserNameMessage = (state: RootState) => state.auth.usernameMessage;
-export const { resetUsernameStatus } = authSlice.actions;
+export const getRegisterStatus = (state: RootState) => state.auth.registerStatus;
+export const { reset } = authSlice.actions;
 export default authSlice.reducer;

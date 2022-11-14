@@ -1,23 +1,28 @@
 import React, { useState, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
 import {
+  fetchPostRegister,
   fetchPostUserName,
+  getRegisterStatus,
   getUserNameMessage,
   getUserNameStatus,
-  resetUsernameStatus,
-} from "../../../features/joinSlice";
-import { InputEmail, InputForm, InputPhone } from "../InputForm/InputForm";
+  reset,
+} from "../../../features/authSlice";
+import { InputBox, InputEmail, InputPhone } from "../InputBox/InputBox";
 import { NormalBtn } from "../../common/Button/Button";
 import ToggleBtn from "../../common/ToggleBtn/ToggleBtn";
 import CheckLabel from "../../common/CheckLabel/CheckLabel";
 import checkOnIcon from "../../../assets/icons/icon-check-on.svg";
 import checkOffIcon from "../../../assets/icons/icon-check-off.svg";
 import * as S from "./joinFormStyle";
+import { useNavigate } from "react-router-dom";
 
 function JoinForm() {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const nameStatus = useAppSelector(getUserNameStatus);
   const usernameMessage = useAppSelector(getUserNameMessage);
+  const registerStatus = useAppSelector(getRegisterStatus);
 
   const initialValues = {
     username: "",
@@ -31,6 +36,7 @@ function JoinForm() {
     email2: "",
     checkBox: "",
   };
+
   const initialError = {
     username: "",
     password: "",
@@ -39,6 +45,7 @@ function JoinForm() {
     phone: "",
     email: "",
   };
+
   //아이디, 비밀번호, 이름, 전화번호, 이메일
   const [formValues, setFormValues] = useState(initialValues);
   //오류 메세지 상태
@@ -51,12 +58,17 @@ function JoinForm() {
     if (nameStatus !== "idle") {
       setErrorMessage({ ...errorMessage, ["username"]: usernameMessage });
     }
+    //가입 하기 버튼 클릭시
+    if (registerStatus === "succeeded") {
+      console.log("가입 성공");
+      navigate("/login");
+    }
     return () => {
-      dispatch(resetUsernameStatus());
+      dispatch(reset());
     };
-  }, [nameStatus]);
+  }, [nameStatus, registerStatus]);
 
-  //가입하기 버튼 활성화
+  //가입하기 버튼 활성화 체크 - 개선 필요
   const canJoin =
     Object.values(formValues).every(Boolean) &&
     errorMessage.username.includes("사용 가능") &&
@@ -67,7 +79,7 @@ function JoinForm() {
 
   //아이디 중복 확인 버튼 클릭 이벤트
   const checkUserNameVaild = (username: string) => {
-    dispatch(resetUsernameStatus());
+    dispatch(reset());
     dispatch(fetchPostUserName(username));
   };
 
@@ -192,10 +204,19 @@ function JoinForm() {
     setFormValues({ ...formValues, ["checkBox"]: value });
   };
 
-  //form 제출
+  //회원가입 폼 제출
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(formValues);
+    const { username, password, confirmPassword, name, phone1, phone2, phone3 } = formValues;
+    const userData = {
+      username,
+      password,
+      password2: confirmPassword,
+      phone_number: `${phone1}${phone2}${phone3}`,
+      name,
+    };
+    console.log(userData);
+    dispatch(fetchPostRegister(userData));
   };
 
   return (
@@ -203,7 +224,7 @@ function JoinForm() {
       <ToggleBtn />
       <S.JoinForm onSubmit={handleSubmit}>
         <S.InputBoxs>
-          <InputForm
+          <InputBox
             label="아이디"
             type="text"
             name="username"
@@ -214,7 +235,7 @@ function JoinForm() {
             error={errorMessage.username}
             value={formValues.username}
           />
-          <InputForm
+          <InputBox
             label="비밀번호"
             type="password"
             name="password"
@@ -225,7 +246,7 @@ function JoinForm() {
             error={errorMessage.password}
             value={formValues.password}
           />
-          <InputForm
+          <InputBox
             label="비밀번호 재확인"
             type="password"
             name="confirmPassword"
@@ -238,7 +259,7 @@ function JoinForm() {
             error={errorMessage.confirmPassword}
             value={formValues.confirmPassword}
           />
-          <InputForm
+          <InputBox
             label="이름"
             type="text"
             name="name"
