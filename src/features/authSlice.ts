@@ -22,7 +22,7 @@ interface LoginProps {
   login_type: string;
 }
 interface AuthSliceProps {
-  token?: string;
+  token?: string | null;
   nameStatus: string;
   registerStatus: string;
   loginStatus: string;
@@ -93,6 +93,11 @@ export const fetchPostLogin = createAsyncThunk(
   }
 );
 
+//로그아웃
+export const logout = createAsyncThunk("auth/logout", async () => {
+  localStorage.removeItem("token");
+});
+
 export const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -125,6 +130,7 @@ export const authSlice = createSlice({
     });
     builder.addCase(fetchPostLogin.fulfilled, (state) => {
       state.loginStatus = "succeeded";
+      state.token = TOKEN;
     });
     builder.addCase(fetchPostLogin.rejected, (state, action) => {
       state.loginStatus = "failed";
@@ -132,6 +138,9 @@ export const authSlice = createSlice({
       state.loginMessage = action.error.message?.includes("400")
         ? "아이디나 비번이 잘못되었습니다."
         : "에러";
+    });
+    builder.addCase(logout.fulfilled, (state) => {
+      state.token = null;
     });
   },
 });
@@ -141,5 +150,6 @@ export const getUserNameMessage = (state: RootState) => state.auth.usernameMessa
 export const getRegisterStatus = (state: RootState) => state.auth.registerStatus;
 export const getLoginStatus = (state: RootState) => state.auth.loginStatus;
 export const getLoginMessage = (state: RootState) => state.auth.loginMessage;
+export const getToken = (state: RootState) => state.auth.token;
 export const { reset } = authSlice.actions;
 export default authSlice.reducer;
