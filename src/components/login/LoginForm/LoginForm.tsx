@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { fetchPostLogin, getAuthStatus, getAuthMessage, reset } from "../../../features/authSlice";
+import {
+  fetchPostLogin,
+  getAuthStatus,
+  getAuthMessage,
+  reset,
+  selectUserType,
+} from "../../../features/authSlice";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
 import { NormalBtn } from "../../common/Button/Button";
 import Spinner from "../../common/Spinner/Spinner";
@@ -19,6 +25,7 @@ function LoginForm() {
   const loginStatus = useAppSelector(getAuthStatus);
   const loginMessage = useAppSelector(getAuthMessage);
   const navigate = useNavigate();
+  const loginType = useAppSelector(selectUserType);
 
   useEffect(() => {
     if (loginStatus === "failed") {
@@ -49,7 +56,7 @@ function LoginForm() {
     const userData = {
       username,
       password,
-      login_type: "BUYER",
+      login_type: loginType,
     };
     dispatch(fetchPostLogin(userData));
   };

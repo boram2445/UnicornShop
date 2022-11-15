@@ -32,10 +32,13 @@ const LoginInput = styled.input`
     border-bottom: 2px solid var(--color-main);
     outline: none;
   }
+  &:nth-child(2) {
+    margin-bottom: 26px;
+  }
 `;
 
 const ErrorText = styled.small`
-  margin: 26px 0;
+  margin-bottom: 26px;
   font-size: 1.6rem;
   line-height: 2rem;
   color: var(--color-red);

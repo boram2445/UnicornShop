@@ -30,6 +30,7 @@ interface AuthSliceProps {
   nameStatus: string;
   error: string;
   message: string;
+  userType: string;
 }
 
 const initialState: AuthSliceProps = {
@@ -38,6 +39,7 @@ const initialState: AuthSliceProps = {
   nameStatus: "",
   error: "",
   message: "",
+  userType: "BUYER",
 };
 
 //아이디 유효성 검증
@@ -98,6 +100,9 @@ export const authSlice = createSlice({
       state.error = "";
       state.message = "";
     },
+    setUserType: (state, action) => {
+      state.userType = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchPostUserName.pending, (state) => {
@@ -146,5 +151,6 @@ export const getAuthStatus = (state: RootState) => state.auth.status;
 export const getUserNameStatus = (state: RootState) => state.auth.nameStatus;
 export const getAuthMessage = (state: RootState) => state.auth.message;
 export const getToken = (state: RootState) => state.auth.token;
-export const { reset } = authSlice.actions;
+export const selectUserType = (state: RootState) => state.auth.userType;
+export const { reset, setUserType } = authSlice.actions;
 export default authSlice.reducer;

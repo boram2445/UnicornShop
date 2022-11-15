@@ -1,21 +1,26 @@
 import React, { useState } from "react";
+import { setUserType } from "../../../features/authSlice";
+import { useAppDispatch } from "../../../hooks";
 import * as S from "./toggleBtnStyle";
 
 function ToggleBtn() {
+  const dispatch = useAppDispatch();
   const [toggleState, setToggleState] = useState({
-    member: true,
+    buyer: true,
     seller: false,
   });
   const handleToggleBtn = (type: string) => {
     if (type === "member") {
-      setToggleState({ member: true, seller: false });
+      setToggleState({ buyer: true, seller: false });
+      dispatch(setUserType("BUYER"));
     } else {
-      setToggleState({ member: false, seller: true });
+      setToggleState({ buyer: false, seller: true });
+      dispatch(setUserType("SELLER"));
     }
   };
   return (
     <S.ToggleBox>
-      <S.ToggleBtn on={toggleState.member.toString()} onClick={() => handleToggleBtn("member")}>
+      <S.ToggleBtn on={toggleState.buyer.toString()} onClick={() => handleToggleBtn("member")}>
         구매회원 로그인
       </S.ToggleBtn>
       <S.ToggleBtn on={toggleState.seller.toString()} onClick={() => handleToggleBtn("seller")}>
