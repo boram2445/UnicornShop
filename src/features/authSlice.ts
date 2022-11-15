@@ -3,7 +3,10 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
 const BASE_URL = "https://openmarket.weniv.co.kr";
-const TOKEN = JSON.parse(localStorage.getItem("token") || "{}");
+
+const item = localStorage.getItem("token");
+const TOKEN = item === null ? null : JSON.parse(item);
+console.log(TOKEN);
 
 //회원가입 타입
 interface RegisterProps {
@@ -23,31 +26,18 @@ interface LoginProps {
 }
 interface AuthSliceProps {
   token?: string | null;
+  status: string;
   nameStatus: string;
-  registerStatus: string;
-  loginStatus: string;
   error: string;
-  usernameMessage: string;
-  loginMessage: string;
-  registerValue: RegisterProps;
+  message: string;
 }
 
 const initialState: AuthSliceProps = {
   token: TOKEN ? TOKEN : null,
-  nameStatus: "idle",
-  registerStatus: "idle",
-  loginStatus: "idle",
+  status: "",
+  nameStatus: "",
   error: "",
-  usernameMessage: "",
-  loginMessage: "",
-  registerValue: {
-    username: "",
-    password: "",
-    password2: "",
-    phone_number: "",
-    name: "",
-    email: "",
-  },
+  message: "",
 };
 
 //아이디 유효성 검증
@@ -103,41 +93,48 @@ export const authSlice = createSlice({
   initialState,
   reducers: {
     reset: (state) => {
+      state.status = "idle";
       state.nameStatus = "idle";
-      state.registerStatus = "idle";
       state.error = "";
-      state.usernameMessage = "";
+      state.message = "";
     },
   },
   extraReducers: (builder) => {
+    builder.addCase(fetchPostUserName.pending, (state) => {
+      state.status = "Loading";
+    });
     builder.addCase(fetchPostUserName.fulfilled, (state) => {
+      state.status = "succeeded";
       state.nameStatus = "succeeded";
-      state.usernameMessage = "사용 가능한 아이디 입니다 :)";
+      state.message = "사용 가능한 아이디 입니다 :)";
     });
     builder.addCase(fetchPostUserName.rejected, (state, action) => {
+      state.status = "failed";
       state.nameStatus = "failed";
       state.error = action.error.message || "Something is wrong in check id:<";
-      state.usernameMessage = action.error.message?.includes("400")
-        ? "이미 사용중인 아이디 입니다 :<"
-        : "에러";
+      state.message = "이미 사용중인 아이디 입니다 :<";
+    });
+    builder.addCase(fetchPostRegister.pending, (state) => {
+      state.status = "Loading";
     });
     builder.addCase(fetchPostRegister.fulfilled, (state) => {
-      state.registerStatus = "succeeded";
+      state.status = "succeeded";
     });
     builder.addCase(fetchPostRegister.rejected, (state, action) => {
-      state.registerStatus = "failed";
+      state.status = "failed";
       state.error = action.error.message || "Something is wrong in register:<";
     });
-    builder.addCase(fetchPostLogin.fulfilled, (state) => {
-      state.loginStatus = "succeeded";
-      state.token = TOKEN;
+    builder.addCase(fetchPostLogin.pending, (state) => {
+      state.status = "Loading";
+    });
+    builder.addCase(fetchPostLogin.fulfilled, (state, action) => {
+      state.status = "succeeded";
+      state.token = action.payload.token;
     });
     builder.addCase(fetchPostLogin.rejected, (state, action) => {
-      state.loginStatus = "failed";
+      state.status = "failed";
       state.error = action.error.message || "Something is wrong in Login:<";
-      state.loginMessage = action.error.message?.includes("400")
-        ? "아이디나 비번이 잘못되었습니다."
-        : "에러";
+      state.message = "아이디나 비밀번호가 잘못되었습니다:<";
     });
     builder.addCase(logout.fulfilled, (state) => {
       state.token = null;
@@ -145,11 +142,9 @@ export const authSlice = createSlice({
   },
 });
 
+export const getAuthStatus = (state: RootState) => state.auth.status;
 export const getUserNameStatus = (state: RootState) => state.auth.nameStatus;
-export const getUserNameMessage = (state: RootState) => state.auth.usernameMessage;
-export const getRegisterStatus = (state: RootState) => state.auth.registerStatus;
-export const getLoginStatus = (state: RootState) => state.auth.loginStatus;
-export const getLoginMessage = (state: RootState) => state.auth.loginMessage;
+export const getAuthMessage = (state: RootState) => state.auth.message;
 export const getToken = (state: RootState) => state.auth.token;
 export const { reset } = authSlice.actions;
 export default authSlice.reducer;
