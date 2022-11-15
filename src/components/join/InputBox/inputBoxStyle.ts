@@ -1,5 +1,11 @@
 import styled from "styled-components";
 
+const InputBox = styled.div`
+  button {
+    margin-left: 10px;
+  }
+`;
+
 const LabelText = styled.label`
   margin-bottom: 10px;
   display: block;
@@ -16,7 +22,6 @@ const Input = styled.input<{ width: string; icon?: string }>`
   border-radius: 5px;
   border: 1px solid var(--color-grey);
   outline-color: var(--color-main);
-
   background: ${({ icon }) => icon && `url(${icon}) no-repeat right 15px center`};
 `;
 
@@ -47,4 +52,4 @@ const InputEmailBox = styled.div`
   }
 `;
 
-export { LabelText, ErrorText, Input, InputPhoneBox, InputPhone, InputEmailBox };
+export { InputBox, LabelText, ErrorText, Input, InputPhoneBox, InputPhone, InputEmailBox };

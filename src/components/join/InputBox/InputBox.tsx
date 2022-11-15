@@ -33,7 +33,7 @@ function InputBox({ icon, width, onClick, onChange, onButton, error, ...props }:
   };
 
   return (
-    <div>
+    <S.InputBox>
       <S.LabelText htmlFor={props.name}>{props.label}</S.LabelText>
       <S.Input
         {...props}
@@ -44,13 +44,13 @@ function InputBox({ icon, width, onClick, onChange, onButton, error, ...props }:
         width={width || "100%"}
         icon={icon}
       />
-      {props.name === "username" && (
+      {onButton?.toString() && (
         <NormalBtn size="smedium" width="122px" onClick={handleBtnClick} disabled={!onButton}>
-          중복확인
+          {props.name === "username" ? "중복확인" : "인증"}
         </NormalBtn>
       )}
       {error && <S.ErrorText>{error}</S.ErrorText>}
-    </div>
+    </S.InputBox>
   );
 }
 

@@ -26,9 +26,6 @@ const InputBoxs = styled.div`
   div:nth-child(3) {
     margin-bottom: 50px;
   }
-  div:first-child input {
-    margin-right: 10px;
-  }
 `;
 
 export { JoinFormSection, InputBoxs, JoinForm };

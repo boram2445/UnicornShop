@@ -7,6 +7,7 @@ import {
   getUserNameStatus,
   getAuthMessage,
   reset,
+  selectUserType,
 } from "../../../features/authSlice";
 import { InputBox, InputEmail, InputPhone } from "../InputBox/InputBox";
 import { NormalBtn } from "../../common/Button/Button";
@@ -24,6 +25,9 @@ function JoinForm() {
   const nameStatus = useAppSelector(getUserNameStatus);
   const message = useAppSelector(getAuthMessage);
   const registerStatus = useAppSelector(getAuthStatus);
+  const userType = useAppSelector(selectUserType);
+
+  console.log(userType);
 
   const initialValues = {
     username: "",
@@ -285,6 +289,29 @@ function JoinForm() {
             value2={formValues.email2}
             error={errorMessage.email}
           />
+          {userType === "SELLER" && (
+            <>
+              <InputBox
+                label="사업자 등록번호"
+                type="text"
+                name="company_number"
+                width="346px"
+                onChange={() => console.log("변경")}
+                onClick={() => console.log("클릭")}
+                onButton={false}
+                error={""}
+                value={""}
+              />
+              <InputBox
+                label="스토어 이름"
+                type="text"
+                name="store_name"
+                onChange={() => console.log("변경")}
+                error={""}
+                value={""}
+              />
+            </>
+          )}
         </S.InputBoxs>
         <CheckLabel color="#767676" onChange={onChangeCheckbox}>
           유니콘샵의 <u>이용약관</u> 및 <u>개인정보처리방침</u>에 대한 내용을 확인하였고 동의합니다.
