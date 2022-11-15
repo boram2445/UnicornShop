@@ -8,14 +8,14 @@ import { NormalBtn } from "../../components/common/Button/Button";
 import AmountBtn from "../../components/common/AmountBtn/AmountBtn";
 import { selectProductById } from "../../features/productSlice";
 import * as S from "./detailPageStyle";
+import { getToken } from "../../features/authSlice";
 
 function DetailPage() {
   const { productId } = useParams();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const detail = useAppSelector((state) => selectProductById(state, Number(productId)));
-  const TOKEN =
-    "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjozLCJlbWFpbCI6IiIsInVzZXJuYW1lIjoiYnV5ZXIyIiwiZXhwIjoxNjY1OTgyNjQ4fQ.MlGGZy8nMKNX9UnxsI2K_puyPWygnIhB-aC5gQjJc4U";
+  const TOKEN = useAppSelector(getToken) || "";
   const [selectedCount, setSelectedCount] = useState(1);
 
   const getProductCount = (res: number) => {

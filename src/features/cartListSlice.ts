@@ -3,8 +3,6 @@ import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 
 const BASE_URL = "https://openmarket.weniv.co.kr";
-const TOKEN =
-  "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjozLCJlbWFpbCI6IiIsInVzZXJuYW1lIjoiYnV5ZXIyIiwiZXhwIjoxNjY1OTgyNjQ4fQ.MlGGZy8nMKNX9UnxsI2K_puyPWygnIhB-aC5gQjJc4U";
 
 export interface Item {
   image: string;
@@ -37,6 +35,7 @@ export type CartItem = {
 };
 
 type PutItemCount = {
+  TOKEN: string;
   is_active: boolean;
   cart_item_id: number;
   product_id: number;
@@ -76,7 +75,7 @@ export const fetchGetCartList = createAsyncThunk(
 //카트 상품 삭제
 export const fetchDeleteCartItem = createAsyncThunk(
   "cartList/fetchDeleteCartItem",
-  async (cart_item_id: number) => {
+  async ({ TOKEN, cart_item_id }: { TOKEN: string; cart_item_id: number }) => {
     const config = {
       headers: {
         Authorization: `JWT ${TOKEN}`,
@@ -90,7 +89,7 @@ export const fetchDeleteCartItem = createAsyncThunk(
 //장바구니 수량 수정
 export const fetchPutCartQuantity = createAsyncThunk(
   "cartList/fetchPutCartQuantity",
-  async ({ product_id, quantity, cart_item_id, is_active }: PutItemCount) => {
+  async ({ TOKEN, product_id, quantity, cart_item_id, is_active }: PutItemCount) => {
     try {
       const config = {
         headers: {

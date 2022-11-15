@@ -33,14 +33,16 @@ function Header() {
           </S.InputBtn>
         </S.LeftWrap>
         <S.RightWrap>
-          <S.NavButton onClick={() => navigate("/cart")}>
-            <img src={cartIcon} />
-            <span>장바구니</span>
-          </S.NavButton>
           {TOKEN ? (
-            <NormalBtn type="button" size="ssmall" onClick={onLogout}>
-              로그아웃
-            </NormalBtn>
+            <>
+              <S.NavButton onClick={() => navigate("/cart")}>
+                <img src={cartIcon} />
+                <span>장바구니</span>
+              </S.NavButton>
+              <NormalBtn type="button" size="ssmall" onClick={onLogout}>
+                로그아웃
+              </NormalBtn>
+            </>
           ) : (
             <S.NavButton onClick={() => navigate("/login")}>
               <img src={userIcon} />

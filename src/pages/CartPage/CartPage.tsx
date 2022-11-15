@@ -19,6 +19,7 @@ import {
   reset,
 } from "../../features/cartListSlice";
 import { Link } from "react-router-dom";
+import { getToken } from "../../features/authSlice";
 
 function CartPage() {
   const dispatch = useAppDispatch();
@@ -27,6 +28,7 @@ function CartPage() {
   const cartStatus = useAppSelector(getCartListStatus);
   const error = useAppSelector(getCartListError);
   const isAllChecked = useAppSelector(selectCheckAllState);
+  const TOKEN = useAppSelector(getToken) || "";
 
   useEffect(() => {
     dispatch(fetchGetCartList(TOKEN));
@@ -36,13 +38,9 @@ function CartPage() {
     // };
   }, [dispatch]);
 
-  //임시 토큰
-  const TOKEN =
-    "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjozLCJlbWFpbCI6IiIsInVzZXJuYW1lIjoiYnV5ZXIyIiwiZXhwIjoxNjY1OTgyNjQ4fQ.MlGGZy8nMKNX9UnxsI2K_puyPWygnIhB-aC5gQjJc4U";
-
   //카트 상품 가져오기
-  function deleteCartItem(id: number) {
-    dispatch(fetchDeleteCartItem(id));
+  function deleteCartItem(cart_item_id: number) {
+    dispatch(fetchDeleteCartItem({ TOKEN, cart_item_id }));
   }
 
   //체크 박스
