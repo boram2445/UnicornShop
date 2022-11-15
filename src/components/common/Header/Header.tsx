@@ -13,6 +13,7 @@ function Header() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const TOKEN = useAppSelector(getToken);
+
   const onLogout = () => {
     dispatch(logout());
     dispatch(reset());
@@ -43,7 +44,7 @@ function Header() {
           ) : (
             <S.NavButton onClick={() => navigate("/login")}>
               <img src={userIcon} />
-              <span>마이페이지</span>
+              <span>로그인</span>
             </S.NavButton>
           )}
         </S.RightWrap>

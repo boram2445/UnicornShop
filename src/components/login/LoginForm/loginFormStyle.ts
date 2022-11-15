@@ -5,7 +5,6 @@ const LoginSection = styled.section`
 `;
 
 const LoginForm = styled.form`
-  top: 60px;
   margin-top: 60px;
   padding: 35px 34px;
   display: flex;

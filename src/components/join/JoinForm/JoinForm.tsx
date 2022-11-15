@@ -3,9 +3,9 @@ import { useAppDispatch, useAppSelector } from "../../../hooks";
 import {
   fetchPostRegister,
   fetchPostUserName,
-  getRegisterStatus,
-  getUserNameMessage,
+  getAuthStatus,
   getUserNameStatus,
+  getAuthMessage,
   reset,
 } from "../../../features/authSlice";
 import { InputBox, InputEmail, InputPhone } from "../InputBox/InputBox";
@@ -16,13 +16,14 @@ import checkOnIcon from "../../../assets/icons/icon-check-on.svg";
 import checkOffIcon from "../../../assets/icons/icon-check-off.svg";
 import * as S from "./joinFormStyle";
 import { useNavigate } from "react-router-dom";
+import Spinner from "../../common/Spinner/Spinner";
 
 function JoinForm() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const nameStatus = useAppSelector(getUserNameStatus);
-  const usernameMessage = useAppSelector(getUserNameMessage);
-  const registerStatus = useAppSelector(getRegisterStatus);
+  const message = useAppSelector(getAuthMessage);
+  const registerStatus = useAppSelector(getAuthStatus);
 
   const initialValues = {
     username: "",
@@ -54,13 +55,13 @@ function JoinForm() {
   const [onNameVaildBtn, setNameVaildBtn] = useState(false);
 
   useEffect(() => {
-    //처음 한번 클릭되었을때 변하고 변경되면
+    //아이디 중복 확인 버튼 클릭시 사용가능 여부 보여주기
     if (nameStatus !== "idle") {
-      setErrorMessage({ ...errorMessage, ["username"]: usernameMessage });
+      setErrorMessage({ ...errorMessage, ["username"]: message });
     }
-    //가입 하기 버튼 클릭시
+    //가입 하기 버튼 클릭후 가입 성공되었을 경우
     if (registerStatus === "succeeded") {
-      console.log("가입 성공");
+      alert("가입이 완료되었습니다 :)");
       navigate("/login");
     }
     return () => {
@@ -79,11 +80,12 @@ function JoinForm() {
 
   //아이디 중복 확인 버튼 클릭 이벤트
   const checkUserNameVaild = (username: string) => {
+    //버튼을 재 클릭 할 경우를 위해 상태 리셋
     dispatch(reset());
     dispatch(fetchPostUserName(username));
   };
 
-  //글자수 제한
+  //입력 글자수 제한 함수
   const handleInputLength = (value: string, maxLen: number) => {
     if (value.length > maxLen) {
       value = value.substring(0, maxLen);
@@ -215,9 +217,12 @@ function JoinForm() {
       phone_number: `${phone1}${phone2}${phone3}`,
       name,
     };
-    console.log(userData);
     dispatch(fetchPostRegister(userData));
   };
+
+  if (registerStatus === "Loading") {
+    return <Spinner />;
+  }
 
   return (
     <S.JoinFormSection>

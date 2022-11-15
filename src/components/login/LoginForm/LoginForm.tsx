@@ -1,13 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  fetchPostLogin,
-  getLoginMessage,
-  getLoginStatus,
-  reset,
-} from "../../../features/authSlice";
+import { fetchPostLogin, getAuthStatus, getAuthMessage, reset } from "../../../features/authSlice";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
 import { NormalBtn } from "../../common/Button/Button";
+import Spinner from "../../common/Spinner/Spinner";
 import ToggleBtn from "../../common/ToggleBtn/ToggleBtn";
 import * as S from "./loginFormStyle";
 
@@ -20,8 +16,8 @@ function LoginForm() {
   const dispatch = useAppDispatch();
   const [formValues, setFormValues] = useState(initialValues);
   const [error, setError] = useState("");
-  const loginStatus = useAppSelector(getLoginStatus);
-  const loginMessage = useAppSelector(getLoginMessage);
+  const loginStatus = useAppSelector(getAuthStatus);
+  const loginMessage = useAppSelector(getAuthMessage);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -57,6 +53,10 @@ function LoginForm() {
     };
     dispatch(fetchPostLogin(userData));
   };
+
+  if (loginStatus === "Loading") {
+    return <Spinner />;
+  }
 
   return (
     <S.LoginSection>
