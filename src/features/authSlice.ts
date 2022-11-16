@@ -203,9 +203,9 @@ export const authSlice = createSlice({
       state.loginStatus = "Loading";
     });
     builder.addCase(fetchPostLogin.fulfilled, (state, action) => {
-      state.loginStatus = action.payload.Success ? "succeeded" : "failed";
-      state.token = action.payload.Success ? action.payload.token : "";
-      state.message = action.payload.Success || action.payload.FAIL_Message;
+      state.loginStatus = action.payload.token ? "succeeded" : "failed";
+      state.token = action.payload.token || "";
+      state.message = state.loginStatus === "failed" && action.payload.FAIL_Message;
     });
     builder.addCase(fetchPostLogin.rejected, (state, action) => {
       state.loginStatus = "failed";
