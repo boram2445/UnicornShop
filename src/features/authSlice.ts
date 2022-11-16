@@ -27,30 +27,54 @@ interface LoginProps {
 interface AuthSliceProps {
   token?: string | null;
   nameStatus: string;
+  companyNumberStatus: string;
   registerStatus: string;
   loginStatus: string;
   error: string;
   message: string;
+  companyMessage: string;
   userType: string;
 }
 
 const initialState: AuthSliceProps = {
   token: TOKEN ? TOKEN : null,
   nameStatus: "idle",
+  companyNumberStatus: "idle",
   registerStatus: "idle",
   loginStatus: "idle",
   error: "",
   message: "",
+  companyMessage: "",
   userType: "BUYER",
 };
 
 //아이디 유효성 검증
 export const fetchPostUserName = createAsyncThunk(
-  "join/fetchPostUserName",
+  "auth/fetchPostUserName",
   async (username: string) => {
     try {
       const data = { username };
       const result = await axios.post(`${BASE_URL}/accounts/signup/valid/username/`, data);
+      return result.data;
+    } catch (error: any) {
+      //사용자 에러 메세지 받아오기 -개선 필요
+      console.log(error.response.data);
+      return error.response.data;
+    }
+  }
+);
+
+//사업자 등록번호 검증
+export const fetchPostCompanyNumber = createAsyncThunk(
+  "auth/fetchPostCompanyNumber",
+  async (number: string) => {
+    try {
+      const data = { company_registration_number: number };
+      const result = await axios.post(
+        `${BASE_URL}/accounts/signup/valid/company_registration_number/`,
+        data
+      );
+      console.log(result.data);
       return result.data;
     } catch (error: any) {
       //사용자 에러 메세지 받아오기 -개선 필요
@@ -117,6 +141,7 @@ export const authSlice = createSlice({
       state.loginStatus = "idle";
       state.error = "";
       state.message = "";
+      state.companyMessage = "";
     },
     setUserType: (state, action) => {
       state.userType = action.payload;
@@ -135,6 +160,18 @@ export const authSlice = createSlice({
     builder.addCase(fetchPostUserName.rejected, (state, action) => {
       state.nameStatus = "failed";
       state.error = action.error.message || "Something is wrong in check id:<";
+    });
+    //사업자등록번호 검증
+    builder.addCase(fetchPostCompanyNumber.pending, (state) => {
+      state.companyNumberStatus = "Loading";
+    });
+    builder.addCase(fetchPostCompanyNumber.fulfilled, (state, action) => {
+      state.companyNumberStatus = action.payload.Success ? "succeeded" : "failed";
+      state.companyMessage = action.payload.Success || action.payload.FAIL_Message;
+    });
+    builder.addCase(fetchPostCompanyNumber.rejected, (state, action) => {
+      state.companyNumberStatus = "failed";
+      state.error = action.error.message || "Something is wrong in company number:<";
     });
     //회원가입
     builder.addCase(fetchPostRegister.pending, (state) => {
@@ -177,10 +214,12 @@ export const authSlice = createSlice({
 
 export const getToken = (state: RootState) => state.auth.token;
 export const getNameStatus = (state: RootState) => state.auth.nameStatus;
+export const getCompanyStatus = (state: RootState) => state.auth.companyNumberStatus;
 export const getRegisterStatus = (state: RootState) => state.auth.registerStatus;
 export const getLoginStatus = (state: RootState) => state.auth.loginStatus;
 export const getError = (state: RootState) => state.auth.error;
 export const getAuthMessage = (state: RootState) => state.auth.message;
+export const getCompanyMessage = (state: RootState) => state.auth.companyMessage;
 export const selectUserType = (state: RootState) => state.auth.userType;
 export const { registerReset, resetAll, setUserType } = authSlice.actions;
 export default authSlice.reducer;

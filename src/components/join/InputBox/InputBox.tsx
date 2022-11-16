@@ -10,7 +10,7 @@ type InputProps = {
   icon?: string;
   width?: string;
   value?: string;
-  onClick?: (username: string) => void;
+  onClick?: (value: string) => void;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   error?: string;
   onButton?: boolean;
@@ -26,7 +26,7 @@ function InputBox({ icon, width, onClick, onChange, onButton, error, ...props }:
     }
   }, []);
 
-  //중복 확인 버튼
+  //입력 버튼 클릭 이벤트 함수
   const handleBtnClick = (e: React.MouseEvent<HTMLButtonElement>): void => {
     e.preventDefault();
     onClick?.(inputRef.current.value);

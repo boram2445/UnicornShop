@@ -13,6 +13,9 @@ import {
   getError,
   resetAll,
   registerReset,
+  fetchPostCompanyNumber,
+  getCompanyStatus,
+  getCompanyMessage,
 } from "../../../features/authSlice";
 import ToggleBtn from "../../common/ToggleBtn/ToggleBtn";
 import CheckLabel from "../../common/CheckLabel/CheckLabel";
@@ -25,8 +28,10 @@ function JoinForm() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const vaildName = useAppSelector(getNameStatus);
+  const vaildCompany = useAppSelector(getCompanyStatus);
   const validRegister = useAppSelector(getRegisterStatus);
   const message = useAppSelector(getAuthMessage);
+  const companyMessage = useAppSelector(getCompanyMessage);
   const userType = useAppSelector(selectUserType);
   const registerError = useAppSelector(getError);
 
@@ -50,6 +55,12 @@ function JoinForm() {
     name: "",
     phone: "",
     email: "",
+    registrationNumber: "",
+  };
+
+  const initialSellerValues = {
+    registrationNumber: "",
+    storeName: "",
   };
 
   //아이디, 비밀번호, 이름, 전화번호, 이메일
@@ -58,12 +69,22 @@ function JoinForm() {
   const [errorMessage, setErrorMessage] = useState(initialError);
   //아이디 중복 확인 버튼 상태
   const [onNameVaildBtn, setNameVaildBtn] = useState(false);
+  //판매자 추가 정보
+  const [sellerValues, setSellerValues] = useState(initialSellerValues);
+  //사업자 등록번호 인증 버튼 상태
+  const [onRegistrationBtn, setRegistrationBtn] = useState(false);
 
   useEffect(() => {
     //아이디 중복 확인 버튼 클릭시 사용가능 여부 보여주기
     if (vaildName !== "idle") {
       setErrorMessage({ ...errorMessage, ["username"]: message });
     }
+
+    //사업자 등록번호 인증 완료 여부 보여주기
+    if (vaildCompany !== "idle") {
+      setErrorMessage({ ...errorMessage, ["registrationNumber"]: companyMessage });
+    }
+
     //가입 하기 버튼 클릭후 성공 or 실패 경우
     if (validRegister === "succeeded") {
       alert("가입이 완료되었습니다 :)");
@@ -77,7 +98,7 @@ function JoinForm() {
     if (registerError) {
       alert(registerError);
     }
-  }, [vaildName, validRegister]);
+  }, [vaildName, vaildCompany, validRegister]);
 
   //가입하기 버튼 활성화 체크 - 개선 필요
   const canJoin =
@@ -214,6 +235,35 @@ function JoinForm() {
     setFormValues({ ...formValues, ["checkBox"]: value });
   };
 
+  //사업자 등록번호 인증 이벤트
+  const checkRegistrationNumber = (number: string) => {
+    console.log(number);
+    dispatch(fetchPostCompanyNumber(number));
+  };
+
+  //사업자 등록번호
+  const onChangeRegistrationNumber = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    const newValue = handleInputLength(value, 10).replace(/[^0-9]/g, "");
+    setSellerValues({ ...sellerValues, [name]: newValue });
+    const message = "사업자 등록 번호는 숫자 10자로 이루어져야 합니다.";
+    if (newValue.length > 0 && newValue.length < 10) {
+      setErrorMessage({ ...errorMessage, [name]: message });
+      setRegistrationBtn(false);
+    } else if (newValue.length === 0) {
+      setErrorMessage({ ...errorMessage, [name]: "" });
+      setRegistrationBtn(false);
+    } else {
+      setErrorMessage({ ...errorMessage, [name]: "" });
+      setRegistrationBtn(true);
+    }
+  };
+
+  //스토어 이름
+  const onChangeStoreName = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSellerValues({ ...sellerValues, ["storeName"]: e.target.value });
+  };
+
   //회원가입 폼 제출
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -299,21 +349,20 @@ function JoinForm() {
               <InputBox
                 label="사업자 등록번호"
                 type="text"
-                name="company_number"
+                name="registrationNumber"
                 width="346px"
-                onChange={() => console.log("변경")}
-                onClick={() => console.log("클릭")}
-                onButton={false}
-                error={""}
-                value={""}
+                onChange={onChangeRegistrationNumber}
+                onClick={checkRegistrationNumber}
+                onButton={onRegistrationBtn}
+                error={errorMessage.registrationNumber}
+                value={sellerValues.registrationNumber}
               />
               <InputBox
                 label="스토어 이름"
                 type="text"
-                name="store_name"
-                onChange={() => console.log("변경")}
-                error={""}
-                value={""}
+                name="storeName"
+                onChange={onChangeStoreName}
+                value={sellerValues.storeName}
               />
             </>
           )}
