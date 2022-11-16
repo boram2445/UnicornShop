@@ -105,15 +105,20 @@ export const fetchPostRegister = createAsyncThunk(
 export const fetchPostLogin = createAsyncThunk(
   "auth/fetchPostLogin",
   async ({ username, password, login_type }: LoginProps) => {
-    const data = { username, password, login_type };
-    const result = await axios.post(`${BASE_URL}/accounts/login/`, data);
-    console.log(result.data);
+    try {
+      const data = { username, password, login_type };
+      const result = await axios.post(`${BASE_URL}/accounts/login/`, data);
+      console.log(result.data);
 
-    if (result.data) {
-      localStorage.setItem("token", JSON.stringify(result.data.token));
+      if (result.data) {
+        localStorage.setItem("token", JSON.stringify(result.data.token));
+      }
+
+      return result.data;
+    } catch (error: any) {
+      console.log(error.response.data);
+      return error.response.data;
     }
-
-    return result.data;
   }
 );
 
@@ -198,13 +203,13 @@ export const authSlice = createSlice({
       state.loginStatus = "Loading";
     });
     builder.addCase(fetchPostLogin.fulfilled, (state, action) => {
-      state.loginStatus = "succeeded";
-      state.token = action.payload.token;
+      state.loginStatus = action.payload.Success ? "succeeded" : "failed";
+      state.token = action.payload.Success ? action.payload.token : "";
+      state.message = action.payload.Success || action.payload.FAIL_Message;
     });
     builder.addCase(fetchPostLogin.rejected, (state, action) => {
       state.loginStatus = "failed";
       state.error = action.error.message || "Something is wrong in Login:<";
-      state.message = "아이디나 비밀번호가 잘못되었습니다:<";
     });
     builder.addCase(logout.fulfilled, (state) => {
       state.token = null;

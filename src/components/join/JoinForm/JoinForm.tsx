@@ -101,13 +101,21 @@ function JoinForm() {
   }, [vaildName, vaildCompany, validRegister]);
 
   //가입하기 버튼 활성화 체크 - 개선 필요
-  const canJoin =
-    Object.values(formValues).every(Boolean) &&
-    vaildName === "succeeded" &&
-    formValues.checkBox === "true" &&
-    Object.entries(errorMessage)
-      .filter((item) => item[0] !== "username")
-      .every((item) => item[1] === "");
+  const checkValidJoin = (userType: string) => {
+    const result =
+      Object.values(formValues).every(Boolean) &&
+      vaildName === "succeeded" &&
+      formValues.checkBox === "true" &&
+      Object.entries(errorMessage)
+        .filter((item) => item[0] !== "username" && item[0] !== "registrationNumber")
+        .every((item) => item[1] === "");
+    if (userType === "BUYER") {
+      return result;
+    } else if (userType === "SELLER") {
+      return result && vaildCompany === "succeeded";
+    }
+  };
+  const canJoin = checkValidJoin(userType);
 
   //아이디 중복 확인 버튼 클릭 이벤트
   const checkUserNameVaild = (username: string) => {

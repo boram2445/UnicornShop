@@ -34,10 +34,8 @@ function LoginForm() {
     if (loginStatus === "succeeded") {
       console.log("로그인 되었습니다.");
       navigate("/");
-    }
-    return () => {
       dispatch(resetAll());
-    };
+    }
   }, [loginStatus]);
 
   //버튼 활성화
