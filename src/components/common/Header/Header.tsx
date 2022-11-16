@@ -5,7 +5,7 @@ import logo from "../../../assets/icons/Logo-hodu.svg";
 import cartIcon from "../../../assets/icons/icon-shopping-cart.svg";
 import userIcon from "../../../assets/icons/icon-user.svg";
 import searchIcon from "../../../assets/icons/search.svg";
-import { getToken, logout, reset } from "../../../features/authSlice";
+import { getToken, logout, resetAll } from "../../../features/authSlice";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
 import { NormalBtn } from "../Button/Button";
 
@@ -16,7 +16,7 @@ function Header() {
 
   const onLogout = () => {
     dispatch(logout());
-    dispatch(reset());
+    dispatch(resetAll());
     navigate("/");
   };
 

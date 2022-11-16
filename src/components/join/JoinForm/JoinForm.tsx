@@ -1,33 +1,34 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
+import { InputBox, InputEmail, InputPhone } from "../InputBox/InputBox";
+import { NormalBtn } from "../../common/Button/Button";
 import {
   fetchPostRegister,
   fetchPostUserName,
-  getAuthStatus,
-  getUserNameStatus,
+  getNameStatus,
+  getRegisterStatus,
   getAuthMessage,
-  reset,
   selectUserType,
+  getError,
+  resetAll,
+  registerReset,
 } from "../../../features/authSlice";
-import { InputBox, InputEmail, InputPhone } from "../InputBox/InputBox";
-import { NormalBtn } from "../../common/Button/Button";
 import ToggleBtn from "../../common/ToggleBtn/ToggleBtn";
 import CheckLabel from "../../common/CheckLabel/CheckLabel";
 import checkOnIcon from "../../../assets/icons/icon-check-on.svg";
 import checkOffIcon from "../../../assets/icons/icon-check-off.svg";
-import * as S from "./joinFormStyle";
-import { useNavigate } from "react-router-dom";
 import Spinner from "../../common/Spinner/Spinner";
+import * as S from "./joinFormStyle";
 
 function JoinForm() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const nameStatus = useAppSelector(getUserNameStatus);
+  const vaildName = useAppSelector(getNameStatus);
+  const validRegister = useAppSelector(getRegisterStatus);
   const message = useAppSelector(getAuthMessage);
-  const registerStatus = useAppSelector(getAuthStatus);
   const userType = useAppSelector(selectUserType);
-
-  console.log(userType);
+  const registerError = useAppSelector(getError);
 
   const initialValues = {
     username: "",
@@ -60,23 +61,28 @@ function JoinForm() {
 
   useEffect(() => {
     //아이디 중복 확인 버튼 클릭시 사용가능 여부 보여주기
-    if (nameStatus !== "idle") {
+    if (vaildName !== "idle") {
       setErrorMessage({ ...errorMessage, ["username"]: message });
     }
-    //가입 하기 버튼 클릭후 가입 성공되었을 경우
-    if (registerStatus === "succeeded") {
+    //가입 하기 버튼 클릭후 성공 or 실패 경우
+    if (validRegister === "succeeded") {
       alert("가입이 완료되었습니다 :)");
       navigate("/login");
+      dispatch(resetAll());
+    } else if (validRegister === "failed") {
+      dispatch(registerReset());
+      formValues.checkBox = "false";
     }
-    return () => {
-      dispatch(reset());
-    };
-  }, [nameStatus, registerStatus]);
+
+    if (registerError) {
+      alert(registerError);
+    }
+  }, [vaildName, validRegister]);
 
   //가입하기 버튼 활성화 체크 - 개선 필요
   const canJoin =
     Object.values(formValues).every(Boolean) &&
-    errorMessage.username.includes("사용 가능") &&
+    vaildName === "succeeded" &&
     formValues.checkBox === "true" &&
     Object.entries(errorMessage)
       .filter((item) => item[0] !== "username")
@@ -84,8 +90,6 @@ function JoinForm() {
 
   //아이디 중복 확인 버튼 클릭 이벤트
   const checkUserNameVaild = (username: string) => {
-    //버튼을 재 클릭 할 경우를 위해 상태 리셋
-    dispatch(reset());
     dispatch(fetchPostUserName(username));
   };
 
@@ -224,7 +228,8 @@ function JoinForm() {
     dispatch(fetchPostRegister(userData));
   };
 
-  if (registerStatus === "Loading") {
+  //가입하기 버튼 클릭시 로딩 화면 보여주기
+  if (validRegister === "Loading") {
     return <Spinner />;
   }
 

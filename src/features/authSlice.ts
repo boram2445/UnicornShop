@@ -26,8 +26,9 @@ interface LoginProps {
 }
 interface AuthSliceProps {
   token?: string | null;
-  status: string;
   nameStatus: string;
+  registerStatus: string;
+  loginStatus: string;
   error: string;
   message: string;
   userType: string;
@@ -35,8 +36,9 @@ interface AuthSliceProps {
 
 const initialState: AuthSliceProps = {
   token: TOKEN ? TOKEN : null,
-  status: "",
-  nameStatus: "",
+  nameStatus: "idle",
+  registerStatus: "idle",
+  loginStatus: "idle",
   error: "",
   message: "",
   userType: "BUYER",
@@ -46,9 +48,15 @@ const initialState: AuthSliceProps = {
 export const fetchPostUserName = createAsyncThunk(
   "join/fetchPostUserName",
   async (username: string) => {
-    const data = { username };
-    const result = await axios.post(`${BASE_URL}/accounts/signup/valid/username/`, data);
-    return result.data;
+    try {
+      const data = { username };
+      const result = await axios.post(`${BASE_URL}/accounts/signup/valid/username/`, data);
+      return result.data;
+    } catch (error: any) {
+      //사용자 에러 메세지 받아오기 -개선 필요
+      console.log(error.response.data);
+      return error.response.data;
+    }
   }
 );
 
@@ -63,8 +71,8 @@ export const fetchPostRegister = createAsyncThunk(
       return result.data;
     } catch (error: any) {
       //사용자 에러 메세지 받아오기 -개선 필요
-      console.log(error.response);
-      alert("이미 등록된 전화번호 입니다.");
+      console.log(error.response.data);
+      return error.response.data;
     }
   }
 );
@@ -94,9 +102,19 @@ export const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    reset: (state) => {
-      state.status = "idle";
+    nameReset: (state) => {
       state.nameStatus = "idle";
+      state.error = "";
+      state.message = "";
+    },
+    registerReset: (state) => {
+      state.registerStatus = "idle";
+      state.error = "";
+    },
+    resetAll: (state) => {
+      state.nameStatus = "idle";
+      state.registerStatus = "idle";
+      state.loginStatus = "idle";
       state.error = "";
       state.message = "";
     },
@@ -105,39 +123,49 @@ export const authSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
+    //아이디 중복 확인
     builder.addCase(fetchPostUserName.pending, (state) => {
-      state.status = "Loading";
+      state.nameStatus = "Loading";
     });
-    builder.addCase(fetchPostUserName.fulfilled, (state) => {
-      state.status = "succeeded";
-      state.nameStatus = "succeeded";
-      state.message = "사용 가능한 아이디 입니다 :)";
+    builder.addCase(fetchPostUserName.fulfilled, (state, action) => {
+      //가입에 실패해도 fulfilled상태로 실패 정보를 반환하기 때문에, 메세지 key에 따라 성공 여부를 판단하였다.
+      state.nameStatus = action.payload.Success ? "succeeded" : "failed";
+      state.message = action.payload.Success || action.payload.FAIL_Message;
     });
     builder.addCase(fetchPostUserName.rejected, (state, action) => {
-      state.status = "failed";
       state.nameStatus = "failed";
       state.error = action.error.message || "Something is wrong in check id:<";
-      state.message = "이미 사용중인 아이디 입니다 :<";
     });
+    //회원가입
     builder.addCase(fetchPostRegister.pending, (state) => {
-      state.status = "Loading";
+      state.registerStatus = "Loading";
     });
-    builder.addCase(fetchPostRegister.fulfilled, (state) => {
-      state.status = "succeeded";
+    builder.addCase(fetchPostRegister.fulfilled, (state, action) => {
+      //가입에 실패해도 fulfilled상태로 실패 정보를 반환하기 때문에, username값을 반환하는지에 따라 성공 여부를 판단해주었다.
+      const result = action.payload.username ? "succeeded" : "failed";
+      state.registerStatus = result;
+      //error를 any로 처리해서 any로 설정할수밖에없었다. - 개선 필요
+      state.error =
+        result === "succeeded"
+          ? ""
+          : Object.values(action.payload)
+              .map((e: any) => e.join().toString())
+              .join("\n");
     });
     builder.addCase(fetchPostRegister.rejected, (state, action) => {
-      state.status = "failed";
+      state.registerStatus = "failed";
       state.error = action.error.message || "Something is wrong in register:<";
     });
+    //로그인
     builder.addCase(fetchPostLogin.pending, (state) => {
-      state.status = "Loading";
+      state.loginStatus = "Loading";
     });
     builder.addCase(fetchPostLogin.fulfilled, (state, action) => {
-      state.status = "succeeded";
+      state.loginStatus = "succeeded";
       state.token = action.payload.token;
     });
     builder.addCase(fetchPostLogin.rejected, (state, action) => {
-      state.status = "failed";
+      state.loginStatus = "failed";
       state.error = action.error.message || "Something is wrong in Login:<";
       state.message = "아이디나 비밀번호가 잘못되었습니다:<";
     });
@@ -147,10 +175,12 @@ export const authSlice = createSlice({
   },
 });
 
-export const getAuthStatus = (state: RootState) => state.auth.status;
-export const getUserNameStatus = (state: RootState) => state.auth.nameStatus;
-export const getAuthMessage = (state: RootState) => state.auth.message;
 export const getToken = (state: RootState) => state.auth.token;
+export const getNameStatus = (state: RootState) => state.auth.nameStatus;
+export const getRegisterStatus = (state: RootState) => state.auth.registerStatus;
+export const getLoginStatus = (state: RootState) => state.auth.loginStatus;
+export const getError = (state: RootState) => state.auth.error;
+export const getAuthMessage = (state: RootState) => state.auth.message;
 export const selectUserType = (state: RootState) => state.auth.userType;
-export const { reset, setUserType } = authSlice.actions;
+export const { registerReset, resetAll, setUserType } = authSlice.actions;
 export default authSlice.reducer;

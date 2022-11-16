@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   fetchPostLogin,
-  getAuthStatus,
+  getLoginStatus,
   getAuthMessage,
-  reset,
+  resetAll,
   selectUserType,
 } from "../../../features/authSlice";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
@@ -22,7 +22,7 @@ function LoginForm() {
   const dispatch = useAppDispatch();
   const [formValues, setFormValues] = useState(initialValues);
   const [error, setError] = useState("");
-  const loginStatus = useAppSelector(getAuthStatus);
+  const loginStatus = useAppSelector(getLoginStatus);
   const loginMessage = useAppSelector(getAuthMessage);
   const navigate = useNavigate();
   const loginType = useAppSelector(selectUserType);
@@ -36,7 +36,7 @@ function LoginForm() {
       navigate("/");
     }
     return () => {
-      dispatch(reset());
+      dispatch(resetAll());
     };
   }, [loginStatus]);
 
