@@ -11,7 +11,7 @@ function TotalPrice() {
 
   useEffect(() => {
     dispatch(getTotalPrice());
-  }, [dispatch]);
+  }, []);
 
   return (
     <S.TotalPriceBox>

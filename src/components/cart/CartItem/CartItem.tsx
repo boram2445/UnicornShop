@@ -1,29 +1,20 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { NormalBtn } from "../../common/Button/Button";
 import { CircleCheckBtn } from "../../common/CheckBtn/CheckBtn";
-import { selectProductById } from "../../../features/productSlice";
+import { CartItem as Cart, Item } from "../../../features/cartListSlice";
 import AmountBtn from "../../common/AmountBtn/AmountBtn";
 import deleteIcon from "../../../assets/icons/icon-delete.svg";
-import { useAppDispatch, useAppSelector } from "../../../hooks";
-import { getDetail, CartItem as Item } from "../../../features/cartListSlice";
 import * as S from "./cartItemStyle";
 
 type ItemProps = {
-  item: Item;
+  item: Cart;
+  detail: Item;
   deleteItem: (id: number) => void;
   checkHandler: (e: React.ChangeEvent<HTMLInputElement>, productId?: number) => void;
 };
 
-function CartItem({ item, deleteItem, checkHandler }: ItemProps) {
-  const dispatch = useAppDispatch();
+function CartItem({ item, detail, deleteItem, checkHandler }: ItemProps) {
   const { cart_item_id, product_id, quantity, isChecked } = item;
-  const detail = useAppSelector((state) => selectProductById(state, Number(product_id)));
-
-  //상품 디테일 가져오기
-  useEffect(() => {
-    dispatch(getDetail(detail));
-  }, []);
-
   return (
     <S.CartItemArticle>
       <CircleCheckBtn

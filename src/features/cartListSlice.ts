@@ -44,6 +44,7 @@ type PutItemCount = {
 
 type InitialState = {
   status: string;
+  detailStatus: string;
   cartItems: CartItem[];
   totalPrice: number;
   deliveryPrice: number;
@@ -52,6 +53,7 @@ type InitialState = {
 
 const initialState: InitialState = {
   status: "idle",
+  detailStatus: "idle",
   cartItems: [],
   totalPrice: 0,
   deliveryPrice: 0,
@@ -86,6 +88,15 @@ export const fetchDeleteCartItem = createAsyncThunk(
   }
 );
 
+//상품 디테일
+export const fetchGetDetail = createAsyncThunk(
+  "detail/fetchGetDetail",
+  async (product_id: number) => {
+    const result = await axios.get(`${BASE_URL}/products/${product_id}/`);
+    return result.data;
+  }
+);
+
 //장바구니 수량 수정
 export const fetchPutCartQuantity = createAsyncThunk(
   "cartList/fetchPutCartQuantity",
@@ -114,15 +125,6 @@ export const cartListSlice = createSlice({
   initialState,
   reducers: {
     reset: () => initialState,
-    //상품 디테일 가져오기
-    getDetail: (state, { payload }) => {
-      const { product_id } = payload;
-      state.cartItems.map((item, index) => {
-        if (item.product_id === product_id) {
-          state.cartItems[index].item = payload;
-        }
-      });
-    },
     //상품 체크 버튼
     checkItem: (state, { payload }) => {
       const { productId, isChecked } = payload;
@@ -172,7 +174,26 @@ export const cartListSlice = createSlice({
       state.status = "failed";
       state.error = action.error.message || "Something was wrong";
     });
-    builder.addCase(fetchDeleteCartItem.fulfilled, (state, action: PayloadAction<number>) => {
+    //디테일 가져오기
+    builder.addCase(fetchGetDetail.pending, (state) => {
+      state.detailStatus = "Loading";
+    });
+    builder.addCase(fetchGetDetail.fulfilled, (state, action) => {
+      const { product_id } = action.payload;
+      state.detailStatus = "succeeded";
+      state.error = "";
+      state.cartItems.map((item, index) => {
+        if (item.product_id === product_id) {
+          state.cartItems[index].item = action.payload;
+        }
+      });
+    });
+    builder.addCase(fetchGetDetail.rejected, (state, action) => {
+      state.detailStatus = "failed";
+      state.error = action.error.message || "Something was wrong";
+    });
+    //상품 삭제
+    builder.addCase(fetchDeleteCartItem.fulfilled, (state, action) => {
       state.status = "succeeded";
       state.error = "";
       const cart_item_id = action.payload;
@@ -210,5 +231,5 @@ export const selectCheckAllState = (state: RootState) =>
   state.cartList.cartItems.every((item) => item.isChecked === true);
 export const selectCheckedItems = (state: RootState) =>
   state.cartList.cartItems.filter((item) => item.isChecked === true);
-export const { reset, checkItem, checkAllItem, getTotalPrice, getDetail } = cartListSlice.actions;
+export const { reset, checkItem, checkAllItem, getTotalPrice } = cartListSlice.actions;
 export default cartListSlice.reducer;

@@ -1,10 +1,12 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks";
+import { Link } from "react-router-dom";
+import { getToken } from "../../features/authSlice";
+import { CircleCheckBtn } from "../../components/common/CheckBtn/CheckBtn";
+import { NormalBtn } from "../../components/common/Button/Button";
 import Header from "../../components/common/Header/Header";
 import CartItem from "../../components/cart/CartItem/CartItem";
 import TotalPrice from "../../components/cart/TotalPrice/TotalPrice";
-import { CircleCheckBtn } from "../../components/common/CheckBtn/CheckBtn";
-import { NormalBtn } from "../../components/common/Button/Button";
 import * as S from "./cartPageStyle";
 import {
   fetchGetCartList,
@@ -17,28 +19,42 @@ import {
   checkAllItem,
   checkItem,
   reset,
+  fetchGetDetail,
 } from "../../features/cartListSlice";
-import { Link } from "react-router-dom";
-import { getToken } from "../../features/authSlice";
 
 function CartPage() {
   const dispatch = useAppDispatch();
 
+  const TOKEN = useAppSelector(getToken) || "";
   const cartLists = useAppSelector(selectCartList);
   const cartStatus = useAppSelector(getCartListStatus);
   const error = useAppSelector(getCartListError);
   const isAllChecked = useAppSelector(selectCheckAllState);
-  const TOKEN = useAppSelector(getToken) || "";
+  const [getAllDetail, setAllDetail] = useState(false);
 
   useEffect(() => {
+    dispatch(reset());
+    setAllDetail(false);
     dispatch(fetchGetCartList(TOKEN));
+  }, []);
 
-    // return () => {
-    //   dispatch(reset());
-    // };
-  }, [dispatch]);
+  useEffect(() => {
+    if (cartStatus === "succeeded" && !getAllDetail) {
+      cartLists.forEach((item) => {
+        dispatch(fetchGetDetail(item.product_id));
+      });
+    }
+  }, [cartStatus]);
 
-  //카트 상품 가져오기
+  if (cartStatus === "succeeded" && !getAllDetail) {
+    if (cartLists.every((item) => item.item)) {
+      setAllDetail(true);
+    }
+  }
+
+  console.log(cartLists, cartStatus, getAllDetail);
+
+  //카트 상품 지우기
   function deleteCartItem(cart_item_id: number) {
     dispatch(fetchDeleteCartItem({ TOKEN, cart_item_id }));
   }
@@ -56,9 +72,9 @@ function CartPage() {
 
   //카트 상품 리스트
   let content;
-  if (cartStatus === "Loading") {
+  if (cartStatus === "Loading" && !getAllDetail) {
     content = <p>Loading...</p>;
-  } else if (cartStatus === "succeeded") {
+  } else if (cartStatus === "succeeded" && getAllDetail) {
     content =
       cartLists.length !== 0 ? (
         <>
@@ -67,6 +83,7 @@ function CartPage() {
               <CartItem
                 key={item.cart_item_id}
                 item={item}
+                detail={item.item}
                 deleteItem={deleteCartItem}
                 checkHandler={checkHandler}
               />
