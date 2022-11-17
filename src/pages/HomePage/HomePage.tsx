@@ -6,7 +6,7 @@ import {
   fetchGetProducts,
 } from "../../features/productSlice";
 import ProductCard from "../../components/home/ProductCard/ProductCard";
-import Header from "../../components/common/Header/Header";
+import { Header } from "../../components/common/Header/Header";
 import Carousel from "../../components/home/Carousel/Carousel";
 import Footer from "../../components/common/Footer/Footer";
 import * as S from "./homePageStyle";

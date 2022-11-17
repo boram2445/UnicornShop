@@ -1,10 +1,10 @@
 import styled from "styled-components";
 
-const NavContainer = styled.header`
+const HeaderContainer = styled.header`
   box-shadow: 0px 4px 5px -4px #0000001a;
 `;
 
-const NavContents = styled.div`
+const HeaderContents = styled.div`
   margin: 0 auto;
   max-width: 1100px;
   padding: 22px;
@@ -18,11 +18,11 @@ const LeftWrap = styled.div`
   position: relative;
 `;
 
-const NavLogo = styled.h1`
+const Logo = styled.h1`
   cursor: pointer;
 `;
 
-const NavInput = styled.input`
+const Input = styled.input`
   width: 400px;
   margin-left: 30px;
   padding: 13px 0 13px 22px;
@@ -56,4 +56,37 @@ const NavButton = styled.li`
   font-size: 1.2rem;
 `;
 
-export { NavContainer, NavContents, LeftWrap, RightWrap, NavLogo, NavInput, InputBtn, NavButton };
+// Center Header
+const CenterContents = styled(HeaderContents)`
+  max-width: 1540px;
+  align-items: center;
+  justify-content: start;
+`;
+
+const SmallLogo = styled(Logo)`
+  img {
+    width: 80px;
+    height: 30px;
+  }
+`;
+
+const TitleText = styled.h2`
+  margin-left: 16px;
+  font-size: 3rem;
+  font-weight: 500;
+  line-height: 3.7rem;
+`;
+
+export {
+  HeaderContainer,
+  HeaderContents,
+  LeftWrap,
+  RightWrap,
+  Logo,
+  Input,
+  InputBtn,
+  NavButton,
+  SmallLogo,
+  TitleText,
+  CenterContents,
+};

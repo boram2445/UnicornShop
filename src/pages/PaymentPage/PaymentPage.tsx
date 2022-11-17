@@ -1,5 +1,5 @@
 import React from "react";
-import Header from "../../components/common/Header/Header";
+import { Header } from "../../components/common/Header/Header";
 import DeliveryInfo from "../../components/payment/DeliveryInfo/DeliveryInfo";
 import FinalPayCheck from "../../components/payment/FinalPayCheck/FinalPayCheck";
 import OrderItem from "../../components/payment/OrderItem/OrderItem";

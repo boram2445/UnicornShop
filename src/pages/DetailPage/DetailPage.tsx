@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { fetchPostCart, postCartItem } from "../../features/postCartSlice";
 import Footer from "../../components/common/Footer/Footer";
-import Header from "../../components/common/Header/Header";
+import { Header } from "../../components/common/Header/Header";
 import { NormalBtn } from "../../components/common/Button/Button";
 import AmountBtn from "../../components/common/AmountBtn/AmountBtn";
 import { selectProductById } from "../../features/productSlice";

@@ -10,7 +10,7 @@ import { getToken, logout, resetAll, selectUserType } from "../../../features/au
 import { useAppDispatch, useAppSelector } from "../../../hooks";
 import { NormalBtn } from "../Button/Button";
 
-function Header() {
+export function Header() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const TOKEN = useAppSelector(getToken);
@@ -23,13 +23,13 @@ function Header() {
   };
 
   return (
-    <S.NavContainer>
-      <S.NavContents>
+    <S.HeaderContainer>
+      <S.HeaderContents>
         <S.LeftWrap>
-          <S.NavLogo onClick={() => navigate("/")}>
+          <S.Logo onClick={() => navigate("/")}>
             <img src={logo} alt="유니콘 마켓 로고" />
-          </S.NavLogo>
-          <S.NavInput type="text" placeholder="상품을 검색해보세요!" />
+          </S.Logo>
+          <S.Input type="text" placeholder="상품을 검색해보세요!" />
           <S.InputBtn type="button">
             <img src={searchIcon} alt="검색" />
           </S.InputBtn>
@@ -63,9 +63,22 @@ function Header() {
             </S.NavButton>
           )}
         </S.RightWrap>
-      </S.NavContents>
-    </S.NavContainer>
+      </S.HeaderContents>
+    </S.HeaderContainer>
   );
 }
 
-export default Header;
+export function CenterHeader() {
+  const navigate = useNavigate();
+
+  return (
+    <S.HeaderContainer>
+      <S.CenterContents>
+        <S.SmallLogo onClick={() => navigate("/")}>
+          <img src={logo} alt="유니콘 마켓 로고" />
+        </S.SmallLogo>
+        <S.TitleText>판매자 센터</S.TitleText>
+      </S.CenterContents>
+    </S.HeaderContainer>
+  );
+}
