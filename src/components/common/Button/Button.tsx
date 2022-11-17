@@ -15,7 +15,8 @@ interface NormalBtnProps {
 
 interface TabMenuBtnProps {
   children: React.ReactNode;
-  on?: boolean;
+  fixed?: boolean;
+  num?: number;
 }
 
 //기본 버튼
@@ -29,11 +30,12 @@ export function NormalBtn({ children, ...props }: NormalBtnProps) {
 }
 
 //탭 메뉴 버튼
-export function TabMenuBtn({ children, ...props }: TabMenuBtnProps) {
+export function TabMenuBtn({ children, fixed, num }: TabMenuBtnProps) {
   return (
-    <S.TabMenuBtn {...props}>
+    <S.TabMenuBtn fixed={fixed?.toString()}>
       {children}
-      <span>1</span>
+      {fixed && <span>({num})</span>}
+      {!fixed && num && <S.NumCircle>{num}</S.NumCircle>}
     </S.TabMenuBtn>
   );
 }

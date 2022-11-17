@@ -103,36 +103,43 @@ const NormalBtn = styled.button<NormalBtnProps>`
   }}
 `;
 
-const TabMenuBtn = styled.button<{ on?: boolean }>`
+const TabMenuBtn = styled.button<{ fixed?: string }>`
+  position: relative;
   width: 250px;
-  padding: 15px 0;
+  padding: 15px 20px 15px;
+  text-align: start;
   color: var(--color-black);
   font-size: 1.6rem;
+  font-weight: 500;
   line-height: 2rem;
-  background-color: var(--color-white);
   border-radius: 5px;
-  span {
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    margin-left: 77px;
-    color: var(--color-white);
-    background-color: var(--color-red);
-    border-radius: 50%;
-  }
-  ${({ on }) => {
-    if (on) {
+  ${({ fixed }) => {
+    if (fixed === "true") {
       return css`
         background-color: var(--color-main);
+        color: var(--color-white);
+        cursor: default;
       `;
     } else {
       return css`
         &:hover {
-          background-color: var(--color-brigthPink);
+          background-color: var(--color-brightPink);
         }
       `;
     }
   }}
 `;
 
-export { NormalBtn, TabMenuBtn };
+const NumCircle = styled.div`
+  position: absolute;
+  right: 20px;
+  display: inline-block;
+  text-align: center;
+  width: 20px;
+  height: 20px;
+  color: var(--color-white);
+  background-color: var(--color-red);
+  border-radius: 50%;
+`;
+
+export { NormalBtn, TabMenuBtn, NumCircle };
