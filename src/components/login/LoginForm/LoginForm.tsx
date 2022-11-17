@@ -34,7 +34,7 @@ function LoginForm() {
     if (loginStatus === "succeeded") {
       console.log("로그인 되었습니다.");
       navigate("/");
-      dispatch(resetAll());
+      // dispatch(resetAll());
     }
   }, [loginStatus]);
 

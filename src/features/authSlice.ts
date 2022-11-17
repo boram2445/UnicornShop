@@ -147,6 +147,7 @@ export const authSlice = createSlice({
       state.error = "";
       state.message = "";
       state.companyMessage = "";
+      state.userType = "BUYER";
     },
     setUserType: (state, action) => {
       state.userType = action.payload;

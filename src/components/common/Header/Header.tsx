@@ -5,7 +5,8 @@ import logo from "../../../assets/icons/Logo-hodu.svg";
 import cartIcon from "../../../assets/icons/icon-shopping-cart.svg";
 import userIcon from "../../../assets/icons/icon-user.svg";
 import searchIcon from "../../../assets/icons/search.svg";
-import { getToken, logout, resetAll } from "../../../features/authSlice";
+import shoppingBag from "../../../assets/icons/icon-shopping-bag.svg";
+import { getToken, logout, resetAll, selectUserType } from "../../../features/authSlice";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
 import { NormalBtn } from "../Button/Button";
 
@@ -13,6 +14,7 @@ function Header() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const TOKEN = useAppSelector(getToken);
+  const USER = useAppSelector(selectUserType);
 
   const onLogout = () => {
     dispatch(logout());
@@ -34,15 +36,26 @@ function Header() {
         </S.LeftWrap>
         <S.RightWrap>
           {TOKEN ? (
-            <>
-              <S.NavButton onClick={() => navigate("/cart")}>
-                <img src={cartIcon} />
-                <span>장바구니</span>
-              </S.NavButton>
-              <NormalBtn type="button" size="ssmall" onClick={onLogout}>
-                로그아웃
-              </NormalBtn>
-            </>
+            USER === "BUYER" ? (
+              <>
+                <S.NavButton onClick={() => navigate("/cart")}>
+                  <img src={cartIcon} />
+                  <span>장바구니</span>
+                </S.NavButton>
+                <NormalBtn type="button" size="ssmall" onClick={onLogout}>
+                  로그아웃
+                </NormalBtn>
+              </>
+            ) : (
+              <>
+                <NormalBtn onClick={() => navigate("/center")} icon={shoppingBag} size="small">
+                  판매자 센터
+                </NormalBtn>
+                <NormalBtn type="button" size="ssmall" onClick={onLogout}>
+                  로그아웃
+                </NormalBtn>
+              </>
+            )
           ) : (
             <S.NavButton onClick={() => navigate("/login")}>
               <img src={userIcon} />
