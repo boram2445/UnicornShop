@@ -36,6 +36,7 @@ function CartPage() {
 
   const checkedItems = useAppSelector(selectCheckedItems);
   const isAllChecked = useAppSelector(selectCheckAllState);
+  const selectedItemNum = Object.keys(checkedItems).length;
   //모달 설정
   const modal = useAppSelector(selectOpenState);
   const [cartItemId, setCartItemId] = useState(0);
@@ -127,7 +128,9 @@ function CartPage() {
           </S.CartList>
           <TotalPrice />
           <Link to="/payment">
-            <NormalBtn size="large">주문하기</NormalBtn>
+            <NormalBtn size="large" disabled={!selectedItemNum}>
+              주문하기
+            </NormalBtn>
           </Link>
         </>
       ) : (
