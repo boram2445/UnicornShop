@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 const TotalPriceBox = styled.div`
-  margin: 80px auto 40px;
+  margin: 40px auto 40px;
   padding: 44px 0 42px;
   width: 1280px;
   display: grid;

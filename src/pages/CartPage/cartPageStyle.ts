@@ -43,7 +43,11 @@ const PriceText = styled.strong`
   right: 131px;
 `;
 
-const CartList = styled.ul``;
+const CartList = styled.ul`
+  & > button {
+    margin: 10px 0 0 10px;
+  }
+`;
 
 const NoItemBox = styled.div`
   margin-top: 200px;
