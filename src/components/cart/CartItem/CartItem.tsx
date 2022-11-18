@@ -9,11 +9,11 @@ import * as S from "./cartItemStyle";
 type ItemProps = {
   item: Cart;
   detail: Item;
-  deleteItem: (id: number) => void;
+  OpenRequestModal: (id: number) => void;
   checkHandler: (e: React.ChangeEvent<HTMLInputElement>, productId?: number) => void;
 };
 
-function CartItem({ item, detail, deleteItem, checkHandler }: ItemProps) {
+function CartItem({ item, detail, OpenRequestModal, checkHandler }: ItemProps) {
   const { cart_item_id, product_id, quantity, isChecked } = item;
   return (
     <S.CartItemArticle>
@@ -42,7 +42,7 @@ function CartItem({ item, detail, deleteItem, checkHandler }: ItemProps) {
       </S.OrderBox>
       <S.DeleteBtn
         onClick={() => {
-          deleteItem(cart_item_id);
+          OpenRequestModal(cart_item_id);
         }}
       >
         <img src={deleteIcon} />

@@ -21,6 +21,8 @@ import {
   reset,
   fetchGetDetail,
 } from "../../features/cartListSlice";
+import Modal from "../../components/common/Modal/Modal";
+import { closeModal, openModal, selectOpenState } from "../../features/modalSlice";
 
 function CartPage() {
   const dispatch = useAppDispatch();
@@ -32,6 +34,8 @@ function CartPage() {
   const isAllChecked = useAppSelector(selectCheckAllState);
   const [getAllDetail, setAllDetail] = useState(false);
 
+  const modal = useAppSelector(selectOpenState);
+  const [cartItemId, setCartItemId] = useState(0);
   useEffect(() => {
     dispatch(reset());
     setAllDetail(false);
@@ -54,9 +58,16 @@ function CartPage() {
 
   console.log(cartLists, cartStatus, getAllDetail);
 
-  //카트 상품 지우기
-  function deleteCartItem(cart_item_id: number) {
-    dispatch(fetchDeleteCartItem({ TOKEN, cart_item_id }));
+  //상품 지우기 재확인 모달 열기
+  function OpenRequestModal(cart_item_id: number) {
+    dispatch(openModal("확인"));
+    setCartItemId(cart_item_id);
+  }
+
+  //상품 삭제후 모달 닫기
+  function deleteCartItem() {
+    dispatch(fetchDeleteCartItem({ TOKEN, cart_item_id: cartItemId }));
+    dispatch(closeModal());
   }
 
   //체크 박스
@@ -84,7 +95,7 @@ function CartPage() {
                 key={item.cart_item_id}
                 item={item}
                 detail={item.item}
-                deleteItem={deleteCartItem}
+                OpenRequestModal={OpenRequestModal}
                 checkHandler={checkHandler}
               />
             ))}
@@ -107,6 +118,7 @@ function CartPage() {
   return (
     <>
       <Header />
+      {modal ? <Modal onClickYes={deleteCartItem}>상품을 삭제하시겠습니까?</Modal> : null}
       <S.CartPageLayout>
         <S.CartPageText>장바구니</S.CartPageText>
         <S.CartInfoBox>
