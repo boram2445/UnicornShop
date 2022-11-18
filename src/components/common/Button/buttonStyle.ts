@@ -63,7 +63,7 @@ const NormalBtn = styled.button<NormalBtnProps>`
       `;
     }
   }}
-  width:${({ width }) => width}
+  width:${({ width }) => width};
   ${({ color }) => {
     if (color === "white") {
       return css`
