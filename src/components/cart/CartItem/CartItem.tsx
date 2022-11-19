@@ -38,7 +38,10 @@ function CartItem({ item, detail, OpenDeleteModal, checkHandler }: ItemProps) {
         <S.ShopText>{detail?.store_name}</S.ShopText>
         <S.ProductText>{detail?.product_name}</S.ProductText>
         <S.PriceText>{detail?.price.toLocaleString()}원</S.PriceText>
-        <S.ShipText>택배배송 / 무료배송</S.ShipText>
+        <S.ShipText>
+          {detail.shipping_method === "PARCEL" ? "직접배송" : "택배배송"} /{" "}
+          {detail?.shipping_fee ? `${detail?.shipping_fee.toLocaleString()} 원` : "무료배송"}
+        </S.ShipText>
       </S.InfoBox>
       {/* 상품 개수 버튼 */}
       <AmountBtn count={quantity} item={item} />

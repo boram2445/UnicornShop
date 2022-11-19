@@ -27,7 +27,6 @@ function DetailPage() {
   };
 
   const getProductCart = () => {
-    console.log("장바구니");
     dispatch(
       fetchPostCart({ TOKEN, product_id: detail?.product_id, quantity: selectedCount, check: true })
     );
@@ -57,8 +56,10 @@ function DetailPage() {
             </S.InfoBox>
             {/* 상품 장바구니 담기 */}
             <S.ShiftText>
-              택배배송 /{" "}
-              {detail.shipping_fee === 0 ? "무료배송" : `배송비 ${detail.shipping_fee}원`}
+              {detail.shipping_method === "PARCEL" ? "직접배송" : "택배배송"} /{" "}
+              {detail.shipping_fee === 0
+                ? "무료배송"
+                : `배송비 ${detail.shipping_fee.toLocaleString()} 원`}
             </S.ShiftText>
             {/* 상품 개수 버튼 */}
             <AmountBtn getCount={getProductCount} />

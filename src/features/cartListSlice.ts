@@ -152,12 +152,15 @@ export const cartListSlice = createSlice({
     // 전체 가격 가져오기
     getTotalPrice: (state) => {
       let totalPrice = 0;
+      let deliveryPrice = 0;
       state.cartItems.map((item) => {
         if (item.isChecked) {
           totalPrice += item.quantity * item.item.price;
+          deliveryPrice += item.item.shipping_fee;
         }
       });
       state.totalPrice = totalPrice;
+      state.deliveryPrice = deliveryPrice;
     },
   },
   extraReducers: (builder) => {
@@ -227,6 +230,7 @@ export const getCartListStatus = (state: RootState) => state.cartList.status;
 export const getCartListError = (state: RootState) => state.cartList.error;
 
 export const selectTotalPrice = (state: RootState) => state.cartList.totalPrice;
+export const selectDeliveryPrice = (state: RootState) => state.cartList.deliveryPrice;
 export const selectCheckAllState = (state: RootState) =>
   state.cartList.cartItems.every((item) => item.isChecked === true);
 export const selectCheckedItems = (state: RootState) =>
