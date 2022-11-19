@@ -38,6 +38,7 @@ const TotalPayText = styled.p`
   font-size: 1.8rem;
   line-height: 2.2rem;
   strong {
+    margin-left: 10px;
     font-weight: 700;
     font-size: 2.4rem;
     line-height: 3rem;

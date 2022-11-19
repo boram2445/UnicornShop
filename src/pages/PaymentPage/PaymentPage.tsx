@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Header } from "../../components/common/Header/Header";
 import { CartItem } from "../../features/cartListSlice";
 import DeliveryInfo from "../../components/payment/DeliveryInfo/DeliveryInfo";
@@ -6,10 +6,18 @@ import FinalPayCheck from "../../components/payment/FinalPayCheck/FinalPayCheck"
 import OrderItem from "../../components/payment/OrderItem/OrderItem";
 import PayMethod from "../../components/payment/PayMethod/PayMethod";
 import * as S from "./paymentPageStyle";
+import { useAppDispatch, useAppSelector } from "../../hooks";
+import { getOrderItem, selectOrderItems, selectTotalPrice } from "../../features/orderSlice";
 
 function PaymentPage() {
-  const orderItems: CartItem[] = JSON.parse(localStorage.getItem("order") || "{}");
-  const totalPrice = orderItems?.reduce((prev, curr) => prev + curr.quantity * curr.item.price, 0);
+  const dispatch = useAppDispatch();
+  const orderedItems = useAppSelector(selectOrderItems);
+  const totalPrice = useAppSelector(selectTotalPrice);
+
+  useEffect(() => {
+    const orderItems: CartItem[] = JSON.parse(localStorage.getItem("order") || "{}");
+    dispatch(getOrderItem(orderItems));
+  }, []);
 
   return (
     <>
@@ -21,10 +29,10 @@ function PaymentPage() {
             <span></span>
             <S.Text>상품정보</S.Text>
             <S.Text>할인</S.Text>
-            <S.Text>수량</S.Text>
+            <S.Text>배송비</S.Text>
             <S.Text>상품금액</S.Text>
           </S.CartInfoBox>
-          {orderItems?.map((item) => (
+          {orderedItems?.map((item) => (
             <OrderItem key={item.product_id} item={item.item} quantity={item.quantity} />
           ))}
           <S.TotalPayText>
