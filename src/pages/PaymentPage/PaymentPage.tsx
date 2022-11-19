@@ -1,16 +1,16 @@
 import React from "react";
 import { Header } from "../../components/common/Header/Header";
+import { CartItem } from "../../features/cartListSlice";
 import DeliveryInfo from "../../components/payment/DeliveryInfo/DeliveryInfo";
 import FinalPayCheck from "../../components/payment/FinalPayCheck/FinalPayCheck";
 import OrderItem from "../../components/payment/OrderItem/OrderItem";
 import PayMethod from "../../components/payment/PayMethod/PayMethod";
-import { useAppSelector } from "../../hooks";
 import * as S from "./paymentPageStyle";
-import { selectCheckedItems, selectTotalPrice } from "../../features/cartListSlice";
 
 function PaymentPage() {
-  const cartItems = useAppSelector(selectCheckedItems);
-  const totalPrice = useAppSelector(selectTotalPrice);
+  const orderItems: CartItem[] = JSON.parse(localStorage.getItem("order") || "{}");
+  const totalPrice = orderItems?.reduce((prev, curr) => prev + curr.quantity * curr.item.price, 0);
+
   return (
     <>
       <Header />
@@ -24,7 +24,7 @@ function PaymentPage() {
             <S.Text>수량</S.Text>
             <S.Text>상품금액</S.Text>
           </S.CartInfoBox>
-          {cartItems?.map((item) => (
+          {orderItems?.map((item) => (
             <OrderItem key={item.product_id} item={item.item} quantity={item.quantity} />
           ))}
           <S.TotalPayText>

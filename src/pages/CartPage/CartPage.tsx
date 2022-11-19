@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { getToken } from "../../features/authSlice";
 import { CircleCheckBtn } from "../../components/common/CheckBtn/CheckBtn";
 import { NormalBtn } from "../../components/common/Button/Button";
@@ -27,6 +27,7 @@ import { closeModal, openModal, selectOpenState } from "../../features/modalSlic
 
 function CartPage() {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const TOKEN = useAppSelector(getToken) || "";
 
   const cartStatus = useAppSelector(getCartListStatus);
@@ -104,6 +105,12 @@ function CartPage() {
     dispatch(getTotalPrice());
   };
 
+  //결제 페이지로 넘어가기
+  const toOrderPage = () => {
+    localStorage.setItem("order", JSON.stringify(checkedItems));
+    navigate("/payment");
+  };
+
   //카트 상품 리스트
   let content;
   if (cartStatus === "Loading" && !getAllDetail) {
@@ -127,11 +134,10 @@ function CartPage() {
             </NormalBtn>
           </S.CartList>
           <TotalPrice />
-          <Link to="/payment">
-            <NormalBtn size="large" disabled={!selectedItemNum}>
-              주문하기
-            </NormalBtn>
-          </Link>
+
+          <NormalBtn size="large" disabled={!selectedItemNum} onClick={toOrderPage}>
+            주문하기
+          </NormalBtn>
         </>
       ) : (
         <S.NoItemBox>

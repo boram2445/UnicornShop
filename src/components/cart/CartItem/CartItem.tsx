@@ -1,17 +1,11 @@
 import React from "react";
 import { NormalBtn } from "../../common/Button/Button";
 import { CircleCheckBtn } from "../../common/CheckBtn/CheckBtn";
-import {
-  CartItem as Cart,
-  Item,
-  OrderOneItem,
-  selectCartList,
-} from "../../../features/cartListSlice";
+import { CartItem as Cart, Item } from "../../../features/cartListSlice";
 import AmountBtn from "../../common/AmountBtn/AmountBtn";
 import deleteIcon from "../../../assets/icons/icon-delete.svg";
 import * as S from "./cartItemStyle";
 import { useNavigate } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../../../hooks";
 
 type ItemProps = {
   item: Cart;
@@ -21,13 +15,14 @@ type ItemProps = {
 };
 
 function CartItem({ item, detail, OpenDeleteModal, checkHandler }: ItemProps) {
-  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { cart_item_id, product_id, quantity, isChecked } = item;
-  function orderOne() {
-    dispatch(OrderOneItem(product_id));
+
+  const orderOneItem = () => {
+    localStorage.setItem("order", JSON.stringify([{ ...item }]));
     navigate("/payment");
-  }
+  };
+
   return (
     <S.CartItemArticle>
       <CircleCheckBtn
@@ -51,7 +46,7 @@ function CartItem({ item, detail, OpenDeleteModal, checkHandler }: ItemProps) {
         <S.PriceAllText>
           {detail?.price && (detail?.price * quantity).toLocaleString()}원
         </S.PriceAllText>
-        <NormalBtn size="small" onClick={orderOne}>
+        <NormalBtn size="small" onClick={orderOneItem}>
           주문하기
         </NormalBtn>
       </S.OrderBox>

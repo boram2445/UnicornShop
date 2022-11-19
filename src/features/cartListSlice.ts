@@ -24,7 +24,7 @@ type CartInfo = {
   results: CartItem[];
 };
 
-export type CartItem = {
+export interface CartItem {
   my_cart: number;
   is_active: boolean;
   cart_item_id: number;
@@ -32,26 +32,26 @@ export type CartItem = {
   quantity: number;
   isChecked: boolean;
   item: Item;
-};
+}
 
-type PutItemCount = {
+interface PutItemCount {
   TOKEN: string;
   is_active: boolean;
   cart_item_id: number;
   product_id: number;
   quantity: number;
-};
+}
 
-type InitialState = {
+interface CartListType {
   status: string;
   detailStatus: string;
   cartItems: CartItem[];
   totalPrice: number;
   deliveryPrice: number;
   error: string;
-};
+}
 
-const initialState: InitialState = {
+const initialState: CartListType = {
   status: "idle",
   detailStatus: "idle",
   cartItems: [],
@@ -159,17 +159,6 @@ export const cartListSlice = createSlice({
       });
       state.totalPrice = totalPrice;
     },
-    // 상품 하나 주문하기
-    OrderOneItem: (state, { payload }) => {
-      const product_id = payload;
-      state.cartItems.map((item) => {
-        if (item.product_id === product_id) {
-          item.isChecked = true;
-        } else {
-          item.isChecked = false;
-        }
-      });
-    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchGetCartList.pending, (state) => {
@@ -242,6 +231,5 @@ export const selectCheckAllState = (state: RootState) =>
   state.cartList.cartItems.every((item) => item.isChecked === true);
 export const selectCheckedItems = (state: RootState) =>
   state.cartList.cartItems.filter((item) => item.isChecked === true);
-export const { reset, checkItem, checkAllItem, getTotalPrice, OrderOneItem } =
-  cartListSlice.actions;
+export const { reset, checkItem, checkAllItem, getTotalPrice } = cartListSlice.actions;
 export default cartListSlice.reducer;
