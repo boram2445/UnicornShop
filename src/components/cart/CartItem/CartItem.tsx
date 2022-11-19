@@ -35,7 +35,7 @@ function CartItem({ item, detail, OpenDeleteModal, checkHandler }: ItemProps) {
         <img src={detail?.image} />
       </S.ImageBox>
       <S.InfoBox>
-        <S.ShopText>{detail?.seller_store}</S.ShopText>
+        <S.ShopText>{detail?.store_name}</S.ShopText>
         <S.ProductText>{detail?.product_name}</S.ProductText>
         <S.PriceText>{detail?.price.toLocaleString()}원</S.PriceText>
         <S.ShipText>택배배송 / 무료배송</S.ShipText>

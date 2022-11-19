@@ -11,7 +11,7 @@ export interface Product {
   product_info: string;
   product_name: string;
   seller: number;
-  seller_store: string;
+  store_name: string;
   shipping_fee: number;
   shipping_method: string;
   stock: number;

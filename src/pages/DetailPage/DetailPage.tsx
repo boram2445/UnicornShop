@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../hooks";
-import { fetchPostCart, postCartItem } from "../../features/postCartSlice";
+import { fetchPostCart } from "../../features/postCartSlice";
 import Footer from "../../components/common/Footer/Footer";
 import { Header } from "../../components/common/Header/Header";
 import { NormalBtn } from "../../components/common/Button/Button";
@@ -48,7 +48,7 @@ function DetailPage() {
           <S.CartBox>
             {/* 상품 정보 */}
             <S.InfoBox>
-              <S.SellerText>{detail.seller_store}</S.SellerText>
+              <S.SellerText>{detail.store_name}</S.SellerText>
               <S.ProductText>{detail.product_name}</S.ProductText>
               <S.PriceText>
                 {detail.price?.toLocaleString()}

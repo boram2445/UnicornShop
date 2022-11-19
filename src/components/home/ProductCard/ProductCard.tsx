@@ -10,7 +10,7 @@ function ProductCard({ product }: { product: Product }) {
       <S.ThumbContainer>
         <S.ThumbImg src={product.image} alt="상품 이미지" />
       </S.ThumbContainer>
-      <S.ProductCorp>{product.seller_store}</S.ProductCorp>
+      <S.ProductCorp>{product.store_name}</S.ProductCorp>
       <S.ProductName>{product.product_name}</S.ProductName>
       <p>
         <S.ProductPrice>{product.price}</S.ProductPrice>
