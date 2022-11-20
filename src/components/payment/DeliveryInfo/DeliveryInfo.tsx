@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { closeModal, openModal, selectOpenState } from "../../../features/modalSlice";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
+import { limitInputLength } from "../../../utils/checkInputValid";
 import { NormalBtn } from "../../common/Button/Button";
 import FormInput from "../FormInput/FormInput";
 import PostAddress from "../PostAddress/PostAddress";
@@ -8,6 +9,7 @@ import * as S from "./deliveryInfoStyle";
 
 function DeliveryInfo() {
   const dispatch = useAppDispatch();
+  const addressDetailRef = useRef() as React.MutableRefObject<HTMLInputElement>;
 
   //우편 번호 찾기 모달
   const modal = useAppSelector(selectOpenState);
@@ -15,7 +17,9 @@ function DeliveryInfo() {
   //주문자 정보 - 이름, phone 넘버는 미리 받아오기
   const [ordererInfo, setOrdererInfo] = useState({
     name: "",
-    phone: "",
+    phone1: "",
+    phone2: "",
+    phone3: "",
     email: "",
   });
   //배송지 정보
@@ -27,146 +31,176 @@ function DeliveryInfo() {
     zoneCode: "",
     address: "",
     addressDetail: "",
-    message: "",
+    message: "배송전 문자 주세요~",
   });
-
-  const onOrdererChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setOrdererInfo({ ...ordererInfo, [e.target.name]: e.target.value });
-    console.log(ordererInfo);
-  };
 
   //우편번호, 주소 팝업창에서 받아오기
   const getAddress = (zoneCode: string, address: string) => {
     setReceiverInfo({ ...receiverInfo, zoneCode, address });
     dispatch(closeModal());
+    addressDetailRef.current.focus();
   };
 
-  // type ObjType = {
-  //   [index: string]: number | string | boolean | null;
-  //   id: number;
-  //   name: string;
-  // };
+  //입력 제한
+  const limitInputValue = (name: string, value: string) => {
+    let newValue = "";
+    if (name === "name") {
+      newValue = limitInputLength(value, 10);
+    } else if (name === "phone1") {
+      newValue = limitInputLength(value, 3).replace(/[^0-9]/g, "");
+    } else if (name === "phone2" || name === "phone3") {
+      newValue = limitInputLength(value, 4).replace(/[^0-9]/g, "");
+    } else {
+      newValue = value;
+    }
+    return newValue;
+  };
 
-  // const ordererInput: ObjType[] = [
-  //   {
-  //     id: 1,
-  //     name: "name",
-  //     type: "text",
-  //     label: "이름",
-  //     pattern: "/^[ㄱ-ㅎ|가-힣|a-z|A-Z|0-9|]+$/",
-  //     required: true,
-  //   },
-  //   {
-  //     id: 2,
-  //     name: "phone",
-  //     type: "text",
-  //     label: "휴대폰",
-  //     pattern: "^[0-9]+$",
-  //     required: true,
-  //   },
-  //   {
-  //     id: 3,
-  //     name: "phone",
-  //     type: "email",
-  //     label: "이메일",
-  //     pattern: "^[0-9]+$",
-  //     required: true,
-  //   },
-  // ];
+  //주문자 정보 입력
+  const onChangeOrdererInfo = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    const newValue = limitInputValue(name, value);
+    setOrdererInfo({ ...ordererInfo, [name]: newValue });
+  };
+
+  //배송지 정보 입력
+  const onChangeReceiverInfo = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    const newValue = limitInputValue(name, value);
+    setReceiverInfo({ ...receiverInfo, [name]: newValue });
+  };
 
   return (
     <section>
-      <S.Title>배송정보</S.Title>
+      <S.Title>
+        배송정보 <span>* 모든 항목 입력 필수</span>
+      </S.Title>
       <table>
-        <S.Catption>주문자 정보</S.Catption>
+        <S.Caption>주문자 정보</S.Caption>
         <tbody>
-          {/* {ordererInput.map((info) => (
-            <FormInput
-              key={info.id}
-              {...info}
-              value={ordererInfo[info.name]}
-              onChange={onOrdererChange}
-            />
-          ))} */}
           <S.Row>
             <S.LabelText>이름</S.LabelText>
             <td>
               <S.Input
                 type="text"
                 name="name"
-                onChange={onOrdererChange}
-                pattern="/^[ㄱ-ㅎ|가-힣|a-z|A-Z|0-9|]+$/"
-                required
+                pattern="^[ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z]{0,10}$"
+                onChange={onChangeOrdererInfo}
+                value={ordererInfo.name}
+                autoComplete="off"
               />
+              <span>* 한글 혹은 영어 10자 이내로 입력해주세요</span>
             </td>
           </S.Row>
           <S.Row>
-            <S.LabelText>휴대폰</S.LabelText>
+            <S.LabelText>휴대폰번호</S.LabelText>
             <td>
               <S.Input
                 type="text"
-                size={3}
                 width="80px"
                 name="phone1"
-                onChange={onOrdererChange}
-                pattern="^[0-9]+$"
+                onChange={onChangeOrdererInfo}
+                value={ordererInfo.phone1}
+                autoComplete="off"
               />
               &nbsp; - &nbsp;
               <S.Input
                 type="text"
-                size={4}
                 width="100px"
                 name="phone2"
-                onChange={onOrdererChange}
-                pattern="^[0-9]+$"
+                onChange={onChangeOrdererInfo}
+                value={ordererInfo.phone2}
+                autoComplete="off"
               />
               &nbsp; - &nbsp;
               <S.Input
                 type="text"
-                size={4}
                 width="100px"
                 name="phone3"
-                onChange={onOrdererChange}
-                pattern="^[0-9]+$"
+                onChange={onChangeOrdererInfo}
+                value={ordererInfo.phone3}
+                autoComplete="off"
               />
             </td>
           </S.Row>
           <S.Row>
             <S.LabelText>이메일</S.LabelText>
             <td>
-              <S.Input type="email" name="email" onChange={onOrdererChange} />
+              <S.Input
+                type="email"
+                name="email"
+                onChange={onChangeOrdererInfo}
+                pattern="^[a-zA-Z0-9+-\_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
+                autoComplete="off"
+              />
+              <span>* 이메일 형식을 확인해주세요</span>
             </td>
           </S.Row>
         </tbody>
       </table>
       <table>
-        <S.Catption>배송지 정보</S.Catption>
+        <S.Caption>
+          <strong>배송지 정보</strong>
+          <NormalBtn size="ssmall" color="white" width="180px">
+            주문자 정보와 동일
+          </NormalBtn>
+        </S.Caption>
         <tbody>
           <S.Row>
             <S.LabelText>수령인</S.LabelText>
             <td>
-              <S.Input type="text" />
+              <S.Input
+                name="name"
+                type="text"
+                pattern="^[ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z]{0,10}$"
+                onChange={onChangeReceiverInfo}
+                value={receiverInfo.name}
+                autoComplete="off"
+              />
+              <span>* 한글 혹은 영어 10자 이내로 입력해주세요</span>
             </td>
           </S.Row>
           <S.Row>
-            <S.LabelText>휴대폰</S.LabelText>
+            <S.LabelText>휴대폰번호</S.LabelText>
             <td>
-              <S.Input type="text" size={3} width="80px" />
+              <S.Input
+                name="phone1"
+                type="text"
+                width="80px"
+                onChange={onChangeReceiverInfo}
+                value={receiverInfo.phone1}
+                autoComplete="off"
+              />
               &nbsp; - &nbsp;
-              <S.Input type="text" size={4} width="100px" />
+              <S.Input
+                name="phone2"
+                type="text"
+                width="100px"
+                onChange={onChangeReceiverInfo}
+                value={receiverInfo.phone2}
+                autoComplete="off"
+              />
               &nbsp; - &nbsp;
-              <S.Input type="text" size={4} width="100px" />
+              <S.Input
+                name="phone3"
+                type="text"
+                width="100px"
+                onChange={onChangeReceiverInfo}
+                value={receiverInfo.phone3}
+                autoComplete="off"
+              />
             </td>
           </S.Row>
           <S.Row>
             <S.LabelText>배송주소</S.LabelText>
             <td rowSpan={3}>
               <S.Input
+                name="zondCode"
                 type="text"
                 width="150px"
-                size={5}
                 placeholder="우편번호"
-                value={receiverInfo.zoneCode}
+                defaultValue={receiverInfo.zoneCode}
+                readOnly
               />
               <S.BtnWrapper>
                 <NormalBtn size="small" onClick={() => dispatch(openModal(""))} type="button">
@@ -175,15 +209,38 @@ function DeliveryInfo() {
               </S.BtnWrapper>
               {modal && <PostAddress getAddress={getAddress} />}
               <br />
-              <S.Input type="text" width="600px" placeholder="주소" value={receiverInfo.address} />
+              <S.Input
+                name="address"
+                type="text"
+                width="600px"
+                placeholder="주소"
+                defaultValue={receiverInfo.address}
+                readOnly
+              />
               <br />
-              <S.Input type="text" width="400px" placeholder="상세주소" />
+              <S.Input
+                name="addressDetail"
+                type="text"
+                width="400px"
+                placeholder="상세주소"
+                autoComplete="off"
+                onChange={onChangeReceiverInfo}
+                value={receiverInfo.addressDetail}
+                ref={addressDetailRef}
+              />
             </td>
           </S.Row>
           <S.Row>
             <S.LabelText>배송 메세지</S.LabelText>
             <td>
-              <S.Input type="text" width="600px" />
+              <S.Input
+                name="message"
+                type="text"
+                width="600px"
+                autoComplete="off"
+                onChange={onChangeReceiverInfo}
+                value={receiverInfo.message}
+              />
             </td>
           </S.Row>
         </tbody>

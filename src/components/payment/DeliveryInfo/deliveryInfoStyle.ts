@@ -14,7 +14,7 @@ const Title = styled.h3`
   }
 `;
 
-const Catption = styled.caption`
+const Caption = styled.caption`
   margin-top: 40px;
   text-align: start;
   font-weight: 500;
@@ -57,11 +57,20 @@ const Input = styled.input<{ width?: string }>`
   width: ${({ width }) => width || "334px"};
   font-size: 1.6rem;
   border: 1px solid var(--color-grey);
-  outline-color: var(--color-main);
+  outline-color: var(--color-brightPink);
+  ~ span {
+    display: none;
+  }
+  &:invalid {
+    ~ span {
+      display: inline-block;
+    }
+  }
 `;
 
-const BtnWrapper = styled.span`
+const BtnWrapper = styled.div`
+  display: inline-block;
   margin-left: 10px;
 `;
 
-export { Title, Catption, LabelText, Row, Input, BtnWrapper };
+export { Title, Caption, LabelText, Row, Input, BtnWrapper };
