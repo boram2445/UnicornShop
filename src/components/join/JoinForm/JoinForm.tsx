@@ -23,6 +23,7 @@ import checkOnIcon from "../../../assets/icons/icon-check-on.svg";
 import checkOffIcon from "../../../assets/icons/icon-check-off.svg";
 import Spinner from "../../common/Spinner/Spinner";
 import * as S from "./joinFormStyle";
+import { handleInputError, limitInputLength } from "../../../utils/checkInputValid";
 
 function JoinForm() {
   const dispatch = useAppDispatch();
@@ -122,78 +123,52 @@ function JoinForm() {
     dispatch(fetchPostUserName(username));
   };
 
-  //입력 글자수 제한 함수
-  const handleInputLength = (value: string, maxLen: number) => {
-    if (value.length > maxLen) {
-      value = value.substring(0, maxLen);
-    }
-    return value;
-  };
-
   //아이디
   const onChangeUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    const newValue = handleInputLength(value, 20);
+    const newValue = limitInputLength(value, 20);
+    const message = "* 아이디는 3-20자 이내의 영어 소문자, 대문자, 숫자만 가능합니다.";
+    const error = handleInputError(name, newValue, message);
     setFormValues({ ...formValues, [name]: newValue });
-    const pattern = "^[A-Za-z0-9]{3,21}$";
-    //아이디 패턴 검사 통과하면, 중복 확인 버튼 활성화
-    if (value.match(pattern)) {
-      setErrorMessage({ ...errorMessage, [name]: "" });
-      setNameVaildBtn(true);
-    } else {
-      const message = "아이디는 3-20자 이내의 영어 소문자, 대문자, 숫자만 가능합니다.";
-      setErrorMessage({ ...errorMessage, [name]: message });
-      setNameVaildBtn(false);
-    }
+    setErrorMessage({ ...errorMessage, [name]: error });
+    error ? setNameVaildBtn(false) : setNameVaildBtn(true);
   };
 
   //비밀번호
   const onChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    const newValue = handleInputLength(value, 20);
+    const newValue = limitInputLength(value, 20);
     setFormValues({ ...formValues, [name]: newValue });
-    const pattern = "^(?=.*[a-zA-Z])(?=.*[0-9]).{8,20}$";
-    let passwordMessage = "";
-    let comfirmMessage = "";
-    if (!value.match(pattern)) {
-      passwordMessage = "비밀번호는 영문, 숫자 조합 8-20자리를 입력해주세요.";
+    if (name === "password") {
+      const message = "비밀번호는 영문, 숫자 조합 8-20자리를 입력해주세요.";
+      const error = handleInputError(name, newValue, message);
+      setErrorMessage({ ...errorMessage, [name]: error });
+    } else if (name === "confirmPassword") {
+      let message = "";
+      if (value !== formValues.confirmPassword) {
+        message = "비밀번호가 일치하지 않습니다.";
+      }
+      setErrorMessage({ ...errorMessage, [name]: message });
     }
-    //비밀번호 재확인 칸에 값이 있을 경우 검사
-    if (formValues.confirmPassword && value !== formValues.confirmPassword) {
-      comfirmMessage = "비밀번호가 일치하지 않습니다.";
-    }
-    setErrorMessage({
-      ...errorMessage,
-      ["password"]: passwordMessage,
-      ["confirmPassword"]: comfirmMessage,
-    });
   };
 
   //비밀번호 재확인
   const onChangeConfirmPassword = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    const newValue = handleInputLength(value, 20);
+    const newValue = limitInputLength(value, 20);
+    const message = value && (value === formValues.password ? "" : "비밀번호가 일치하지 않습니다.");
     setFormValues({ ...formValues, [name]: newValue });
-    if (value === formValues.password) {
-      setErrorMessage({ ...errorMessage, [name]: "" });
-    } else {
-      const message = "비밀번호가 일치하지 않습니다.";
-      setErrorMessage({ ...errorMessage, [name]: message });
-    }
+    setErrorMessage({ ...errorMessage, [name]: message });
   };
 
   //이름
   const onChangeName = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    const newValue = handleInputLength(value, 10);
+    const newValue = limitInputLength(value, 10);
     setFormValues({ ...formValues, [name]: newValue });
-    const pattern = "^[ㄱ-ㅎ가-힣a-zA-Z]{1,10}$";
-    if (value.match(pattern)) {
-      setErrorMessage({ ...errorMessage, [name]: "" });
-    } else {
-      const message = "이름은 한글 혹은 영어로 10자리까지 가능합니다.";
-      setErrorMessage({ ...errorMessage, [name]: message });
-    }
+    const message = "이름은 한글 혹은 영어로 10자리까지 가능합니다.";
+    const error = handleInputError(name, newValue, message);
+    setErrorMessage({ ...errorMessage, [name]: error });
   };
 
   //휴대폰 번호
@@ -203,38 +178,21 @@ function JoinForm() {
 
   const onChangePhone = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    //숫자만 입력 가능
-    const newValue = handleInputLength(value, 4).replace(/[^0-9]/g, "");
+    //숫자 4자리만 입력 가능
+    const newValue = limitInputLength(value, 4).replace(/[^0-9]/g, "");
+    const message = "* 휴대폰번호 입력 형식을 확인해주세요";
+    const error = handleInputError(name, newValue, message);
     setFormValues({ ...formValues, [name]: newValue });
-
-    let message = "";
-    if (formValues.phone2 && formValues.phone3) {
-      if (
-        (name === "phone2" && !newValue.match("^[0-9]{3,4}$")) ||
-        (name === "phone3" && !newValue.match("^[0-9]{4}$"))
-      ) {
-        message = "휴대폰번호 입력 형식을 확인해 주세요";
-      }
-    }
-    setErrorMessage({ ...errorMessage, ["phone"]: message });
+    setErrorMessage({ ...errorMessage, ["phone"]: error });
   };
 
-  //이메일
+  //이메일 - 개선 필요
   const onChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    const pattern1 = "^[a-zA-Z0-9]*$";
-    const pattern2 = "[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$";
-    let message = "";
-    if (formValues.email1 && formValues.email2) {
-      if (
-        (name === "email1" && !value.match(pattern1)) ||
-        (name === "email2" && !value.match(pattern2))
-      ) {
-        message = "이메일 형식을 확인해 주세요";
-      }
-    }
+    const message = "* 이메일 형식을 확인해 주세요";
     setFormValues({ ...formValues, [name]: value });
-    setErrorMessage({ ...errorMessage, ["email"]: message });
+    const error = handleInputError(name, value, message);
+    setErrorMessage({ ...errorMessage, ["email"]: error });
   };
 
   //체크박스
@@ -245,14 +203,13 @@ function JoinForm() {
 
   //사업자 등록번호 인증 이벤트
   const checkRegistrationNumber = (number: string) => {
-    console.log(number);
     dispatch(fetchPostCompanyNumber(number));
   };
 
   //사업자 등록번호
   const onChangeRegistrationNumber = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    const newValue = handleInputLength(value, 10).replace(/[^0-9]/g, "");
+    const newValue = limitInputLength(value, 10).replace(/[^0-9]/g, "");
     setSellerValues({ ...sellerValues, [name]: newValue });
     const message = "사업자 등록 번호는 숫자 10자로 이루어져야 합니다.";
     if (newValue.length > 0 && newValue.length < 10) {

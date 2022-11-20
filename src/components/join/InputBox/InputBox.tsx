@@ -17,7 +17,16 @@ type InputProps = {
 };
 
 //일반, 버튼, 아이콘 입력 폼
-function InputBox({ icon, width, onClick, onChange, onButton, error, ...props }: InputProps) {
+function InputBox({
+  icon,
+  width,
+  onClick,
+  onChange,
+  onButton,
+  error,
+  value,
+  ...props
+}: InputProps) {
   const inputRef = useRef() as React.MutableRefObject<HTMLInputElement>;
   //페이지 렌더링시 아이디 input에 focus
   useEffect(() => {
@@ -43,13 +52,14 @@ function InputBox({ icon, width, onClick, onChange, onButton, error, ...props }:
         onChange={onChange}
         width={width || "100%"}
         icon={icon}
+        value={value}
       />
       {onButton?.toString() && (
         <NormalBtn size="smedium" width="122px" onClick={handleBtnClick} disabled={!onButton}>
           {props.name === "username" ? "중복확인" : "인증"}
         </NormalBtn>
       )}
-      {error && <S.ErrorText>{error}</S.ErrorText>}
+      {value && error && <S.ErrorText>{error}</S.ErrorText>}
     </S.InputBox>
   );
 }
