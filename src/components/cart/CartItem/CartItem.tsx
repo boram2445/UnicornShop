@@ -19,7 +19,7 @@ function CartItem({ item, detail, OpenDeleteModal, checkHandler }: ItemProps) {
   const { cart_item_id, product_id, quantity, isChecked } = item;
 
   const orderOneItem = () => {
-    localStorage.setItem("order", JSON.stringify([{ ...item }]));
+    sessionStorage.setItem("order", JSON.stringify([{ ...item }]));
     navigate("/payment");
   };
 

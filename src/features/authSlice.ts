@@ -4,7 +4,7 @@ import axios from "axios";
 
 const BASE_URL = "https://openmarket.weniv.co.kr";
 
-const item = localStorage.getItem("token");
+const item = sessionStorage.getItem("token");
 const TOKEN = item === null ? null : JSON.parse(item);
 console.log(TOKEN);
 
@@ -111,7 +111,7 @@ export const fetchPostLogin = createAsyncThunk(
       console.log(result.data);
 
       if (result.data) {
-        localStorage.setItem("token", JSON.stringify(result.data.token));
+        sessionStorage.setItem("token", JSON.stringify(result.data.token));
       }
 
       return result.data;
@@ -124,7 +124,7 @@ export const fetchPostLogin = createAsyncThunk(
 
 //로그아웃
 export const logout = createAsyncThunk("auth/logout", async () => {
-  localStorage.removeItem("token");
+  sessionStorage.removeItem("token");
 });
 
 export const authSlice = createSlice({

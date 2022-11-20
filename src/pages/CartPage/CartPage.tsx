@@ -107,7 +107,7 @@ function CartPage() {
 
   //결제 페이지로 넘어가기
   const toOrderPage = () => {
-    localStorage.setItem("order", JSON.stringify(checkedItems));
+    sessionStorage.setItem("order", JSON.stringify(checkedItems));
     navigate("/payment");
   };
 
