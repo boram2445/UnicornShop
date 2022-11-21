@@ -11,7 +11,7 @@ const Title = styled.h3`
   line-height: 3rem;
 `;
 
-const PayMentForm = styled.form`
+const PayMentBox = styled.div`
   margin-top: 18px;
   padding: 18px 0 18px 12px;
   border-top: 2px solid var(--color-grey);
@@ -38,4 +38,4 @@ const CircleInput = styled(CircleCheckBtn)`
   }
 `;
 
-export { PayMentSection, PayMentForm, InputWrap, Title, Label, CircleInput };
+export { PayMentSection, PayMentBox, InputWrap, Title, Label, CircleInput };

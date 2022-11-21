@@ -1,13 +1,11 @@
 import React, { useEffect } from "react";
 import { Header } from "../../components/common/Header/Header";
 import { CartItem } from "../../features/cartListSlice";
-import DeliveryInfo from "../../components/payment/DeliveryInfo/DeliveryInfo";
-import FinalPayCheck from "../../components/payment/FinalPayCheck/FinalPayCheck";
-import OrderItem from "../../components/payment/OrderItem/OrderItem";
-import PayMethod from "../../components/payment/PayMethod/PayMethod";
-import * as S from "./paymentPageStyle";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { getOrderItem, selectOrderItems, selectTotalPrice } from "../../features/orderSlice";
+import OrderForm from "../../components/payment/OrderForm/OrderForm";
+import OrderItem from "../../components/payment/OrderItem/OrderItem";
+import * as S from "./paymentPageStyle";
 
 function PaymentPage() {
   const dispatch = useAppDispatch();
@@ -18,10 +16,6 @@ function PaymentPage() {
     const orderItems: CartItem[] = JSON.parse(sessionStorage.getItem("order") || "{}");
     dispatch(getOrderItem(orderItems));
   }, []);
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-  };
 
   return (
     <>
@@ -43,13 +37,7 @@ function PaymentPage() {
             총 주문금액 <strong>{totalPrice.toLocaleString()}원</strong>
           </S.TotalPayText>
         </S.CartBox>
-        <form onSubmit={handleSubmit}>
-          <DeliveryInfo />
-          <S.BottomWrap>
-            <PayMethod />
-            <FinalPayCheck />
-          </S.BottomWrap>
-        </form>
+        <OrderForm />
       </S.PaymentSection>
     </>
   );

@@ -46,10 +46,4 @@ const TotalPayText = styled.p`
   }
 `;
 
-const BottomWrap = styled.div`
-  margin-top: 70px;
-  display: flex;
-  justify-content: space-between;
-`;
-
-export { PaymentSection, CartBox, TotalPayText, Title, CartInfoBox, Text, BottomWrap };
+export { PaymentSection, CartBox, TotalPayText, Title, CartInfoBox, Text };

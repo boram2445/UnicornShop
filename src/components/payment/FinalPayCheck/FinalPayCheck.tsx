@@ -5,10 +5,14 @@ import { NormalBtn } from "../../common/Button/Button";
 import CheckLabel from "../../common/CheckLabel/CheckLabel";
 import * as S from "./finalPayCheckStyle";
 
-function FinalPayCheck() {
+interface FinalCheckProps {
+  canOrder: boolean;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
+function FinalPayCheck({ canOrder, onChange }: FinalCheckProps) {
   const totalPrice = useAppSelector(selectTotalPrice);
   const deliveryPrice = useAppSelector(selectDeliveryPrice);
-
   return (
     <S.FinalPaySection>
       <S.Title>최종결제 정보</S.Title>
@@ -43,8 +47,12 @@ function FinalPayCheck() {
           </S.TotalMoneyBox>
         </S.TopWrap>
         <S.BottomWrap>
-          <CheckLabel>주문 내용을 확인하였으며, 정보 제공 등에 동의합니다.</CheckLabel>
-          <NormalBtn size="large">결제하기</NormalBtn>
+          <CheckLabel onChange={onChange}>
+            주문 내용을 확인하였으며, 정보 제공 등에 동의합니다.
+          </CheckLabel>
+          <NormalBtn size="large" disabled={!canOrder}>
+            결제하기
+          </NormalBtn>
         </S.BottomWrap>
       </S.BoxWrap>
     </S.FinalPaySection>

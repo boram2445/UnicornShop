@@ -4,10 +4,12 @@ import { useAppDispatch, useAppSelector } from "../../../hooks";
 import { limitInputLength } from "../../../utils/checkInputValid";
 import { NormalBtn } from "../../common/Button/Button";
 import SelectInput from "../../common/SelectInput/SelectInput";
+import FinalPayCheck from "../FinalPayCheck/FinalPayCheck";
+import PayMethod from "../PayMethod/PayMethod";
 import PostAddress from "../PostAddress/PostAddress";
-import * as S from "./deliveryInfoStyle";
+import * as S from "./orderFormStyle";
 
-function DeliveryInfo() {
+function OrderForm() {
   const dispatch = useAppDispatch();
   const addressDetailRef = useRef() as React.MutableRefObject<HTMLInputElement>;
 
@@ -16,6 +18,7 @@ function DeliveryInfo() {
     "배송전 미리 연락 바랍니다.",
     "부재시 경비실에 맡겨 주세요.",
     "부재시 전화주시거나 문자 남겨 주세요.",
+    "직접 입력",
   ];
   //우편 번호 찾기 모달
   const modal = useAppSelector(selectOpenState);
@@ -23,7 +26,7 @@ function DeliveryInfo() {
   //주문자 정보 - 이름, phone 넘버는 미리 받아오기
   const [ordererInfo, setOrdererInfo] = useState({
     name: "",
-    phone1: "",
+    phone1: phoneSelect[0],
     phone2: "",
     phone3: "",
     email: "",
@@ -39,6 +42,16 @@ function DeliveryInfo() {
     addressDetail: "",
     message: messageSelect[0],
   });
+
+  const [checkBox, setCheckBox] = useState({
+    payMethod: "",
+    finalCheck: false,
+  });
+
+  const canOrder =
+    Object.values(ordererInfo).every(Boolean) &&
+    Object.values(receiverInfo).every(Boolean) &&
+    Object.values(checkBox).every(Boolean);
 
   //우편번호, 주소 팝업창에서 받아오기
   const getAddress = (zoneCode: string, address: string) => {
@@ -83,7 +96,7 @@ function DeliveryInfo() {
   };
 
   return (
-    <section>
+    <form onSubmit={() => console.log("제출")}>
       <S.Title>
         배송정보 <S.ErrorText>* 모든 항목 입력 필수</S.ErrorText>
       </S.Title>
@@ -109,7 +122,6 @@ function DeliveryInfo() {
             <SelectInput
               selectItems={phoneSelect}
               onClick={(selected: string) => {
-                console.log(selected);
                 setOrdererInfo({ ...ordererInfo, ["phone1"]: selected });
               }}
               checkItem={ordererInfo.phone1}
@@ -142,6 +154,7 @@ function DeliveryInfo() {
             <S.Input
               type="email"
               name="email"
+              value={ordererInfo.email}
               onChange={onChangeOrdererInfo}
               pattern="[-a-zA-Z0-9~!$%^&amp;*_=+}{'?]+(\.[-a-zA-Z0-9~!$%^&amp;*_=+}{'?]+)*@([a-zA-Z0-9_][-a-zA-Z0-9_]*(\.[-a-zA-Z0-9_]+)*\.([cC][oO][mM]))(:[0-9]{1,5})?"
               autoComplete="off"
@@ -153,7 +166,13 @@ function DeliveryInfo() {
       <section>
         <S.SectionTitle>
           <strong>배송지 정보</strong>
-          <NormalBtn size="ssmall" color="white" width="160px" onClick={handleSameInfoBtn}>
+          <NormalBtn
+            size="ssmall"
+            color="white"
+            width="160px"
+            onClick={handleSameInfoBtn}
+            type="button"
+          >
             주문자 정보와 동일
           </NormalBtn>
         </S.SectionTitle>
@@ -256,8 +275,21 @@ function DeliveryInfo() {
           />
         </S.Row>
       </section>
-    </section>
+      <S.BottomWrap>
+        <PayMethod
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setCheckBox({ ...checkBox, ["payMethod"]: e.target.id })
+          }
+        />
+        <FinalPayCheck
+          canOrder={canOrder}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+            setCheckBox({ ...checkBox, ["finalCheck"]: e.target.checked })
+          }
+        />
+      </S.BottomWrap>
+    </form>
   );
 }
 
-export default DeliveryInfo;
+export default OrderForm;

@@ -52,6 +52,7 @@ const SelectList = styled.ul<{ on: string; width: string; radius?: string; textA
   border: 1px solid var(--color-grey);
   border-radius: ${({ radius }) => radius};
   background-color: var(--color-white);
+  z-index: 100;
   li button {
     font-size: 1.6rem;
     line-height: 2rem;

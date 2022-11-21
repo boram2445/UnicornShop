@@ -84,4 +84,10 @@ const BtnWrapper = styled.div`
   margin-left: 10px;
 `;
 
-export { Title, ErrorText, SectionTitle, LabelText, Row, Input, BtnWrapper };
+const BottomWrap = styled.div`
+  margin-top: 70px;
+  display: flex;
+  justify-content: space-between;
+`;
+
+export { Title, ErrorText, SectionTitle, LabelText, Row, Input, BtnWrapper, BottomWrap };
