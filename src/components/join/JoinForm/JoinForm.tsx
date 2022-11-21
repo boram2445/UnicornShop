@@ -299,6 +299,7 @@ function JoinForm() {
           <InputPhone
             onClick={onClickPhone}
             onChange={onChangePhone}
+            value1={formValues.phone1}
             value2={formValues.phone2}
             value3={formValues.phone3}
             error={errorMessage.phone}

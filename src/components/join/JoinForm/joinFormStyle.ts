@@ -20,7 +20,7 @@ const InputBoxs = styled.div`
   padding: 35px 34px;
   border: 1px solid var(--color-grey);
   border-radius: 0 0 10px 10px;
-  div {
+  & > div {
     margin-bottom: 12px;
   }
   div:nth-child(3) {

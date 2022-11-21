@@ -67,20 +67,28 @@ function InputBox({
 type InputPhoneProps = {
   onClick: (selected: string) => void;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  value1: string;
   value2: string;
   value3: string;
   error: string;
 };
 
 //휴대폰 번호 입력 폼
-function InputPhone({ onClick, onChange, value2, value3, error }: InputPhoneProps) {
+function InputPhone({ onClick, onChange, value1, value2, value3, error }: InputPhoneProps) {
   const selectItems = ["010", "011", "016", "017", "018", "019"];
 
   return (
     <S.InputPhoneBox>
       <S.LabelText>휴대폰번호</S.LabelText>
       <div>
-        <SelectInput selectItems={selectItems} onClick={onClick} />
+        <SelectInput
+          selectItems={selectItems}
+          onClick={onClick}
+          checkItem={value1}
+          width="150px"
+          radius="5px"
+          padding="16px 14px 16px 0"
+        />
         <S.InputPhone
           type="text"
           name="phone2"
