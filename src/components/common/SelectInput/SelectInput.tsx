@@ -6,28 +6,38 @@ import * as S from "./selectInputStyle";
 type SelectInputProps = {
   selectItems: string[];
   onClick: (selected: string) => void;
+  checkItem?: string;
+  width: string;
+  radius?: string;
+  padding: string;
+  textAlign?: string;
 };
 
-function SelectInput({ selectItems, onClick }: SelectInputProps) {
+function SelectInput({
+  selectItems,
+  onClick,
+  checkItem,
+  width,
+  radius,
+  padding,
+  textAlign,
+}: SelectInputProps) {
   const [onToggle, setOnToggle] = useState(false);
-  const [selected, setSelected] = useState(selectItems[0]);
 
   const handleItemClick = (item: string) => {
-    setSelected(item);
     setOnToggle(!onToggle);
-    onClick(selected);
+    onClick(item);
   };
 
   return (
-    <S.SelectArticle>
-      <S.SelectedBtn
-        type="button"
-        icon={onToggle ? ArrowDownIcon : ArrowUpIcon}
-        onClick={() => setOnToggle(!onToggle)}
-      >
-        {selected}
-      </S.SelectedBtn>
-      <S.SelectList on={onToggle.toString()}>
+    <S.SelectArticle width={width}>
+      <S.InputWrap width={width} radius={radius} padding={padding}>
+        <S.SelectInput value={checkItem ? checkItem : selectItems[0]} textAlign={textAlign} />
+        <S.InputBtn onClick={() => setOnToggle(!onToggle)} width={width}>
+          <img src={onToggle ? ArrowDownIcon : ArrowUpIcon} alt="검색" />
+        </S.InputBtn>
+      </S.InputWrap>
+      <S.SelectList on={onToggle.toString()} width={width} radius={radius} textAlign={textAlign}>
         {selectItems.map((item, index) => (
           <li key={index}>
             <button type="button" onClick={() => handleItemClick(item)}>
