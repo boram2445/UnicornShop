@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-const FinalPayForm = styled.form`
+const FinalPaySection = styled.section`
   width: 480px;
 `;
 
@@ -105,7 +105,7 @@ const LabelText = styled.label`
 `;
 
 export {
-  FinalPayForm,
+  FinalPaySection,
   Title,
   BoxWrap,
   TopWrap,

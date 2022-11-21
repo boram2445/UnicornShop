@@ -1,21 +1,24 @@
 import React from "react";
+import { selectDeliveryPrice, selectTotalPrice } from "../../../features/orderSlice";
+import { useAppSelector } from "../../../hooks";
 import { NormalBtn } from "../../common/Button/Button";
 import CheckLabel from "../../common/CheckLabel/CheckLabel";
 import * as S from "./finalPayCheckStyle";
 
 function FinalPayCheck() {
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-  };
+  const totalPrice = useAppSelector(selectTotalPrice);
+  const deliveryPrice = useAppSelector(selectDeliveryPrice);
+
   return (
-    <S.FinalPayForm onSubmit={handleSubmit}>
+    <S.FinalPaySection>
       <S.Title>최종결제 정보</S.Title>
       <S.BoxWrap>
         <S.TopWrap>
           <S.PayRow>
             <S.PayText>상품금액</S.PayText>
             <S.MoneyCount>
-              46,500<span>원</span>
+              {totalPrice.toLocaleString()}
+              <span>원</span>
             </S.MoneyCount>
           </S.PayRow>
           <S.PayRow>
@@ -27,13 +30,15 @@ function FinalPayCheck() {
           <S.PayRow>
             <S.PayText>배송비</S.PayText>
             <S.MoneyCount>
-              0<span>원</span>
+              {deliveryPrice.toLocaleString()}
+              <span>원</span>
             </S.MoneyCount>
           </S.PayRow>
           <S.TotalMoneyBox>
             <S.PayText>결제금액</S.PayText>
             <S.TotalMoneyCount>
-              46,500<span>원</span>
+              {(totalPrice + deliveryPrice).toLocaleString()}
+              <span>원</span>
             </S.TotalMoneyCount>
           </S.TotalMoneyBox>
         </S.TopWrap>
@@ -42,7 +47,7 @@ function FinalPayCheck() {
           <NormalBtn size="large">결제하기</NormalBtn>
         </S.BottomWrap>
       </S.BoxWrap>
-    </S.FinalPayForm>
+    </S.FinalPaySection>
   );
 }
 

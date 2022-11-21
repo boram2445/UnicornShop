@@ -14,7 +14,14 @@ const Title = styled.h3`
   }
 `;
 
-const Caption = styled.caption`
+const ErrorText = styled.small`
+  margin-left: 10px;
+  font-size: 1.6rem;
+  line-height: 2rem;
+  color: var(--color-red);
+`;
+
+const SectionTitle = styled.h4`
   margin-top: 40px;
   text-align: start;
   font-weight: 500;
@@ -28,15 +35,18 @@ const Caption = styled.caption`
     height: 2px;
     background-color: var(--color-grey);
   }
+  button {
+    margin-left: 20px;
+  }
 `;
 
-const LabelText = styled.th`
+const LabelText = styled.strong`
   text-align: start;
   font-size: 1.6rem;
   line-height: 4.5rem;
 `;
 
-const Row = styled.tr`
+const Row = styled.div`
   padding-top: 4px;
   display: grid;
   grid-template-columns: 170px auto;
@@ -58,11 +68,12 @@ const Input = styled.input<{ width?: string }>`
   font-size: 1.6rem;
   border: 1px solid var(--color-grey);
   outline-color: var(--color-brightPink);
-  ~ span {
+  ~ small {
     display: none;
   }
   &:invalid {
-    ~ span {
+    outline-color: var(--color-red);
+    ~ small {
       display: inline-block;
     }
   }
@@ -73,4 +84,4 @@ const BtnWrapper = styled.div`
   margin-left: 10px;
 `;
 
-export { Title, Caption, LabelText, Row, Input, BtnWrapper };
+export { Title, ErrorText, SectionTitle, LabelText, Row, Input, BtnWrapper };

@@ -19,6 +19,10 @@ function PaymentPage() {
     dispatch(getOrderItem(orderItems));
   }, []);
 
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+  };
+
   return (
     <>
       <Header />
@@ -39,11 +43,13 @@ function PaymentPage() {
             총 주문금액 <strong>{totalPrice.toLocaleString()}원</strong>
           </S.TotalPayText>
         </S.CartBox>
-        <DeliveryInfo />
-        <S.BottomWrap>
-          <PayMethod />
-          <FinalPayCheck />
-        </S.BottomWrap>
+        <form onSubmit={handleSubmit}>
+          <DeliveryInfo />
+          <S.BottomWrap>
+            <PayMethod />
+            <FinalPayCheck />
+          </S.BottomWrap>
+        </form>
       </S.PaymentSection>
     </>
   );
