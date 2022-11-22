@@ -47,7 +47,7 @@ function CartItem({ item, detail, OpenDeleteModal, checkHandler }: ItemProps) {
         </S.ShipText>
       </S.InfoBox>
       {/* 상품 개수 버튼 */}
-      <AmountBtn count={quantity} item={item} />
+      <AmountBtn count={quantity} item={item} stock={item.item.stock} />
       <S.OrderBox>
         <S.PriceAllText>
           {detail?.price && (detail?.price * quantity).toLocaleString()}원
