@@ -130,10 +130,9 @@ function OrderForm() {
     const { name, phone1, phone2, phone3, address, message } = receiverInfo;
     if (orderType === "direct_order" || orderType === "cart_one_order") {
       orderedItems.forEach((item) => {
-        const { product_id, quantity } = item;
         const info = {
-          product_id,
-          quantity,
+          product_id: item.item.product_id,
+          quantity: item.quantity,
           order_kind: orderType,
           total_price: item.item.price * item.quantity + item.item.shipping_fee,
           receiver: name,

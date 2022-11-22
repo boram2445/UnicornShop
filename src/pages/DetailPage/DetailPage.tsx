@@ -23,7 +23,14 @@ function DetailPage() {
   };
 
   const getProductNow = () => {
-    console.log("바로구매");
+    sessionStorage.setItem(
+      "order",
+      JSON.stringify({
+        ["type"]: "direct_order",
+        ["items"]: [{ ["quantity"]: selectedCount, ["item"]: { ...detail } }],
+      })
+    );
+    navigate("/payment");
   };
 
   const getProductCart = () => {
@@ -55,20 +62,25 @@ function DetailPage() {
               </S.PriceText>
             </S.InfoBox>
             {/* 상품 장바구니 담기 */}
-            <S.ShiftText>
-              {detail.shipping_method === "PARCEL" ? "직접배송" : "택배배송"} /{" "}
-              {detail.shipping_fee === 0
-                ? "무료배송"
-                : `배송비 ${detail.shipping_fee.toLocaleString()} 원`}
-            </S.ShiftText>
+            <S.DetailWrap>
+              <div>
+                <S.DetailText>
+                  {detail.shipping_method === "PARCEL" ? "직접배송" : "택배배송"} /{" "}
+                  {detail.shipping_fee === 0
+                    ? "무료배송"
+                    : `배송비 ${detail.shipping_fee.toLocaleString()} 원`}
+                </S.DetailText>
+                <S.StockText>* 재고 : {detail.stock} 개</S.StockText>
+              </div>
+            </S.DetailWrap>
             {/* 상품 개수 버튼 */}
-            <AmountBtn getCount={getProductCount} />
+            <AmountBtn getCount={getProductCount} stock={detail.stock} />
             <S.PriceBox>
               <S.CountWrapBox>
                 <S.PriceDescribeText>총 상품 금액</S.PriceDescribeText>
                 <S.CountBox>
                   <S.CountText>
-                    총 수량<span>{selectedCount}</span>개
+                    총 수량 <span>{selectedCount}</span>개
                   </S.CountText>
                   <S.PriceResultText>
                     {detail.price && (detail.price * selectedCount).toLocaleString()}
