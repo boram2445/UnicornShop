@@ -4,7 +4,6 @@ import { useAppDispatch, useAppSelector } from "../../../hooks";
 import { InputBox, InputEmail, InputPhone } from "../InputBox/InputBox";
 import { NormalBtn } from "../../common/Button/Button";
 import {
-  fetchPostRegister,
   fetchPostUserName,
   getNameStatus,
   getRegisterStatus,
@@ -16,6 +15,10 @@ import {
   fetchPostCompanyNumber,
   getCompanyStatus,
   getCompanyMessage,
+  // fetchPostJoinBuyer,
+  // fetchPostJoinSeller,
+  fetchPostRegister,
+  RegisterProps,
 } from "../../../features/authSlice";
 import ToggleBtn from "../../common/ToggleBtn/ToggleBtn";
 import CheckLabel from "../../common/CheckLabel/CheckLabel";
@@ -46,7 +49,7 @@ function JoinForm() {
     phone3: "",
     email1: "",
     email2: "",
-    checkBox: "",
+    checkBox: false,
   };
 
   const initialError = {
@@ -93,7 +96,7 @@ function JoinForm() {
       dispatch(resetAll());
     } else if (validRegister === "failed") {
       dispatch(registerReset());
-      formValues.checkBox = "false";
+      formValues.checkBox = false;
     }
 
     if (registerError) {
@@ -106,7 +109,7 @@ function JoinForm() {
     const result =
       Object.values(formValues).every(Boolean) &&
       vaildName === "succeeded" &&
-      formValues.checkBox === "true" &&
+      // formValues.checkBox === "true" &&
       Object.entries(errorMessage)
         .filter((item) => item[0] !== "username" && item[0] !== "registrationNumber")
         .every((item) => item[1] === "");
@@ -197,8 +200,8 @@ function JoinForm() {
 
   //체크박스
   const onChangeCheckbox = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.checked.toString();
-    setFormValues({ ...formValues, ["checkBox"]: value });
+    // const value = e.target.checked.toString();
+    setFormValues({ ...formValues, ["checkBox"]: e.target.checked });
   };
 
   //사업자 등록번호 인증 이벤트
@@ -233,14 +236,22 @@ function JoinForm() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const { username, password, confirmPassword, name, phone1, phone2, phone3 } = formValues;
-    const userData = {
+    let userData: RegisterProps = {
       username,
       password,
       password2: confirmPassword,
       phone_number: `${phone1}${phone2}${phone3}`,
       name,
     };
-    dispatch(fetchPostRegister(userData));
+    if (userType === "SELLER") {
+      userData = {
+        company_registration_number: sellerValues.registrationNumber,
+        store_name: sellerValues.storeName,
+        ...userData,
+      };
+    }
+    console.log(userData);
+    dispatch(fetchPostRegister({ userType, userData }));
   };
 
   //가입하기 버튼 클릭시 로딩 화면 보여주기

@@ -6,7 +6,7 @@ const limitInputLength = (value: string, maxLen: number) => {
   return value;
 };
 
-//오류 메세지 반환 함수 - 3자리, 3~4자리, 4자리 제한
+//오류 메세지 반환 함수
 const handleInputError = (name: string, value: string, message: string) => {
   switch (name) {
     case "username":
@@ -20,7 +20,7 @@ const handleInputError = (name: string, value: string, message: string) => {
       }
       return "";
     case "name":
-      if (!value.match("^(?=.*[a-zA-Z])(?=.*[0-9]).{8,20}$")) {
+      if (!value.match("^[ㄱ-ㅎ가-힣a-zA-Z]{1,10}$")) {
         return message;
       }
       return "";
@@ -45,7 +45,9 @@ const handleInputError = (name: string, value: string, message: string) => {
       }
       return "";
     case "email2":
-      if (!value.match("^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$")) {
+      if (
+        !value.match("([a-zA-Z0-9_][-a-zA-Z0-9_]*(.[-a-zA-Z0-9_]+)*.([cC][oO][mM]))(:[0-9]{1,5})?")
+      ) {
         return message;
       }
       return "";

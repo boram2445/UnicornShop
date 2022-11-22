@@ -9,13 +9,15 @@ const TOKEN = item === null ? null : JSON.parse(item);
 console.log(TOKEN);
 
 //회원가입 타입
-interface RegisterProps {
+export interface RegisterProps {
   username: string;
   password: string;
   password2: string;
   phone_number: string;
   name: string;
   email?: string;
+  company_registration_number?: string;
+  store_name?: string;
 }
 
 //로그인 타입
@@ -86,11 +88,14 @@ export const fetchPostCompanyNumber = createAsyncThunk(
 
 //회원가입
 export const fetchPostRegister = createAsyncThunk(
-  "auth/fetchPostRegister",
-  async ({ username, password, password2, phone_number, name }: RegisterProps) => {
+  "auth/fetchPostJoinBuyer",
+  async ({ userType, userData }: { userType: string; userData: RegisterProps }) => {
+    const url =
+      userType === "BUYER" ? `${BASE_URL}/accounts/signup/` : `${BASE_URL}/accounts/signup_seller/`;
+
     try {
-      const data = { username, password, password2, phone_number, name };
-      const result = await axios.post(`${BASE_URL}/accounts/signup/`, data);
+      const data = userData;
+      const result = await axios.post(url, data);
       console.log(result.data);
       return result.data;
     } catch (error: any) {
@@ -179,7 +184,7 @@ export const authSlice = createSlice({
       state.companyNumberStatus = "failed";
       state.error = action.error.message || "Something is wrong in company number:<";
     });
-    //회원가입
+    //회원가입 - 구매자
     builder.addCase(fetchPostRegister.pending, (state) => {
       state.registerStatus = "Loading";
     });
