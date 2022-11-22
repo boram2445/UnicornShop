@@ -1,5 +1,14 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
+import {
+  fetchPostOrder,
+  getOrderError,
+  getOrderStatus,
+  selectDeliveryPrice,
+  selectOrderType,
+  selectTotalPrice,
+} from "../../../features/orderSlice";
 import { closeModal, openModal, selectOpenState } from "../../../features/modalSlice";
+import { selectOrderItems, reset } from "../../../features/orderSlice";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
 import { limitInputLength } from "../../../utils/checkInputValid";
 import { NormalBtn } from "../../common/Button/Button";
@@ -8,10 +17,20 @@ import FinalPayCheck from "../FinalPayCheck/FinalPayCheck";
 import PayMethod from "../PayMethod/PayMethod";
 import PostAddress from "../PostAddress/PostAddress";
 import * as S from "./orderFormStyle";
+import { getToken } from "../../../features/authSlice";
+import { useNavigate } from "react-router-dom";
 
 function OrderForm() {
   const dispatch = useAppDispatch();
   const addressDetailRef = useRef() as React.MutableRefObject<HTMLInputElement>;
+  const navigate = useNavigate();
+
+  const TOKEN = useAppSelector(getToken) || "";
+
+  const orderedItems = useAppSelector(selectOrderItems);
+  const totalPrice = useAppSelector(selectTotalPrice);
+  const deliveryPrice = useAppSelector(selectDeliveryPrice);
+  const orderType = useAppSelector(selectOrderType);
 
   const phoneSelect = ["010", "011", "016", "017", "018", "019"];
   const messageSelect = [
@@ -20,6 +39,16 @@ function OrderForm() {
     "부재시 전화주시거나 문자 남겨 주세요.",
     "직접 입력",
   ];
+
+  const orderStatus = useAppSelector(getOrderStatus);
+  const orderError = useAppSelector(getOrderError);
+
+  useEffect(() => {
+    return () => {
+      dispatch(reset());
+    };
+  }, []);
+
   //우편 번호 찾기 모달
   const modal = useAppSelector(selectOpenState);
 
@@ -95,8 +124,44 @@ function OrderForm() {
     setReceiverInfo({ ...receiverInfo, name, phone1, phone2, phone3 });
   };
 
+  //주문 폼 제출
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const { name, phone1, phone2, phone3, address, message } = receiverInfo;
+    if (orderType === "direct_order" || orderType === "cart_one_order") {
+      orderedItems.forEach((item) => {
+        const { product_id, quantity } = item;
+        const info = {
+          product_id,
+          quantity,
+          order_kind: orderType,
+          total_price: item.item.price * item.quantity + item.item.shipping_fee,
+          receiver: name,
+          receiver_phone_number: `${phone1}${phone2}${phone3}`,
+          address,
+          address_message: message,
+          payment_method: checkBox.payMethod,
+        };
+        dispatch(fetchPostOrder({ TOKEN, info }));
+      });
+    } else if (orderType === "cart_order") {
+      const info = {
+        order_kind: orderType,
+        total_price: totalPrice + deliveryPrice,
+        receiver: name,
+        receiver_phone_number: `${phone1}${phone2}${phone3}`,
+        address,
+        address_message: message,
+        payment_method: checkBox.payMethod,
+      };
+      dispatch(fetchPostOrder({ TOKEN, info }));
+    }
+    sessionStorage.removeItem("order");
+    navigate("/");
+  };
+
   return (
-    <form onSubmit={() => console.log("제출")}>
+    <form onSubmit={handleSubmit}>
       <S.Title>
         배송정보 <S.ErrorText>* 모든 항목 입력 필수</S.ErrorText>
       </S.Title>

@@ -13,8 +13,10 @@ function PaymentPage() {
   const totalPrice = useAppSelector(selectTotalPrice);
 
   useEffect(() => {
-    const orderItems: CartItem[] = JSON.parse(sessionStorage.getItem("order") || "{}");
-    dispatch(getOrderItem(orderItems));
+    const orderInfo: { type: string; items: CartItem[] } = JSON.parse(
+      sessionStorage.getItem("order") || "{}"
+    );
+    dispatch(getOrderItem(orderInfo));
   }, []);
 
   return (

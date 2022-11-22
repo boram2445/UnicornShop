@@ -107,7 +107,11 @@ function CartPage() {
 
   //결제 페이지로 넘어가기
   const toOrderPage = () => {
-    sessionStorage.setItem("order", JSON.stringify(checkedItems));
+    const orderType = !isAllChecked ? "cart_one_order" : "cart_order";
+    sessionStorage.setItem(
+      "order",
+      JSON.stringify({ ["type"]: orderType, ["items"]: checkedItems })
+    );
     navigate("/payment");
   };
 

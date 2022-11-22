@@ -5,25 +5,89 @@ import { CartItem } from "./cartListSlice";
 
 const BASE_URL = "https://openmarket.weniv.co.kr";
 
-interface orderInfoType {
+interface OrderInfoType {
+  product_id?: number;
+  quantity?: number;
+  order_kind: string;
+  receiver: string;
+  receiver_phone_number: string;
+  address: string;
+  address_message: string;
+  payment_method: string;
+  total_price: number;
+}
+interface OrderType {
+  status: string;
+  error: string;
   orderItems: CartItem[];
   shippingfee: number;
   totalPrice: number;
+  order_kind: string;
+  orderInfo: OrderInfoType | null;
 }
 
-const initialState: orderInfoType = {
+const initialState: OrderType = {
+  status: "idle",
+  error: "",
   orderItems: [],
   shippingfee: 0,
   totalPrice: 0,
+  order_kind: "",
+  orderInfo: null,
 };
+
+export const fetchPostOrder = createAsyncThunk(
+  "order/fetchPostOrder",
+  async ({ TOKEN, info }: { TOKEN: string; info: OrderInfoType }) => {
+    const {
+      order_kind,
+      total_price,
+      receiver,
+      receiver_phone_number,
+      address,
+      address_message,
+      payment_method,
+    } = info;
+    try {
+      const config = {
+        headers: {
+          Authorization: `JWT ${TOKEN}`,
+        },
+      };
+      const data = {
+        order_kind,
+        total_price,
+        receiver,
+        receiver_phone_number,
+        address,
+        address_message,
+        payment_method,
+      };
+      const selectData =
+        order_kind === "cart_order"
+          ? data
+          : { product_id: info.product_id, quantity: info.quantity, ...data };
+
+      const result = await axios.post(`${BASE_URL}/order/`, selectData, config);
+      console.log(result.data);
+      return result.data;
+    } catch (error: any) {
+      //서버 에러 메세지 받아오기 -개선 필요
+      console.log(error.response.data);
+      return error.response.data;
+    }
+  }
+);
 
 export const orderSlice = createSlice({
   name: "order",
   initialState,
   reducers: {
+    reset: () => initialState,
     getOrderItem: (state, action) => {
-      const orderedItems: CartItem[] = action.payload;
-      state.orderItems = orderedItems;
+      const orderInfo: { type: string; items: CartItem[] } = action.payload;
+      state.order_kind = orderInfo.type;
+      state.orderItems = orderInfo.items;
       state.shippingfee = state.orderItems.reduce((prev, curr) => prev + curr.item.shipping_fee, 0);
       state.totalPrice = state.orderItems?.reduce(
         (prev, curr) => prev + curr.quantity * curr.item.price,
@@ -31,11 +95,28 @@ export const orderSlice = createSlice({
       );
     },
   },
+  extraReducers: (builder) => {
+    builder.addCase(fetchPostOrder.pending, (state) => {
+      state.status = "Loading";
+    });
+    builder.addCase(fetchPostOrder.fulfilled, (state, action) => {
+      state.status = action.payload.FAIL_Message ? "failed" : "succeeded";
+      state.error = action.payload.FAIL_Message;
+    });
+    builder.addCase(fetchPostOrder.rejected, (state, action) => {
+      state.status = "failed";
+      state.error = action.error.message || "Something is wrong in company number:<";
+    });
+  },
 });
+
+export const getOrderStatus = (state: RootState) => state.order.status;
+export const getOrderError = (state: RootState) => state.order.error;
 
 export const selectOrderItems = (state: RootState) => state.order.orderItems;
 export const selectTotalPrice = (state: RootState) => state.order.totalPrice;
 export const selectDeliveryPrice = (state: RootState) => state.order.shippingfee;
+export const selectOrderType = (state: RootState) => state.order.order_kind;
 
-export const { getOrderItem } = orderSlice.actions;
+export const { reset, getOrderItem } = orderSlice.actions;
 export default orderSlice.reducer;

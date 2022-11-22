@@ -19,7 +19,10 @@ function CartItem({ item, detail, OpenDeleteModal, checkHandler }: ItemProps) {
   const { cart_item_id, product_id, quantity, isChecked } = item;
 
   const orderOneItem = () => {
-    sessionStorage.setItem("order", JSON.stringify([{ ...item }]));
+    sessionStorage.setItem(
+      "order",
+      JSON.stringify({ ["type"]: "cart_one_order", ["items"]: [{ ...item }] })
+    );
     navigate("/payment");
   };
 
