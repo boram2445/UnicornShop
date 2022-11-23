@@ -46,6 +46,7 @@ function InputBox({
       <S.LabelText htmlFor={props.name}>{props.label}</S.LabelText>
       <S.Input
         {...props}
+        id={props.name}
         required
         autoComplete="off"
         ref={inputRef}
@@ -79,7 +80,7 @@ function InputPhone({ onClick, onChange, value1, value2, value3, error }: InputP
 
   return (
     <S.InputPhoneBox>
-      <S.LabelText>휴대폰번호</S.LabelText>
+      <S.LabelText htmlFor="phone">휴대폰번호</S.LabelText>
       <div>
         <SelectInput
           selectItems={selectItems}
@@ -90,8 +91,9 @@ function InputPhone({ onClick, onChange, value1, value2, value3, error }: InputP
           padding="16px 14px 16px 0"
         />
         <S.InputPhone
-          type="text"
+          id="phone"
           name="phone2"
+          type="text"
           width="150px"
           autoComplete="off"
           required
@@ -99,8 +101,9 @@ function InputPhone({ onClick, onChange, value1, value2, value3, error }: InputP
           value={value2}
         />
         <S.InputPhone
-          type="text"
+          id="phone"
           name="phone3"
+          type="text"
           width="150px"
           autoComplete="off"
           required
@@ -124,8 +127,9 @@ type InputEmailProps = {
 function InputEmail({ onChange, value1, value2, error }: InputEmailProps) {
   return (
     <S.InputEmailBox>
-      <S.LabelText>이메일</S.LabelText>
+      <S.LabelText htmlFor="email">이메일</S.LabelText>
       <S.Input
+        id="email"
         type="text"
         name="email1"
         width="218px"
@@ -136,6 +140,7 @@ function InputEmail({ onChange, value1, value2, error }: InputEmailProps) {
       />
       <span>@</span>
       <S.Input
+        id="email"
         type="text"
         name="email2"
         width="218px"
