@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-const Title = styled.h4`
+const Label = styled.label`
   color: var(--color-darkGrey);
   font-size: 1.6rem;
   line-height: 2rem;
@@ -40,4 +40,4 @@ const ImageBtn = styled.button<{ image?: string }>`
   border-radius: 50%;
 `;
 
-export { Title, ImageBox, ImageInput, ImageBtn };
+export { Label, ImageBox, ImageInput, ImageBtn };

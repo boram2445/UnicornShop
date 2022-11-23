@@ -6,6 +6,11 @@ const Container = styled.div`
   padding: 44px 22px 96px;
 `;
 
+const TitleWrap = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
 const TitleText = styled.h3`
   font-size: 3.6rem;
   font-weight: 700;
@@ -30,4 +35,4 @@ const BtnWrap = styled.div`
   gap: 10px;
 `;
 
-export { Container, TitleText, ContentWrap, BtnWrap };
+export { Container, TitleWrap, TitleText, ContentWrap, BtnWrap };

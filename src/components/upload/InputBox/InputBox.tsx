@@ -2,8 +2,11 @@ import React, { useState } from "react";
 import * as S from "./inputBoxStyle";
 import { limitInputLength } from "../../../utils/checkInputValid";
 
-function TextInput() {
-  const label = "상품명";
+interface TextInputProps {
+  label: string;
+}
+
+function TextInput({ label }: TextInputProps) {
   const [inputText, setInputText] = useState("");
 
   const handleTextInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -22,9 +25,12 @@ function TextInput() {
   );
 }
 
-function NumInput() {
-  const label = "판매가";
-  const unit = "원";
+interface NumInputProps {
+  label: string;
+  unit: string;
+}
+
+function NumInput({ label, unit }: NumInputProps) {
   const [priceText, setPriceText] = useState("");
   const handlePriceInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = limitInputLength(e.target.value, 10).replace(/[^0-9]/g, "");

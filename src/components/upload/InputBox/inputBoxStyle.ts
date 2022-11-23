@@ -1,6 +1,7 @@
 import styled from "styled-components";
 
 const InputWrap = styled.div<{ width?: string }>`
+  margin-top: 10px;
   width: ${({ width }) => (width ? width : "100%")};
   position: relative;
   display: flex;
@@ -8,7 +9,6 @@ const InputWrap = styled.div<{ width?: string }>`
 `;
 
 const Label = styled.label`
-  margin-bottom: 10px;
   color: var(--color-darkGrey);
   font-size: 1.6rem;
   line-height: 2rem;

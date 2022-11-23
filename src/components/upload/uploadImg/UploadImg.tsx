@@ -45,7 +45,7 @@ function UploadImgBox() {
   };
   return (
     <article>
-      <S.Title>상품 이미지</S.Title>
+      <S.Label>상품 이미지</S.Label>
       <S.ImageBox image={preview} onClick={onFileInput}>
         {preview && <img src={preview} />}
         <UploadBtn inputFile={inputFile} handlePreview={handlePreview} image={preview} />
