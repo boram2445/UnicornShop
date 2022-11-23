@@ -5,8 +5,8 @@ import axios from "axios";
 const BASE_URL = "https://openmarket.weniv.co.kr";
 
 const item = sessionStorage.getItem("token");
-const TOKEN = item === null ? null : JSON.parse(item);
-console.log(TOKEN);
+const TOKEN = item === null ? null : JSON.parse(item).token;
+const USER_TYPE = item === null ? null : JSON.parse(item).user_type;
 
 //회원가입 타입
 export interface RegisterProps {
@@ -40,6 +40,7 @@ interface AuthSliceProps {
 
 const initialState: AuthSliceProps = {
   token: TOKEN ? TOKEN : null,
+  userType: USER_TYPE ? USER_TYPE : "BUYER",
   nameStatus: "idle",
   companyNumberStatus: "idle",
   registerStatus: "idle",
@@ -47,7 +48,6 @@ const initialState: AuthSliceProps = {
   error: "",
   message: "",
   companyMessage: "",
-  userType: "BUYER",
 };
 
 //아이디 유효성 검증
@@ -116,7 +116,7 @@ export const fetchPostLogin = createAsyncThunk(
       console.log(result.data);
 
       if (result.data) {
-        sessionStorage.setItem("token", JSON.stringify(result.data.token));
+        sessionStorage.setItem("token", JSON.stringify(result.data));
       }
 
       return result.data;
