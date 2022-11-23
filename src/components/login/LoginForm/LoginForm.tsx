@@ -4,7 +4,6 @@ import {
   fetchPostLogin,
   getLoginStatus,
   getAuthMessage,
-  resetAll,
   selectUserType,
 } from "../../../features/authSlice";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
@@ -82,7 +81,7 @@ function LoginForm() {
           value={formValues.password}
         />
         {error && <S.ErrorText>아이디 또는 비밀번호가 일치하지 않습니다.</S.ErrorText>}
-        <NormalBtn type="submit" disabled={!canJoin}>
+        <NormalBtn type="submit" disabled={!canJoin} padding="19px 0">
           로그인
         </NormalBtn>
       </S.LoginForm>

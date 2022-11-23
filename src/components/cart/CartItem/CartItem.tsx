@@ -52,7 +52,7 @@ function CartItem({ item, detail, OpenDeleteModal, checkHandler }: ItemProps) {
         <S.PriceAllText>
           {detail?.price && (detail?.price * quantity).toLocaleString()}원
         </S.PriceAllText>
-        <NormalBtn size="small" onClick={orderOneItem}>
+        <NormalBtn width="130px" padding="10px" onClick={orderOneItem}>
           주문하기
         </NormalBtn>
       </S.OrderBox>

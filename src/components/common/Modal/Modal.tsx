@@ -40,14 +40,15 @@ function Modal({ children, onClickYes }: ModalProps) {
         <S.ModalText>{children}</S.ModalText>
         <S.BtnWrap>
           <NormalBtn
-            size="ssmall"
             width="100px"
             color="white"
+            fontSize="1.6rem"
+            padding="8px"
             onClick={() => dispatch(closeModal())}
           >
             {BtnText.no}
           </NormalBtn>
-          <NormalBtn size="ssmall" width="100px" onClick={onClickYes}>
+          <NormalBtn width="100px" fontSize="1.6rem" padding="8px" onClick={onClickYes}>
             {BtnText.yes}
           </NormalBtn>
         </S.BtnWrap>

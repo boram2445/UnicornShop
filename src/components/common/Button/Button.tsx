@@ -4,12 +4,15 @@ import * as S from "./buttonStyle";
 interface NormalBtnProps {
   children: React.ReactNode;
   type?: "button" | "submit"; //literal type
-  size?: string;
-  width?: string;
-  color?: string;
   disabled?: boolean;
+  fontSize?: string;
+  fontWeight?: string;
+  width?: string;
+  padding?: string;
+  color?: string;
   icon?: string;
-  tab?: boolean;
+  on?: string; //선택후 고정이어야 할 경우 'true'
+  tab?: string; //탭 버튼일 경우 'true'
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 

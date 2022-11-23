@@ -133,13 +133,19 @@ function CartPage() {
                 checkHandler={checkHandler}
               />
             ))}
-            <NormalBtn size="small" color="white" onClick={OpenDeleteAllModal}>
+            <NormalBtn color="white" width="110px" fontSize="1.6rem" onClick={OpenDeleteAllModal}>
               선택상품 삭제
             </NormalBtn>
           </S.CartList>
           <TotalPrice />
-
-          <NormalBtn size="large" disabled={!selectedItemNum} onClick={toOrderPage}>
+          <NormalBtn
+            width="220px"
+            padding="18px 0"
+            fontSize="2.4rem"
+            fontWeight="500"
+            disabled={!selectedItemNum}
+            onClick={toOrderPage}
+          >
             주문하기
           </NormalBtn>
         </>

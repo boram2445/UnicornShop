@@ -15,8 +15,6 @@ import {
   fetchPostCompanyNumber,
   getCompanyStatus,
   getCompanyMessage,
-  // fetchPostJoinBuyer,
-  // fetchPostJoinSeller,
   fetchPostRegister,
   RegisterProps,
 } from "../../../features/authSlice";
@@ -347,7 +345,7 @@ function JoinForm() {
         <CheckLabel color="#767676" onChange={onChangeCheckbox}>
           유니콘샵의 <u>이용약관</u> 및 <u>개인정보처리방침</u>에 대한 내용을 확인하였고 동의합니다.
         </CheckLabel>
-        <NormalBtn type="submit" size="medium" disabled={!canJoin}>
+        <NormalBtn type="submit" disabled={!canJoin} width="480px" padding="19px 0">
           가입하기
         </NormalBtn>
       </S.JoinForm>

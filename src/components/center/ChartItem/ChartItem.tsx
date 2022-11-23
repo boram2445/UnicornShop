@@ -19,8 +19,10 @@ function ChartItem() {
         </S.InfoBox>
       </S.InfoWrap>
       <S.PriceText>17,500원</S.PriceText>
-      <NormalBtn size="ssmall">수정</NormalBtn>
-      <NormalBtn size="ssmall" color="white">
+      <NormalBtn fontSize="1.6rem" padding="8px 0">
+        수정
+      </NormalBtn>
+      <NormalBtn color="white" fontSize="1.6rem" padding="8px 0">
         삭제
       </NormalBtn>
     </S.ItemContainer>

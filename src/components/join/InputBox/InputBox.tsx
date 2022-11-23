@@ -56,7 +56,7 @@ function InputBox({
         value={value}
       />
       {onButton?.toString() && (
-        <NormalBtn size="smedium" width="122px" onClick={handleBtnClick} disabled={!onButton}>
+        <NormalBtn onClick={handleBtnClick} disabled={!onButton} width="122px" padding="16px 0">
           {props.name === "username" ? "중복확인" : "인증"}
         </NormalBtn>
       )}

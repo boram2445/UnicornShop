@@ -50,7 +50,13 @@ function FinalPayCheck({ canOrder, onChange }: FinalCheckProps) {
           <CheckLabel onChange={onChange}>
             주문 내용을 확인하였으며, 정보 제공 등에 동의합니다.
           </CheckLabel>
-          <NormalBtn size="large" disabled={!canOrder}>
+          <NormalBtn
+            disabled={!canOrder}
+            width="220px"
+            padding="18px"
+            fontSize="2.4rem"
+            fontWeight="500"
+          >
             결제하기
           </NormalBtn>
         </S.BottomWrap>

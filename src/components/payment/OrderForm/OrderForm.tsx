@@ -231,11 +231,12 @@ function OrderForm() {
         <S.SectionTitle>
           <strong>배송지 정보</strong>
           <NormalBtn
-            size="ssmall"
-            color="white"
-            width="160px"
-            onClick={handleSameInfoBtn}
             type="button"
+            color="white"
+            width="150px"
+            padding="6px 0"
+            fontSize="1.6rem"
+            onClick={handleSameInfoBtn}
           >
             주문자 정보와 동일
           </NormalBtn>
@@ -298,7 +299,12 @@ function OrderForm() {
               readOnly
             />
             <S.BtnWrapper>
-              <NormalBtn size="small" onClick={() => dispatch(openModal(""))} type="button">
+              <NormalBtn
+                type="button"
+                width="110px"
+                fontSize="1.6rem"
+                onClick={() => dispatch(openModal(""))}
+              >
                 우편번호 찾기
               </NormalBtn>
             </S.BtnWrapper>

@@ -16,6 +16,8 @@ export function Header() {
   const TOKEN = useAppSelector(getToken);
   const USER = useAppSelector(selectUserType);
 
+  console.log(TOKEN);
+
   const onLogout = () => {
     dispatch(logout());
     dispatch(resetAll());
@@ -42,16 +44,21 @@ export function Header() {
                   <img src={cartIcon} />
                   <span>장바구니</span>
                 </S.NavButton>
-                <NormalBtn type="button" size="ssmall" onClick={onLogout}>
+                <NormalBtn type="button" onClick={onLogout} width="120px" padding="11px 0">
                   로그아웃
                 </NormalBtn>
               </>
             ) : (
               <>
-                <NormalBtn onClick={() => navigate("/center")} icon={shoppingBag} size="small">
+                <NormalBtn
+                  onClick={() => navigate("/center")}
+                  icon={shoppingBag}
+                  width="168px"
+                  padding="11px 20px"
+                >
                   판매자 센터
                 </NormalBtn>
-                <NormalBtn type="button" size="ssmall" onClick={onLogout}>
+                <NormalBtn type="button" onClick={onLogout} width="120px" padding="11px 0">
                   로그아웃
                 </NormalBtn>
               </>

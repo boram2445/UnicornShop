@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { NormalBtn } from "../../components/common/Button/Button";
 import { CenterHeader } from "../../components/common/Header/Header";
@@ -9,6 +9,7 @@ import * as S from "./uploadPageStyle";
 
 function UploadPage() {
   const navigate = useNavigate();
+  const [deliveryBtn, setDeliveryBtn] = useState("");
   return (
     <>
       <CenterHeader />
@@ -16,10 +17,15 @@ function UploadPage() {
         <S.TitleWrap>
           <S.TitleText>상품 등록</S.TitleText>
           <S.TitleBtnWrap>
-            <NormalBtn size="small" width="120px" color="white" onClick={() => navigate("/center")}>
+            <NormalBtn
+              width="120px"
+              color="white"
+              fontSize="1.6rem"
+              onClick={() => navigate("/center")}
+            >
               취소
             </NormalBtn>
-            <NormalBtn size="small" width="120px">
+            <NormalBtn width="120px" fontSize="1.6rem">
               저장하기
             </NormalBtn>
           </S.TitleBtnWrap>
@@ -34,8 +40,22 @@ function UploadPage() {
               <NumInput label="판매가" unit="원"></NumInput>
               <S.BtnWrap>
                 <S.Label>배송방법</S.Label>
-                <NormalBtn width="220px">택배,소포,등기</NormalBtn>
-                <NormalBtn width="220px" color="white">
+                <NormalBtn
+                  width="220px"
+                  color="white"
+                  padding="16px 0"
+                  onClick={() => setDeliveryBtn("PARCEL")}
+                  on={deliveryBtn === "PARCEL" ? "true" : "false"}
+                >
+                  택배,소포,등기
+                </NormalBtn>
+                <NormalBtn
+                  width="220px"
+                  color="white"
+                  padding="16px 0"
+                  onClick={() => setDeliveryBtn("DELIVERY")}
+                  on={deliveryBtn === "DELIVERY" ? "true" : "false"}
+                >
                   직접배송(화물배달)
                 </NormalBtn>
               </S.BtnWrap>

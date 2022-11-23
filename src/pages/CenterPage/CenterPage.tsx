@@ -17,7 +17,7 @@ function CenterPage() {
           </S.TitleText>
           <NormalBtn
             icon={plusIcon}
-            size="small"
+            padding="11px 20px"
             width="168px"
             onClick={() => navigate("/center/upload")}
           >

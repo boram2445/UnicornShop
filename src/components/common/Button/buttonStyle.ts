@@ -1,69 +1,45 @@
 import styled, { css } from "styled-components";
 
 interface NormalBtnProps {
-  size?: string;
+  fontSize?: string;
+  fontWeight?: string;
+  width?: string;
+  padding?: string;
   color?: string;
   icon?: string;
-  tab?: boolean;
-  width?: string;
+  on?: string;
+  tab?: string;
 }
 
 const NormalBtn = styled.button<NormalBtnProps>`
-  width: 480px;
-  padding: 19px 0;
-  font-size: 1.8rem;
-  line-height: 2.2rem;
-  border-radius: 5px;
+  width: ${({ width }) => (width ? width : "100%")};
+  padding: ${({ padding }) => (padding ? padding : "10px 0")};
+  font-size: ${({ fontSize }) => (fontSize ? fontSize : "1.8rem")};
+  font-weight: ${({ fontWeight }) => (fontWeight ? fontWeight : "400")};
   background-color: var(--color-main);
   color: var(--color-white);
+  line-height: 2.2rem;
+  border-radius: 5px;
+  &:hover {
+    opacity: 0.9;
+  }
   &:disabled {
     background-color: var(--color-grey);
     cursor: default;
+    &:hover {
+      opacity: 1;
+    }
   }
-  ${({ size, icon }) => {
-    if (size === "ssmall") {
-      return css`
-        width: 80px;
-        padding: 10px 0;
-      `;
-    }
-    if (size === "small") {
-      return css`
-        width: 130px;
-        padding: 10px 0;
-      `;
-    }
-    if (icon && size === "smedium") {
+  ${({ icon }) => {
+    if (icon) {
       return css`
         display: flex;
         align-items: center;
         gap: 8px;
-        width: 166px;
-        padding: 11px 20px;
-      `;
-    }
-    if (size === "smedium") {
-      return css`
-        width: 166px;
-        padding: 17px 0;
-      `;
-    }
-    if (size === "medium") {
-      return css`
-        width: 480px;
-        padding: 19px 0;
-      `;
-    }
-    if (size === "large") {
-      return css`
-        width: 220px;
-        padding: 19px 0;
-        font-size: 2.4rem;
-        line-height: 3rem;
       `;
     }
   }}
-  width:${({ width }) => width};
+
   ${({ color }) => {
     if (color === "white") {
       return css`
@@ -83,21 +59,40 @@ const NormalBtn = styled.button<NormalBtnProps>`
       `;
     }
   }}
+  ${({ color, on }) => {
+    if (color === "white" && on === "true") {
+      return css`
+        background-color: var(--color-main);
+        color: var(--color-white);
+        border: none;
+        &:hover {
+          border-color: var(--color-main);
+          color: var(--color-white);
+          opacity: 0.9;
+        }
+      `;
+    }
+  }}
+  
   ${({ tab }) => {
-    if (tab) {
+    if (tab === "true") {
       return css`
         width: 320px;
         padding: 19px 0 12px;
+        border-radius: 0;
+        color: var(--color-darkGrey);
+        border-bottom: var(--color-grey) 6px solid;
+        background-color: var(--color-white);
+        cursor: pointer;
+      `;
+    }
+  }}
+  ${({ tab, on }) => {
+    if (tab === "true" && on === "true") {
+      return css`
         background-color: var(--color-white);
         color: var(--color-main);
         border-bottom: var(--color-main) 6px solid;
-        border-radius: 0;
-        &:disabled {
-          color: var(--color-darkGrey);
-          border-bottom: var(--color-grey) 6px solid;
-          background-color: var(--color-white);
-          cursor: pointer;
-        }
       `;
     }
   }}
