@@ -1,28 +1,39 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
+import { Item } from "../../../features/cartListSlice";
 import { NormalBtn } from "../../common/Button/Button";
 import * as S from "./chartItemStyle";
 
-function ChartItem() {
+interface ChartItemProps {
+  item: Item;
+  deleteModal: (id: number) => void;
+}
+
+function ChartItem({ item, deleteModal }: ChartItemProps) {
+  const navigate = useNavigate();
+  const { product_id, product_name, stock, price, image } = item;
+
   return (
     <S.ItemContainer>
       <S.InfoWrap>
         <S.ImageBox>
-          <img
-            src={
-              "https://w.namu.la/s/12856db09720692cf725a41251e754bcd05c10bbac7b3343e25396a8acf7997dea06bfe981695a056bcbc6d927b6430fd74070476bfd3f9c13724929aff71f2e206be5798e088e0250834484d4326d9b426ff020c084668c44bc68b84f1d03bc"
-            }
-          />
+          <img src={image} />
         </S.ImageBox>
         <S.InfoBox>
-          <S.ProductText>딥러닝 개발자 무릎 담요</S.ProductText>
-          <S.StockText>재고 :370개</S.StockText>
+          <S.ProductText>{product_name}</S.ProductText>
+          <S.StockText>재고 : {stock} 개</S.StockText>
         </S.InfoBox>
       </S.InfoWrap>
-      <S.PriceText>17,500원</S.PriceText>
-      <NormalBtn fontSize="1.6rem" padding="8px 0">
+      <S.PriceText>{price.toLocaleString()} 원</S.PriceText>
+      <NormalBtn fontSize="1.6rem" padding="8px 0" onClick={() => navigate("/center/upload")}>
         수정
       </NormalBtn>
-      <NormalBtn color="white" fontSize="1.6rem" padding="8px 0">
+      <NormalBtn
+        color="white"
+        fontSize="1.6rem"
+        padding="8px 0"
+        onClick={() => deleteModal(product_id)}
+      >
         삭제
       </NormalBtn>
     </S.ItemContainer>

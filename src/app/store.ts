@@ -5,6 +5,7 @@ import cartReducer from "../features/postCartSlice";
 import cartListReducer from "../features/cartListSlice";
 import modalReducer from "../features/modalSlice";
 import orderReducer from "../features/orderSlice";
+import sellerReducer from "../features/sellerSlice";
 
 //state 저장소
 const store = configureStore({
@@ -15,6 +16,7 @@ const store = configureStore({
     cartList: cartListReducer,
     modal: modalReducer,
     order: orderReducer,
+    seller: sellerReducer,
   },
 });
 

@@ -5,7 +5,7 @@ const ItemContainer = styled.div`
   grid-template-columns: 5fr 2fr 80px 80px;
   gap: 20px;
   align-items: center;
-  padding: 16px 30px 17px;
+  padding: 15px 30px 16px;
   background-color: var(--color-white);
   border-bottom: 1px solid var(--color-grey);
 `;
@@ -20,11 +20,12 @@ const ImageBox = styled.div`
   width: 70px;
   height: 70px;
   border-radius: 50%;
+  overflow: hidden;
   border: 1px solid var(--color-grey);
   img {
     width: 100%;
+    height: 100%;
     object-fit: cover;
-    border-radius: 50%;
   }
 `;
 
@@ -35,8 +36,8 @@ const InfoBox = styled.div`
 `;
 
 const ProductText = styled.p`
-  font-size: 1.8rem;
-  line-height: 2.2rem;
+  font-size: 1.6rem;
+  line-height: 2rem;
 `;
 
 const StockText = styled.p`
@@ -49,6 +50,7 @@ const PriceText = styled.p`
   text-align: center;
   font-size: 1.8rem;
   line-height: 2.2rem;
+  font-weight: 500;
 `;
 
 export { ItemContainer, InfoWrap, ImageBox, InfoBox, ProductText, StockText, PriceText };
