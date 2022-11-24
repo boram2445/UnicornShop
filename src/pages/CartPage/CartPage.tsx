@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { getToken } from "../../features/authSlice";
 import { CircleCheckBtn } from "../../components/common/CheckBtn/CheckBtn";
 import { NormalBtn } from "../../components/common/Button/Button";
-import { Header } from "../../components/common/Header/Header";
 import CartItem from "../../components/cart/CartItem/CartItem";
 import TotalPrice from "../../components/cart/TotalPrice/TotalPrice";
 import * as S from "./cartPageStyle";

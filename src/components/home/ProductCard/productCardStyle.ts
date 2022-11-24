@@ -19,20 +19,24 @@ const ThumbImg = styled.img`
   border-radius: 10px;
 `;
 
-const ProductCorp = styled.p`
+const SellerText = styled.p`
   color: #767676;
   font-size: 1.6rem;
   line-height: 2.2rem;
+  &:hover {
+    text-decoration: underline;
+    cursor: pointer;
+  }
 `;
 
-const ProductName = styled.p`
+const ProductText = styled.p`
   margin: 10px 0;
   font-size: 1.8rem;
   font-weight: 500;
   line-height: 22px;
 `;
 
-const ProductPrice = styled.strong`
+const PriceText = styled.strong`
   font-size: 2.4rem;
   font-weight: 700;
   line-height: 3rem;
@@ -43,12 +47,4 @@ const WordWon = styled.span`
   line-height: 2rem;
 `;
 
-export {
-  ProductItem,
-  ThumbContainer,
-  ThumbImg,
-  ProductCorp,
-  ProductName,
-  ProductPrice,
-  WordWon,
-};
+export { ProductItem, ThumbContainer, ThumbImg, SellerText, ProductText, PriceText, WordWon };

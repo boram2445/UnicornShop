@@ -6,7 +6,7 @@ import { NormalBtn } from "../../components/common/Button/Button";
 import AmountBtn from "../../components/common/AmountBtn/AmountBtn";
 import { selectProductById } from "../../features/productSlice";
 import * as S from "./detailPageStyle";
-import { getToken } from "../../features/authSlice";
+import { getToken, selectUserType } from "../../features/authSlice";
 import DetailTab from "../../components/detail/DetailTab";
 
 function DetailPage() {
@@ -15,6 +15,7 @@ function DetailPage() {
   const dispatch = useAppDispatch();
   const detail = useAppSelector((state) => selectProductById(state, Number(productId)));
   const TOKEN = useAppSelector(getToken) || "";
+  const USER_TYPE = useAppSelector(selectUserType);
   const [selectedCount, setSelectedCount] = useState(1);
 
   const getProductCount = (res: number) => {
@@ -89,10 +90,15 @@ function DetailPage() {
             </S.PriceBox>
             {/* 상품 구매 버튼 */}
             <S.ButtonBox>
-              <NormalBtn onClick={getProductNow} padding="18px 0">
+              <NormalBtn onClick={getProductNow} padding="18px 0" disabled={USER_TYPE === "SELLER"}>
                 바로 구매
               </NormalBtn>
-              <NormalBtn color="dark" onClick={getProductCart} padding="18px 0">
+              <NormalBtn
+                color="dark"
+                onClick={getProductCart}
+                padding="18px 0"
+                disabled={USER_TYPE === "SELLER"}
+              >
                 장바구니
               </NormalBtn>
             </S.ButtonBox>

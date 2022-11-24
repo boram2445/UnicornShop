@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { Product } from "../../../features/productSlice";
 import * as S from "./productCardStyle";
 
@@ -10,11 +10,13 @@ function ProductCard({ product }: { product: Product }) {
       <S.ThumbContainer>
         <S.ThumbImg src={product.image} alt="상품 이미지" />
       </S.ThumbContainer>
-      <S.ProductCorp>{product.store_name}</S.ProductCorp>
-      <S.ProductName>{product.product_name}</S.ProductName>
+      <Link to="#">
+        <S.SellerText>{product.store_name}</S.SellerText>
+      </Link>
+      <S.ProductText>{product.product_name}</S.ProductText>
       <p>
-        <S.ProductPrice>{product.price}</S.ProductPrice>
-        <S.WordWon>원</S.WordWon>
+        <S.PriceText>{product.price.toLocaleString()}</S.PriceText>
+        <S.WordWon> 원</S.WordWon>
       </p>
     </S.ProductItem>
   );

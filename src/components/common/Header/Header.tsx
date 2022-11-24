@@ -51,7 +51,7 @@ export function Header() {
                 </S.NavButton>
                 <S.NavButton onClick={() => setArrowModal(!onArrowModal)}>
                   <img src={userIcon} />
-                  <span>로그아웃</span>
+                  <span>마이페이지</span>
                   <ArrowModal on={onArrowModal} list={arrowList} />
                 </S.NavButton>
               </>
