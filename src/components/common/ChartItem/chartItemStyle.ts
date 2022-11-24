@@ -5,7 +5,7 @@ const ItemContainer = styled.div`
   grid-template-columns: 5fr 2fr 80px 80px;
   gap: 20px;
   align-items: center;
-  padding: 15px 30px 16px;
+  padding: 10px 30px 11px;
   background-color: var(--color-white);
   border-bottom: 1px solid var(--color-grey);
 `;

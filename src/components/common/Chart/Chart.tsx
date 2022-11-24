@@ -8,7 +8,7 @@ import {
 } from "../../../features/sellerSlice";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
 import ChartItem from "../ChartItem/ChartItem";
-import Modal from "../../common/Modal/Modal";
+import Modal from "../Modal/Modal";
 import { closeModal, openModal, selectOpenState } from "../../../features/modalSlice";
 import * as S from "./chartStyle";
 

@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Item } from "../../../features/cartListSlice";
-import { NormalBtn } from "../../common/Button/Button";
+import { NormalBtn } from "../Button/Button";
 import * as S from "./chartItemStyle";
 
 interface ChartItemProps {
