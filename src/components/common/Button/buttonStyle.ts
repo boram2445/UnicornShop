@@ -6,6 +6,7 @@ interface NormalBtnProps {
   width?: string;
   padding?: string;
   color?: string;
+  border?: string;
   icon?: string;
   on?: string;
   tab?: string;
@@ -59,6 +60,17 @@ const NormalBtn = styled.button<NormalBtnProps>`
       `;
     }
   }}
+  ${({ border }) => {
+    if (border === "false") {
+      return css`
+        border-color: transparent;
+        &:hover {
+          border-color: var(--color-darkGrey);
+        }
+      `;
+    }
+  }}
+
   ${({ color, on }) => {
     if (color === "white" && on === "true") {
       return css`
@@ -73,6 +85,7 @@ const NormalBtn = styled.button<NormalBtnProps>`
       `;
     }
   }}
+
   
   ${({ tab }) => {
     if (tab === "true") {

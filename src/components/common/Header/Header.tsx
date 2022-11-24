@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import * as S from "./headerStyle";
 import logo from "../../../assets/icons/Logo-hodu.svg";
@@ -9,6 +9,7 @@ import shoppingBag from "../../../assets/icons/icon-shopping-bag.svg";
 import { getToken, logout, resetAll, selectUserType } from "../../../features/authSlice";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
 import { NormalBtn } from "../Button/Button";
+import ArrowModal from "../ArrowModal/ArrowModal";
 
 export function Header() {
   const navigate = useNavigate();
@@ -16,13 +17,17 @@ export function Header() {
   const TOKEN = useAppSelector(getToken);
   const USER = useAppSelector(selectUserType);
 
-  console.log(TOKEN);
-
   const onLogout = () => {
     dispatch(logout());
     dispatch(resetAll());
     navigate("/");
   };
+
+  const [onArrowModal, setArrowModal] = useState(false);
+  const arrowList = [
+    { label: "마이페이지", onClick: () => navigate("/") },
+    { label: "로그아웃", onClick: () => onLogout() },
+  ];
 
   return (
     <S.HeaderContainer>
@@ -44,22 +49,26 @@ export function Header() {
                   <img src={cartIcon} />
                   <span>장바구니</span>
                 </S.NavButton>
-                <NormalBtn type="button" onClick={onLogout} width="120px" padding="11px 0">
-                  로그아웃
-                </NormalBtn>
+                <S.NavButton onClick={() => setArrowModal(!onArrowModal)}>
+                  <img src={userIcon} />
+                  <span>로그아웃</span>
+                  <ArrowModal on={onArrowModal} list={arrowList} />
+                </S.NavButton>
               </>
             ) : (
               <>
+                <S.NavButton onClick={() => setArrowModal(!onArrowModal)}>
+                  <img src={userIcon} />
+                  <span>마이페이지</span>
+                  <ArrowModal on={onArrowModal} list={arrowList} />
+                </S.NavButton>
                 <NormalBtn
                   onClick={() => navigate("/center")}
                   icon={shoppingBag}
                   width="168px"
-                  padding="11px 20px"
+                  padding="10px 20px"
                 >
                   판매자 센터
-                </NormalBtn>
-                <NormalBtn type="button" onClick={onLogout} width="120px" padding="11px 0">
-                  로그아웃
                 </NormalBtn>
               </>
             )

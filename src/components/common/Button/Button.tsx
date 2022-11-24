@@ -10,6 +10,7 @@ interface NormalBtnProps {
   width?: string;
   padding?: string;
   color?: string;
+  border?: string; //border를 없애고 싶은 경우 'false'
   icon?: string;
   on?: string; //선택후 고정이어야 할 경우 'true'
   tab?: string; //탭 버튼일 경우 'true'

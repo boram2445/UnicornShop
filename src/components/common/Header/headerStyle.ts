@@ -44,13 +44,13 @@ const RightWrap = styled.ul`
 `;
 
 const NavButton = styled.li`
-  width: 46px;
-  height: 50px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 4px;
+  position: relative;
+  max-width: 60px;
   cursor: pointer;
   color: #767676;
   font-size: 1.2rem;
