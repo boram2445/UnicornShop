@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import { Header } from "../../components/common/Header/Header";
 import { CartItem } from "../../features/cartListSlice";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { getOrderItem, selectOrderItems, selectTotalPrice } from "../../features/orderSlice";
@@ -21,7 +20,6 @@ function PaymentPage() {
 
   return (
     <>
-      <Header />
       <S.Title>주문/결제하기</S.Title>
       <S.PaymentSection>
         <S.CartBox>

@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { NormalBtn } from "../../components/common/Button/Button";
-import { CenterHeader } from "../../components/common/Header/Header";
 import { TextInput, NumInput } from "../../components/upload/InputBox/InputBox";
 import UploadImgBox from "../../components/upload/uploadImg/UploadImg";
 import WranBox from "../../components/upload/WranBox/WranBox";
@@ -12,7 +11,6 @@ function UploadPage() {
   const [deliveryBtn, setDeliveryBtn] = useState("");
   return (
     <>
-      <CenterHeader />
       <S.Container>
         <S.TitleWrap>
           <S.TitleText>상품 등록</S.TitleText>

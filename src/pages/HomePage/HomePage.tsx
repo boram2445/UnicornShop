@@ -6,11 +6,9 @@ import {
   fetchGetProducts,
 } from "../../features/productSlice";
 import ProductCard from "../../components/home/ProductCard/ProductCard";
-import { Header } from "../../components/common/Header/Header";
 import Carousel from "../../components/home/Carousel/Carousel";
-import Footer from "../../components/common/Footer/Footer";
-import * as S from "./homePageStyle";
 import PaginationBtn from "../../components/common/PaginationBtn/PaginationBtn";
+import * as S from "./homePageStyle";
 
 function HomePage() {
   const [page, setPage] = useState(1);
@@ -26,7 +24,6 @@ function HomePage() {
   }, [page]);
   return (
     <>
-      <Header />
       <Carousel />
       <S.ProductContainer>
         <S.ProductLists>
@@ -36,7 +33,6 @@ function HomePage() {
         </S.ProductLists>
       </S.ProductContainer>
       <PaginationBtn totalPage={totalPageCount} getPageCount={getPageCount} />
-      <Footer />
     </>
   );
 }

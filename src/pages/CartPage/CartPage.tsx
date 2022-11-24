@@ -161,7 +161,6 @@ function CartPage() {
 
   return (
     <>
-      <Header />
       {modal ? (
         <Modal onClickYes={deleteType === "one" ? deleteCartItem : deleteSelectItems}>
           {deleteType === "one" ? "상품을 삭제하시겠습니까?" : "선택한 상품 모두 삭제하시겠습니까?"}

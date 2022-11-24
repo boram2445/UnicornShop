@@ -1,15 +1,14 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
+import { NormalBtn, TabMenuBtn } from "../../components/common/Button/Button";
 import Chart from "../../components/center/Chart/Chart";
 import plusIcon from "../../assets/icons/icon-circle-plus.svg";
-import { NormalBtn, TabMenuBtn } from "../../components/common/Button/Button";
-import { CenterHeader } from "../../components/common/Header/Header";
 import * as S from "./centerPageStyle";
-import { useNavigate } from "react-router-dom";
+
 function CenterPage() {
   const navigate = useNavigate();
   return (
     <>
-      <CenterHeader />
       <S.Container>
         <S.TitleWrap>
           <S.TitleText>

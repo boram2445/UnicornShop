@@ -2,13 +2,12 @@ import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { fetchPostCart } from "../../features/postCartSlice";
-import Footer from "../../components/common/Footer/Footer";
-import { Header } from "../../components/common/Header/Header";
 import { NormalBtn } from "../../components/common/Button/Button";
 import AmountBtn from "../../components/common/AmountBtn/AmountBtn";
 import { selectProductById } from "../../features/productSlice";
 import * as S from "./detailPageStyle";
 import { getToken } from "../../features/authSlice";
+import DetailTab from "../../components/detail/DetailTab";
 
 function DetailPage() {
   const { productId } = useParams();
@@ -45,7 +44,6 @@ function DetailPage() {
 
   return (
     <>
-      <Header />
       {detail && (
         <S.ProductSection>
           <S.ImageBox>
@@ -91,31 +89,17 @@ function DetailPage() {
             </S.PriceBox>
             {/* 상품 구매 버튼 */}
             <S.ButtonBox>
-              <NormalBtn size="medium" onClick={getProductNow}>
+              <NormalBtn onClick={getProductNow} width="416px" padding="18px 0">
                 바로 구매
               </NormalBtn>
-              <NormalBtn size="smedium" color="dark" onClick={getProductCart}>
+              <NormalBtn color="dark" onClick={getProductCart} width="200px" padding="18px 0">
                 장바구니
               </NormalBtn>
             </S.ButtonBox>
           </S.CartBox>
+          <DetailTab />
         </S.ProductSection>
       )}
-
-      {/* 상품 상세 보기 */}
-      <S.TabSection>
-        <NormalBtn tab={true}>제품 상세</NormalBtn>
-        <NormalBtn disabled={true} tab={true}>
-          리뷰
-        </NormalBtn>
-        <NormalBtn disabled={true} tab={true}>
-          Q&A
-        </NormalBtn>
-        <NormalBtn disabled={true} tab={true}>
-          반품/교환정보
-        </NormalBtn>
-      </S.TabSection>
-      <Footer />
     </>
   );
 }
