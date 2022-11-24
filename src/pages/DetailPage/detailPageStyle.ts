@@ -1,32 +1,41 @@
 import styled from "styled-components";
 
 const ProductSection = styled.section`
-  margin-top: 50px;
-  display: flex;
-  justify-content: center;
+  margin: 50px auto;
+  padding: 0 30px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  justify-items: center;
   gap: 50px;
 `;
 
 const ImageBox = styled.div`
-  width: 600px;
-  height: 600px;
+  width: 100%;
+  max-height: 600px;
   img {
+    display: block;
     width: 100%;
-    height: 600px;
+    height: 100%;
     object-fit: cover;
   }
 `;
 
-const CartBox = styled.div``;
+const CartBox = styled.div`
+  width: 100%;
+`;
 
 const InfoBox = styled.div`
   margin-bottom: 138px;
 `;
 
-const SellerText = styled.p`
+const SellerText = styled.a`
   font-size: 1.8rem;
   line-height: 2.3rem;
-  color: #767676;
+  color: var(--color-darkGrey);
+  &:hover {
+    text-decoration: underline;
+    cursor: pointer;
+  }
 `;
 
 const ProductText = styled.strong`
@@ -46,27 +55,35 @@ const PriceText = styled.p`
   }
 `;
 
-const ShiftText = styled.p`
-  font-size: 1.6rem;
-  color: #767676;
+const DetailWrap = styled.div`
+  & > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
   &::after {
     margin: 20px auto 30px;
     display: block;
     content: "";
     height: 2px;
-    background-color: #c4c4c4;
+    background-color: var(--color-grey);
   }
 `;
 
-const ButtonBox = styled.div`
-  display: flex;
-  gap: 14px;
+const DetailText = styled.p`
+  font-size: 1.6rem;
+  color: var(--color-darkGrey);
 `;
 
-const TabSection = styled.section`
-  margin: 140px auto 350px;
-  display: flex;
-  justify-content: center;
+const StockText = styled.p`
+  font-size: 1.6rem;
+  color: var(--color-red);
+`;
+
+const ButtonBox = styled.div`
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 14px;
 `;
 
 const PriceBox = styled.div`
@@ -75,7 +92,7 @@ const PriceBox = styled.div`
     display: block;
     content: "";
     height: 2px;
-    background-color: #c4c4c4;
+    background-color: var(--color-grey);
   }
 `;
 
@@ -100,10 +117,10 @@ const CountWrapBox = styled.div`
 const CountText = styled.p`
   font-size: 1.8rem;
   line-height: 2.3rem;
-  color: #767676;
+  color: var(--color-darkGrey);
   span {
     font-weight: 700;
-    color: #7e57c2;
+    color: var(--color-main);
   }
   &::after {
     margin: auto 12px auto 11px;
@@ -111,7 +128,7 @@ const CountText = styled.p`
     content: "";
     height: 18px;
     width: 1px;
-    background-color: #c4c4c4;
+    background-color: var(--color-grey);
     vertical-align: middle;
   }
 `;
@@ -120,7 +137,7 @@ const PriceResultText = styled.p`
   font-weight: 700;
   font-size: 3.6rem;
   line-height: 4.5rem;
-  color: #fa897b;
+  color: var(--color-main);
   span {
     font-weight: 400;
     font-size: 18px;
@@ -136,9 +153,10 @@ export {
   SellerText,
   ProductText,
   PriceText,
-  ShiftText,
+  DetailWrap,
+  DetailText,
+  StockText,
   ButtonBox,
-  TabSection,
   PriceBox,
   PriceDescribeText,
   CountWrapBox,

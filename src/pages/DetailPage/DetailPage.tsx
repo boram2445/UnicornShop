@@ -89,10 +89,10 @@ function DetailPage() {
             </S.PriceBox>
             {/* 상품 구매 버튼 */}
             <S.ButtonBox>
-              <NormalBtn onClick={getProductNow} width="416px" padding="18px 0">
+              <NormalBtn onClick={getProductNow} padding="18px 0">
                 바로 구매
               </NormalBtn>
-              <NormalBtn color="dark" onClick={getProductCart} width="200px" padding="18px 0">
+              <NormalBtn color="dark" onClick={getProductCart} padding="18px 0">
                 장바구니
               </NormalBtn>
             </S.ButtonBox>

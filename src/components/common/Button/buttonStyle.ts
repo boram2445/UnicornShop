@@ -77,7 +77,7 @@ const NormalBtn = styled.button<NormalBtnProps>`
   ${({ tab }) => {
     if (tab === "true") {
       return css`
-        width: 320px;
+        width: 100%;
         padding: 19px 0 12px;
         border-radius: 0;
         color: var(--color-darkGrey);
