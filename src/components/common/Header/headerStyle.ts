@@ -6,7 +6,7 @@ const HeaderContainer = styled.header`
 
 const HeaderContents = styled.div`
   margin: 0 auto;
-  max-width: 1100px;
+  max-width: 1380px;
   padding: 22px;
   display: flex;
   justify-content: space-between;
@@ -58,7 +58,7 @@ const NavButton = styled.li`
 
 // Center Header
 const CenterContents = styled(HeaderContents)`
-  max-width: 1540px;
+  max-width: 1380px;
   align-items: center;
   justify-content: start;
 `;
