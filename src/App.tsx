@@ -10,6 +10,7 @@ import PaymentPage from "./pages/PaymentPage/PaymentPage";
 import JoinPage from "./pages/JoinPage/JoinPage";
 import CenterPage from "./pages/CenterPage/CenterPage";
 import UploadPage from "./pages/UploadPage/UploadPage";
+import MyPage from "./pages/MyPage/MyPage";
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
           <Route path="/cart" element={<CartPage />} />
           <Route path="/products/:productId" element={<DetailPage />} />
           <Route path="/payment" element={<PaymentPage />} />
+          <Route path="/mypage" element={<MyPage />} />
         </Route>
         <Route element={<CenterLayout />}>
           <Route path="/center" element={<CenterPage />} />

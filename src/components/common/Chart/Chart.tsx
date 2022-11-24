@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getToken } from "../../../features/authSlice";
+import { getToken, selectUserType } from "../../../features/authSlice";
 import {
   fetchDeleteSellerItem,
   fetchGetSellerProduct,
@@ -15,14 +15,18 @@ import * as S from "./chartStyle";
 function Chart() {
   const dispatch = useAppDispatch();
   const TOKEN = useAppSelector(getToken);
+  const USER_TYPE = useAppSelector(selectUserType);
+
   const sellerStatus = useAppSelector(getSellerStatus);
   const products = useAppSelector(selectSellerProducts);
   const modal = useAppSelector(selectOpenState);
 
   const [selectedItemId, setSelectedItemId] = useState(0);
 
+  console.log(USER_TYPE);
+
   useEffect(() => {
-    if (sellerStatus === "idle" && TOKEN) {
+    if (TOKEN && USER_TYPE === "SELLER" && sellerStatus === "idle") {
       dispatch(fetchGetSellerProduct(TOKEN));
     }
   }, []);
@@ -41,10 +45,11 @@ function Chart() {
     }
   }
 
-  return (
-    <>
-      {modal ? <Modal onClickYes={deleteItem}>상품을 삭제하시겠습니까?</Modal> : null}
-      <S.ChartContainer>
+  //사용자 종류에 따른 content 변경
+  let content;
+  if (USER_TYPE === "SELLER") {
+    content = (
+      <>
         <S.TopWrap>
           <strong>상품정보</strong>
           <strong>판매가격</strong>
@@ -63,7 +68,28 @@ function Chart() {
             ))
           )}
         </S.ListWrap>
-      </S.ChartContainer>
+      </>
+    );
+  } else if (USER_TYPE === "BUYER") {
+    content = (
+      <>
+        <S.TopWrap>
+          <strong>상품정보</strong>
+          <strong>구매가격</strong>
+          <strong>구매날짜</strong>
+          <strong>배송상태</strong>
+        </S.TopWrap>
+        <S.ListWrap></S.ListWrap>
+      </>
+    );
+  } else {
+    <p>사용자 정보가 없습니다.</p>;
+  }
+
+  return (
+    <>
+      {modal ? <Modal onClickYes={deleteItem}>상품을 삭제하시겠습니까?</Modal> : null}
+      <S.ChartContainer>{content}</S.ChartContainer>
     </>
   );
 }

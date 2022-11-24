@@ -5,6 +5,7 @@ import { CartItem } from "./cartListSlice";
 
 const BASE_URL = "https://openmarket.weniv.co.kr";
 
+//상품 주문
 interface OrderInfoType {
   product_id?: number;
   quantity?: number;
@@ -16,6 +17,21 @@ interface OrderInfoType {
   payment_method: string;
   total_price: number;
 }
+
+//주문 내역
+interface OrderedListType {
+  buyer: string;
+  order_number: number;
+  order_items: number[];
+  order_quantity: number[];
+  receiver: string;
+  receiver_phone_number: string;
+  address: string;
+  address_message: string;
+  payment_method: string;
+  total_price: number;
+}
+
 interface OrderType {
   status: string;
   error: string;
@@ -24,6 +40,7 @@ interface OrderType {
   totalPrice: number;
   order_kind: string;
   orderInfo: OrderInfoType | null;
+  orderedInfo: { count: number; next: string; previous: string; results: OrderedListType[] } | null;
 }
 
 const initialState: OrderType = {
@@ -34,8 +51,10 @@ const initialState: OrderType = {
   totalPrice: 0,
   order_kind: "",
   orderInfo: null,
+  orderedInfo: null,
 };
 
+//주문하기
 export const fetchPostOrder = createAsyncThunk(
   "order/fetchPostOrder",
   async ({ TOKEN, info }: { TOKEN: string; info: OrderInfoType }) => {
@@ -79,6 +98,21 @@ export const fetchPostOrder = createAsyncThunk(
   }
 );
 
+//주문 목록 불러오기
+export const fetchPostOrderList = createAsyncThunk(
+  "order/fetchPostOrderList",
+  async (TOKEN: string) => {
+    const config = {
+      headers: {
+        Authorization: `JWT ${TOKEN}`,
+      },
+    };
+    const result = await axios.get(`${BASE_URL}/order/`, config);
+    console.log(result.data);
+    return result.data;
+  }
+);
+
 export const orderSlice = createSlice({
   name: "order",
   initialState,
@@ -107,6 +141,18 @@ export const orderSlice = createSlice({
       state.status = "failed";
       state.error = action.error.message || "Something is wrong in company number:<";
     });
+    builder.addCase(fetchPostOrderList.pending, (state) => {
+      state.status = "Loading";
+    });
+    builder.addCase(fetchPostOrderList.fulfilled, (state, action) => {
+      state.status = "succeeded";
+      state.error = "";
+      state.orderedInfo = action.payload;
+    });
+    builder.addCase(fetchPostOrderList.rejected, (state, action) => {
+      state.status = "failed";
+      state.error = action.error.message || "Something is wrong in company number:<";
+    });
   },
 });
 
@@ -117,6 +163,8 @@ export const selectOrderItems = (state: RootState) => state.order.orderItems;
 export const selectTotalPrice = (state: RootState) => state.order.totalPrice;
 export const selectDeliveryPrice = (state: RootState) => state.order.shippingfee;
 export const selectOrderType = (state: RootState) => state.order.order_kind;
+
+export const selectOrderedInfo = (state: RootState) => state.order.orderedInfo;
 
 export const { reset, getOrderItem } = orderSlice.actions;
 export default orderSlice.reducer;

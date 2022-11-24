@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { NormalBtn, TabMenuBtn } from "../../components/common/Button/Button";
-import Chart from "../../components/center/Chart/Chart";
+import Chart from "../../components/common/Chart/Chart";
 import plusIcon from "../../assets/icons/icon-circle-plus.svg";
 import * as S from "./centerPageStyle";
 
@@ -33,9 +33,7 @@ function CenterPage() {
             <TabMenuBtn>통계</TabMenuBtn>
             <TabMenuBtn>스토어 설정</TabMenuBtn>
           </S.BtnWrap>
-          <div>
-            <Chart />
-          </div>
+          <Chart />
         </S.ContentWrap>
       </S.Container>
     </>
