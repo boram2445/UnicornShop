@@ -1,5 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { getToken } from "../../../features/authSlice";
+import { fetchPostOrder } from "../../../features/orderSlice";
+import { fetchPostItem, ItemPostType } from "../../../features/sellerSlice";
+import { useAppDispatch, useAppSelector } from "../../../hooks";
 import { NormalBtn } from "../../common/Button/Button";
 import { NumInput, TextInput } from "../InputBox/InputBox";
 import UploadImgBox from "../uploadImg/UploadImg";
@@ -7,12 +11,50 @@ import * as S from "./uploadFormStyle";
 
 function UploadForm() {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const TOKEN = useAppSelector(getToken) || "";
+
+  const initialValues: ItemPostType = {
+    product_name: "",
+    image: null,
+    price: 0,
+    shipping_method: "",
+    shipping_fee: 0,
+    stock: 0,
+    product_info: "",
+  };
   const [deliveryBtn, setDeliveryBtn] = useState("");
+  const [formValues, setFormValues] = useState(initialValues);
+
+  const handleImgFile = (file: File) => {
+    setFormValues({ ...formValues, image: file });
+  };
+
+  const handleDeiveryBtn = (type: "PARCEL" | "DELIVERY") => {
+    setDeliveryBtn(type);
+    setFormValues({ ...formValues, shipping_method: type });
+  };
+
+  const handleOnChange = (name: string, value: string | number) => {
+    setFormValues({ ...formValues, [name]: value });
+  };
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    console.log(formValues);
+    dispatch(fetchPostItem({ TOKEN, formValues }));
+  };
+
+  const canUpload =
+    formValues.product_name &&
+    formValues.image &&
+    formValues.product_info &&
+    formValues.shipping_method;
 
   return (
-    <S.UploadForm>
+    <S.UploadForm onSubmit={handleSubmit}>
       <S.TitleBtnWrap>
-        {/* 폼 제출 버튼 */}
         <NormalBtn
           type="button"
           width="120px"
@@ -22,15 +64,17 @@ function UploadForm() {
         >
           취소
         </NormalBtn>
-        <NormalBtn type="submit" width="120px" fontSize="1.6rem">
+        {/* 폼 제출 버튼 */}
+        <NormalBtn type="submit" width="120px" fontSize="1.6rem" disabled={!canUpload}>
           저장하기
         </NormalBtn>
       </S.TitleBtnWrap>
-
-      <UploadImgBox />
+      {/* 이미지 업로드 */}
+      <UploadImgBox handleImgFile={handleImgFile} />
+      {/* 상품 정보 업로드 */}
       <S.InputsWrap>
-        <TextInput label="상품명" />
-        <NumInput label="판매가" unit="원"></NumInput>
+        <TextInput label="상품명" name="product_name" handleOnChange={handleOnChange} />
+        <NumInput label="판매가" name="price" unit="원" handleOnChange={handleOnChange}></NumInput>
         <S.BtnWrap>
           <S.Label>배송방법</S.Label>
           <NormalBtn
@@ -38,7 +82,7 @@ function UploadForm() {
             width="220px"
             color="white"
             padding="16px 0"
-            onClick={() => setDeliveryBtn("PARCEL")}
+            onClick={() => handleDeiveryBtn("PARCEL")}
             on={deliveryBtn === "PARCEL" ? "true" : "false"}
           >
             택배,소포,등기
@@ -48,19 +92,28 @@ function UploadForm() {
             width="220px"
             color="white"
             padding="16px 0"
-            onClick={() => setDeliveryBtn("DELIVERY")}
+            onClick={() => handleDeiveryBtn("DELIVERY")}
             on={deliveryBtn === "DELIVERY" ? "true" : "false"}
           >
             직접배송(화물배달)
           </NormalBtn>
         </S.BtnWrap>
-        <NumInput label="기본 배송비" unit="원" />
-        <NumInput label="재고" unit="개" />
+        <NumInput
+          label="기본 배송비"
+          name="shipping_fee"
+          unit="원"
+          handleOnChange={handleOnChange}
+        />
+        <NumInput label="재고" name="stock" unit="개" handleOnChange={handleOnChange} />
       </S.InputsWrap>
       {/* 상품 상세 정보 */}
       <S.DetailWrap>
         <S.Label>상품 상세 정보</S.Label>
-        <S.ItemDetail>에디터 영역</S.ItemDetail>
+        <S.TextArea
+          name="product_info"
+          placeholder="제품 상세 정보를 적어주세요"
+          onChange={(e) => handleOnChange(e.target.name, e.target.value)}
+        />
       </S.DetailWrap>
     </S.UploadForm>
   );

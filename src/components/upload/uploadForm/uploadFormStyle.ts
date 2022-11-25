@@ -33,16 +33,19 @@ const DetailWrap = styled.div`
   grid-column: span 2;
 `;
 
-const ItemDetail = styled.div`
+const TextArea = styled.textarea`
   margin-top: 10px;
-  background-color: var(--color-brightGrey);
-  border: 1px solid var(--color-grey);
   width: 100%;
   height: 300px;
-  font-size: 4rem;
-  color: var(--color-grey);
-  text-align: center;
-  line-height: 300px;
+  padding: 10px;
+  font-size: 1.4rem;
+  line-height: 2rem;
+  resize: none;
+  border: 1px solid var(--color-grey);
+
+  & ::placeholder {
+    color: var(--color-grey);
+  }
 `;
 
-export { UploadForm, TitleBtnWrap, InputsWrap, BtnWrap, Label, DetailWrap, ItemDetail };
+export { UploadForm, TitleBtnWrap, InputsWrap, BtnWrap, Label, DetailWrap, TextArea };

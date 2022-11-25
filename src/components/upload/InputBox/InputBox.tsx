@@ -4,13 +4,16 @@ import { limitInputLength } from "../../../utils/checkInputValid";
 
 interface TextInputProps {
   label: string;
+  name: string;
+  handleOnChange: (name: string, value: string | number) => void;
 }
 
-function TextInput({ label }: TextInputProps) {
+function TextInput({ label, name, handleOnChange }: TextInputProps) {
   const [inputText, setInputText] = useState("");
 
   const handleTextInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = limitInputLength(e.target.value, 50);
+    const value = limitInputLength(e.target.value, 20);
+    handleOnChange(name, value);
     setInputText(value);
   };
 
@@ -18,8 +21,8 @@ function TextInput({ label }: TextInputProps) {
     <div>
       <S.Label htmlFor={label}>{label}</S.Label>
       <S.InputWrap>
-        <S.TextInputBox id={label} onChange={handleTextInput} value={inputText} />
-        <S.TextLength>{inputText.length}/50</S.TextLength>
+        <S.TextInputBox id={label} name={name} onChange={handleTextInput} value={inputText} />
+        <S.TextLength>{inputText.length}/20</S.TextLength>
       </S.InputWrap>
     </div>
   );
@@ -27,14 +30,17 @@ function TextInput({ label }: TextInputProps) {
 
 interface NumInputProps {
   label: string;
+  name: string;
   unit: string;
+  handleOnChange: (name: string, value: string | number) => void;
 }
 
-function NumInput({ label, unit }: NumInputProps) {
-  const [priceText, setPriceText] = useState("");
+function NumInput({ label, name, unit, handleOnChange }: NumInputProps) {
+  const [priceText, setPriceText] = useState(0);
   const handlePriceInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = limitInputLength(e.target.value, 10).replace(/[^0-9]/g, "");
-    setPriceText(value);
+    handleOnChange(name, Number(value));
+    setPriceText(Number(value));
   };
   return (
     <div>
@@ -42,8 +48,9 @@ function NumInput({ label, unit }: NumInputProps) {
       <S.InputWrap width="220px">
         <S.NumInputBox
           id={label}
+          name={name}
           onChange={handlePriceInput}
-          value={Number(priceText).toLocaleString()}
+          value={priceText.toLocaleString()}
         />
         <S.UnitText>{unit}</S.UnitText>
       </S.InputWrap>

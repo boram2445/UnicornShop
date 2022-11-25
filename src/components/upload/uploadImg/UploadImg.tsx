@@ -4,16 +4,16 @@ import ImgIcon from "../../../assets/icons/icon-image.svg";
 
 interface UploadBtnProps {
   inputFile: React.MutableRefObject<HTMLInputElement>;
-  handlePreview: (src: string) => void;
+  getImageFile: (file: File) => void;
   image: string;
 }
 
 //이미지 업로드 버튼
-function UploadBtn({ inputFile, handlePreview, image }: UploadBtnProps) {
+function UploadBtn({ inputFile, getImageFile, image }: UploadBtnProps) {
   const saveImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    handlePreview(URL.createObjectURL(file));
+    getImageFile(file);
   };
 
   return (
@@ -31,8 +31,12 @@ function UploadBtn({ inputFile, handlePreview, image }: UploadBtnProps) {
   );
 }
 
+interface UploadImgProps {
+  handleImgFile: (file: File) => void;
+}
+
 //이미지 업로드 박스
-function UploadImgBox() {
+function UploadImgBox({ handleImgFile }: UploadImgProps) {
   const inputFile = useRef() as React.MutableRefObject<HTMLInputElement>;
   const [preview, setPreview] = useState("");
 
@@ -40,15 +44,16 @@ function UploadImgBox() {
     inputFile.current.click();
   };
 
-  const handlePreview = (src: string) => {
-    setPreview(src);
+  const getImageFile = (file: File) => {
+    setPreview(URL.createObjectURL(file));
+    handleImgFile(file);
   };
   return (
     <article>
       <S.Label>상품 이미지</S.Label>
       <S.ImageBox image={preview} onClick={onFileInput}>
         {preview && <img src={preview} />}
-        <UploadBtn inputFile={inputFile} handlePreview={handlePreview} image={preview} />
+        <UploadBtn inputFile={inputFile} getImageFile={getImageFile} image={preview} />
       </S.ImageBox>
     </article>
   );
