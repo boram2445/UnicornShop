@@ -6,25 +6,27 @@ import axios from "axios";
 const BASE_URL = "https://openmarket.weniv.co.kr";
 
 export interface ItemPostType {
-  product_name: string;
-  image: File | null;
-  price: number;
-  shipping_method: "PARCEL" | "DELIVERY" | "";
-  shipping_fee: number;
-  stock: number;
-  product_info: string;
+  product_name?: string;
+  image?: File | string | null;
+  price?: number;
+  shipping_method?: string;
+  shipping_fee?: number;
+  stock?: number;
+  product_info?: string;
   token?: string;
 }
 interface SellerType {
   status: string;
   error: string;
   products: Product[];
+  modifyItemId: number;
 }
 
 const initialState: SellerType = {
   status: "idle",
   error: "",
   products: [],
+  modifyItemId: 0,
 };
 
 //판매자 상품 가져오기
@@ -68,8 +70,42 @@ export const fetchPostItem = createAsyncThunk(
         },
       };
       const data = { ...formValues, token: TOKEN };
-      console.log(data);
       const result = await axios.post(`${BASE_URL}/products/`, data, config);
+      console.log(result.data);
+      return result.data;
+    } catch (error: any) {
+      //서버 에러 메세지 받아오기 -개선 필요
+      console.log(error.response.data);
+      return error.response.data;
+    }
+  }
+);
+
+//판매자 상품 수정
+export const fetchPutSellerItem = createAsyncThunk(
+  "seller/fetchPutSellerItem",
+  async ({
+    TOKEN,
+    product_id,
+    formValues,
+  }: {
+    TOKEN: string;
+    product_id: number;
+    formValues: ItemPostType;
+  }) => {
+    try {
+      const config: any = {
+        headers: {
+          Authorization: `JWT ${TOKEN}`,
+        },
+      };
+      //왜,, api 명세에는 image가 포함 안되어있으면서,,
+      if (formValues.image) {
+        config.headers["Content-Type"] = "multipart/form-data";
+      } else {
+        delete formValues.image;
+      }
+      const result = await axios.put(`${BASE_URL}/products/${product_id}/`, formValues, config);
       console.log(result.data);
       return result.data;
     } catch (error: any) {
@@ -83,7 +119,16 @@ export const fetchPostItem = createAsyncThunk(
 const sellerSlice = createSlice({
   name: "sellerSlice",
   initialState,
-  reducers: {},
+  reducers: {
+    reset: (state) => {
+      state.status = "idle";
+      state.error = "";
+      state.modifyItemId = 0;
+    },
+    getModifyId: (state, action) => {
+      state.modifyItemId = action.payload;
+    },
+  },
   extraReducers: (builder) => {
     //상품 불러오기
     builder.addCase(fetchGetSellerProduct.pending, (state) => {
@@ -126,9 +171,30 @@ const sellerSlice = createSlice({
       state.status = "failed";
       state.error = action.error.message || "Something is wrong";
     });
+    //판매자 상품 수정
+    builder.addCase(fetchPutSellerItem.pending, (state) => {
+      state.status = "Loading";
+    });
+    builder.addCase(fetchPutSellerItem.fulfilled, (state, action) => {
+      state.status = "succeeded";
+      state.error = "";
+      state.products = state.products
+        .filter((item) => item.product_id !== action.payload)
+        .splice(0, 0, action.payload);
+    });
+    builder.addCase(fetchPutSellerItem.rejected, (state, action) => {
+      state.status = "failed";
+      state.error = action.error.message || "Something is wrong";
+    });
   },
 });
 
 export const getSellerStatus = (state: RootState) => state.seller.status;
 export const selectSellerProducts = (state: RootState) => state.seller.products;
+
+export const selectModifyId = (state: RootState) => state.seller.modifyItemId;
+export const selectModifyItem = (state: RootState) =>
+  state.seller.products.find((item) => item.product_id === state.seller.modifyItemId);
+
+export const { reset, getModifyId } = sellerSlice.actions;
 export default sellerSlice.reducer;

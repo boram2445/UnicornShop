@@ -23,8 +23,6 @@ function Chart() {
 
   const [selectedItemId, setSelectedItemId] = useState(0);
 
-  console.log(USER_TYPE);
-
   useEffect(() => {
     if (TOKEN && USER_TYPE === "SELLER" && sellerStatus === "idle") {
       dispatch(fetchGetSellerProduct(TOKEN));

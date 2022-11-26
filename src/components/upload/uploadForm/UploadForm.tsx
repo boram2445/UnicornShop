@@ -1,30 +1,45 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { getToken } from "../../../features/authSlice";
-import { fetchPostOrder } from "../../../features/orderSlice";
-import { fetchPostItem, ItemPostType } from "../../../features/sellerSlice";
+import {
+  fetchPostItem,
+  fetchPutSellerItem,
+  ItemPostType,
+  reset,
+  selectModifyId,
+} from "../../../features/sellerSlice";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
 import { NormalBtn } from "../../common/Button/Button";
 import { NumInput, TextInput } from "../InputBox/InputBox";
 import UploadImgBox from "../uploadImg/UploadImg";
 import * as S from "./uploadFormStyle";
+import { Product } from "../../../features/productSlice";
 
-function UploadForm() {
+function UploadForm({ itemInfo }: { itemInfo?: Product }) {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const TOKEN = useAppSelector(getToken) || "";
+  const modifyId = useAppSelector(selectModifyId);
 
   const initialValues: ItemPostType = {
-    product_name: "",
+    product_name: itemInfo?.product_name,
     image: null,
-    price: 0,
-    shipping_method: "",
-    shipping_fee: 0,
-    stock: 0,
-    product_info: "",
+    price: itemInfo?.price,
+    shipping_method: itemInfo?.shipping_method,
+    shipping_fee: itemInfo?.shipping_fee,
+    stock: itemInfo?.stock,
+    product_info: itemInfo?.product_info,
   };
-  const [deliveryBtn, setDeliveryBtn] = useState("");
+  const [deliveryBtn, setDeliveryBtn] = useState(itemInfo?.shipping_method);
   const [formValues, setFormValues] = useState(initialValues);
+
+  console.log(formValues);
+
+  useEffect(() => {
+    return () => {
+      dispatch(reset());
+    };
+  }, []);
 
   const handleImgFile = (file: File) => {
     setFormValues({ ...formValues, image: file });
@@ -41,16 +56,18 @@ function UploadForm() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    console.log(formValues);
-    dispatch(fetchPostItem({ TOKEN, formValues }));
+    if (modifyId) {
+      dispatch(fetchPutSellerItem({ TOKEN, product_id: modifyId, formValues }));
+    } else {
+      dispatch(fetchPostItem({ TOKEN, formValues }));
+    }
   };
 
   const canUpload =
     formValues.product_name &&
-    formValues.image &&
     formValues.product_info &&
-    formValues.shipping_method;
+    formValues.shipping_method &&
+    (formValues.image || itemInfo?.image);
 
   return (
     <S.UploadForm onSubmit={handleSubmit}>
@@ -70,11 +87,22 @@ function UploadForm() {
         </NormalBtn>
       </S.TitleBtnWrap>
       {/* 이미지 업로드 */}
-      <UploadImgBox handleImgFile={handleImgFile} />
+      <UploadImgBox handleImgFile={handleImgFile} image={itemInfo?.image} />
       {/* 상품 정보 업로드 */}
       <S.InputsWrap>
-        <TextInput label="상품명" name="product_name" handleOnChange={handleOnChange} />
-        <NumInput label="판매가" name="price" unit="원" handleOnChange={handleOnChange}></NumInput>
+        <TextInput
+          label="상품명"
+          name="product_name"
+          handleOnChange={handleOnChange}
+          value={formValues.product_name}
+        />
+        <NumInput
+          label="판매가"
+          name="price"
+          unit="원"
+          handleOnChange={handleOnChange}
+          value={formValues.price}
+        ></NumInput>
         <S.BtnWrap>
           <S.Label>배송방법</S.Label>
           <NormalBtn
@@ -103,8 +131,15 @@ function UploadForm() {
           name="shipping_fee"
           unit="원"
           handleOnChange={handleOnChange}
+          value={formValues.shipping_fee}
         />
-        <NumInput label="재고" name="stock" unit="개" handleOnChange={handleOnChange} />
+        <NumInput
+          label="재고"
+          name="stock"
+          unit="개"
+          handleOnChange={handleOnChange}
+          value={formValues.stock}
+        />
       </S.InputsWrap>
       {/* 상품 상세 정보 */}
       <S.DetailWrap>

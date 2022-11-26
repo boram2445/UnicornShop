@@ -5,7 +5,7 @@ import ImgIcon from "../../../assets/icons/icon-image.svg";
 interface UploadBtnProps {
   inputFile: React.MutableRefObject<HTMLInputElement>;
   getImageFile: (file: File) => void;
-  image: string;
+  image?: string;
 }
 
 //이미지 업로드 버튼
@@ -33,18 +33,21 @@ function UploadBtn({ inputFile, getImageFile, image }: UploadBtnProps) {
 
 interface UploadImgProps {
   handleImgFile: (file: File) => void;
+  image?: string;
 }
 
 //이미지 업로드 박스
-function UploadImgBox({ handleImgFile }: UploadImgProps) {
+function UploadImgBox({ handleImgFile, image }: UploadImgProps) {
   const inputFile = useRef() as React.MutableRefObject<HTMLInputElement>;
-  const [preview, setPreview] = useState("");
+  const [preview, setPreview] = useState(image);
+  console.log(preview);
 
   const onFileInput = () => {
     inputFile.current.click();
   };
 
   const getImageFile = (file: File) => {
+    console.log(file);
     setPreview(URL.createObjectURL(file));
     handleImgFile(file);
   };
