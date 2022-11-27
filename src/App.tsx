@@ -11,6 +11,7 @@ import JoinPage from "./pages/JoinPage/JoinPage";
 import CenterPage from "./pages/CenterPage/CenterPage";
 import UploadPage from "./pages/UploadPage/UploadPage";
 import MyPage from "./pages/MyPage/MyPage";
+import ErrorPage from "./pages/ErrorPage/ErrorPage";
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
         </Route>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/join" element={<JoinPage />} />
+        <Route path="/*" element={<ErrorPage />} />
       </Routes>
     </>
   );
