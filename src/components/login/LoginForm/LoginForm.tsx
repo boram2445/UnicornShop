@@ -1,54 +1,56 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   fetchPostLogin,
   getLoginStatus,
-  getAuthMessage,
-  selectUserType,
-} from "../../../features/authSlice";
+  getLoginError,
+  getUserType,
+} from "../../../features/loginSlice";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
 import { NormalBtn } from "../../common/Button/Button";
-import Spinner from "../../common/Spinner/Spinner";
 import ToggleBtn from "../../common/ToggleBtn/ToggleBtn";
+import Spinner from "../../common/Spinner/Spinner";
 import * as S from "./loginFormStyle";
 
 function LoginForm() {
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const passwordRef = useRef() as React.MutableRefObject<HTMLInputElement>;
+
   const initialValues = {
     username: "",
     password: "",
   };
-
-  const dispatch = useAppDispatch();
   const [formValues, setFormValues] = useState(initialValues);
-  const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
+
   const loginStatus = useAppSelector(getLoginStatus);
-  const loginMessage = useAppSelector(getAuthMessage);
-  const navigate = useNavigate();
-  const loginType = useAppSelector(selectUserType);
+  const loginType = useAppSelector(getUserType);
+  const loginError = useAppSelector(getLoginError);
 
   useEffect(() => {
     if (loginStatus === "failed") {
-      setError(loginMessage);
+      setMessage(loginError);
+      passwordRef.current.value = "";
+      passwordRef.current.focus();
     }
     if (loginStatus === "succeeded") {
-      console.log("로그인 되었습니다.");
+      setFormValues(initialValues);
       navigate("/");
-      // dispatch(resetAll());
     }
   }, [loginStatus]);
 
-  //버튼 활성화
-  const canJoin = Object.values(formValues).every(Boolean);
-
   //아이디 & 비밀번호 입력
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setMessage("");
     const { name, value } = e.target;
     setFormValues({ ...formValues, [name]: value });
   };
 
   //로그인 폼 제출
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (message) return;
     const { username, password } = formValues;
     const userData = {
       username,
@@ -65,23 +67,26 @@ function LoginForm() {
   return (
     <S.LoginSection>
       <ToggleBtn />
-      <S.LoginForm onSubmit={handleSubmit}>
+      <S.LoginForm onSubmit={onSubmit}>
         <S.LoginInput
           type="text"
           name="username"
           placeholder="아이디"
           onChange={onChange}
           value={formValues.username}
+          required
         />
         <S.LoginInput
+          ref={passwordRef}
           type="password"
           name="password"
           placeholder="비밀번호"
           onChange={onChange}
           value={formValues.password}
+          required
         />
-        {error && <S.ErrorText>아이디 또는 비밀번호가 일치하지 않습니다.</S.ErrorText>}
-        <NormalBtn type="submit" disabled={!canJoin} padding="19px 0">
+        {message ? <S.ErrorText>{message}</S.ErrorText> : null}
+        <NormalBtn type="submit" padding="19px 0">
           로그인
         </NormalBtn>
       </S.LoginForm>

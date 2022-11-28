@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import { selectUserType, setUserType } from "../../../features/authSlice";
+import { getUserType, setUserType } from "../../../features/loginSlice";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
 import * as S from "./toggleBtnStyle";
 
 function ToggleBtn() {
   const dispatch = useAppDispatch();
-  const userType = useAppSelector(selectUserType);
+  const userType = useAppSelector(getUserType);
   const [toggleState, setToggleState] = useState({
     buyer: userType === "BUYER",
     seller: userType === "SELLER",
