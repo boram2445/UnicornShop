@@ -38,12 +38,12 @@ const TextArea = styled.textarea`
   width: 100%;
   height: 300px;
   padding: 10px;
-  font-size: 1.4rem;
+  font-size: 1.5rem;
   line-height: 2rem;
   resize: none;
   border: 1px solid var(--color-grey);
 
-  & ::placeholder {
+  &::placeholder {
     color: var(--color-grey);
   }
 `;

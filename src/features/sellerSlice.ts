@@ -94,17 +94,12 @@ export const fetchPutSellerItem = createAsyncThunk(
     formValues: ItemPostType;
   }) => {
     try {
-      const config: any = {
+      const config = {
         headers: {
           Authorization: `JWT ${TOKEN}`,
+          "Content-Type": "multipart/form-data",
         },
       };
-      //왜,, api 명세에는 image가 포함 안되어있으면서,,
-      if (formValues.image) {
-        config.headers["Content-Type"] = "multipart/form-data";
-      } else {
-        delete formValues.image;
-      }
       const result = await axios.put(`${BASE_URL}/products/${product_id}/`, formValues, config);
       console.log(result.data);
       return result.data;
