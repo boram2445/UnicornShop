@@ -1,41 +1,45 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
-import { InputBox, InputEmail, InputPhone } from "../InputBox/InputBox";
+import { InputBox, InputEmail, InputPhone } from "../JoinInput/JoinInput";
 import { NormalBtn } from "../../common/Button/Button";
 import {
   fetchPostUserName,
-  getNameStatus,
-  getRegisterStatus,
-  getAuthMessage,
-  selectUserType,
-  getError,
-  resetAll,
-  registerReset,
   fetchPostCompanyNumber,
-  getCompanyStatus,
-  getCompanyMessage,
   fetchPostRegister,
-  RegisterProps,
-} from "../../../features/authSlice";
+  getNameStatus,
+  getCompanyStatus,
+  getRegisterStatus,
+  getRegisterError,
+  getNameMessage,
+  getCompanyMessage,
+  getJoinUserType,
+  resetAll,
+  resetName,
+  resetCompany,
+  RegisterPostData,
+} from "../../../features/registerSlice";
+import { handleInputError, limitInputLength } from "../../../utils/checkInputValid";
 import ToggleBtn from "../../common/ToggleBtn/ToggleBtn";
 import CheckLabel from "../../common/CheckLabel/CheckLabel";
 import checkOnIcon from "../../../assets/icons/icon-check-on.svg";
 import checkOffIcon from "../../../assets/icons/icon-check-off.svg";
 import Spinner from "../../common/Spinner/Spinner";
 import * as S from "./joinFormStyle";
-import { handleInputError, limitInputLength } from "../../../utils/checkInputValid";
 
 function JoinForm() {
-  const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const vaildName = useAppSelector(getNameStatus);
-  const vaildCompany = useAppSelector(getCompanyStatus);
-  const validRegister = useAppSelector(getRegisterStatus);
-  const message = useAppSelector(getAuthMessage);
+  const dispatch = useAppDispatch();
+
+  const userType = useAppSelector(getJoinUserType);
+
+  const nameStatus = useAppSelector(getNameStatus);
+  const companyStatus = useAppSelector(getCompanyStatus);
+  const registerStatus = useAppSelector(getRegisterStatus);
+  const registerError = useAppSelector(getRegisterError);
+
+  const nameMessage = useAppSelector(getNameMessage);
   const companyMessage = useAppSelector(getCompanyMessage);
-  const userType = useAppSelector(selectUserType);
-  const registerError = useAppSelector(getError);
 
   const initialValues = {
     username: "",
@@ -69,55 +73,25 @@ function JoinForm() {
   const [formValues, setFormValues] = useState(initialValues);
   //오류 메세지 상태
   const [errorMessage, setErrorMessage] = useState(initialError);
-  //아이디 중복 확인 버튼 상태
-  const [onNameVaildBtn, setNameVaildBtn] = useState(false);
   //판매자 추가 정보
   const [sellerValues, setSellerValues] = useState(initialSellerValues);
-  //사업자 등록번호 인증 버튼 상태
+
+  //아이디 중복 확인 버튼
+  const [onNameVaildBtn, setNameVaildBtn] = useState(false);
+  //사업자 등록번호 인증 버튼
   const [onRegistrationBtn, setRegistrationBtn] = useState(false);
 
   useEffect(() => {
-    //아이디 중복 확인 버튼 클릭시 사용가능 여부 보여주기
-    if (vaildName !== "idle") {
-      setErrorMessage({ ...errorMessage, ["username"]: message });
-    }
-
-    //사업자 등록번호 인증 완료 여부 보여주기
-    if (vaildCompany !== "idle") {
-      setErrorMessage({ ...errorMessage, ["registrationNumber"]: companyMessage });
-    }
-
     //가입 하기 버튼 클릭후 성공 or 실패 경우
-    if (validRegister === "succeeded") {
+    if (registerStatus === "succeeded") {
       alert("가입이 완료되었습니다 :)");
-      navigate("/login");
       dispatch(resetAll());
-    } else if (validRegister === "failed") {
-      dispatch(registerReset());
+      navigate("/login");
+    } else if (registerStatus === "failed") {
+      alert(registerError);
       formValues.checkBox = false;
     }
-
-    if (registerError) {
-      alert(registerError);
-    }
-  }, [vaildName, vaildCompany, validRegister]);
-
-  //가입하기 버튼 활성화 체크 - 개선 필요
-  const checkValidJoin = (userType: string) => {
-    const result =
-      Object.values(formValues).every(Boolean) &&
-      vaildName === "succeeded" &&
-      // formValues.checkBox === "true" &&
-      Object.entries(errorMessage)
-        .filter((item) => item[0] !== "username" && item[0] !== "registrationNumber")
-        .every((item) => item[1] === "");
-    if (userType === "BUYER") {
-      return result;
-    } else if (userType === "SELLER") {
-      return result && vaildCompany === "succeeded";
-    }
-  };
-  const canJoin = checkValidJoin(userType);
+  }, [registerStatus]);
 
   //아이디 중복 확인 버튼 클릭 이벤트
   const checkUserNameVaild = (username: string) => {
@@ -126,30 +100,29 @@ function JoinForm() {
 
   //아이디
   const onChangeUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    const newValue = limitInputLength(value, 20);
-    const message = "* 아이디는 3-20자 이내의 영어 소문자, 대문자, 숫자만 가능합니다.";
-    const error = handleInputError(name, newValue, message);
-    setFormValues({ ...formValues, [name]: newValue });
-    setErrorMessage({ ...errorMessage, [name]: error });
-    error ? setNameVaildBtn(false) : setNameVaildBtn(true);
+    if (nameStatus !== "idle") dispatch(resetName());
+    else {
+      const { name, value } = e.target;
+      const newValue = limitInputLength(value, 20);
+      const message = "* 아이디는 3-20자 이내의 영어 소문자, 대문자, 숫자만 가능합니다.";
+      const error = handleInputError(name, newValue, message);
+      setFormValues({ ...formValues, [name]: newValue });
+      setErrorMessage({ ...errorMessage, [name]: error });
+      error ? setNameVaildBtn(false) : setNameVaildBtn(true);
+    }
   };
 
   //비밀번호
   const onChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     const newValue = limitInputLength(value, 20);
+    const message = "비밀번호는 영문, 숫자 조합 8-20자리를 입력해주세요.";
+    const error = handleInputError(name, newValue, message);
     setFormValues({ ...formValues, [name]: newValue });
-    if (name === "password") {
-      const message = "비밀번호는 영문, 숫자 조합 8-20자리를 입력해주세요.";
-      const error = handleInputError(name, newValue, message);
-      setErrorMessage({ ...errorMessage, [name]: error });
-    } else if (name === "confirmPassword") {
-      let message = "";
-      if (value !== formValues.confirmPassword) {
-        message = "비밀번호가 일치하지 않습니다.";
-      }
-      setErrorMessage({ ...errorMessage, [name]: message });
+    setErrorMessage({ ...errorMessage, [name]: error });
+
+    if (formValues.confirmPassword && value !== formValues.confirmPassword) {
+      setErrorMessage({ ...errorMessage, ["confirmPassword"]: "* 비밀번호가 일치하지 않습니다." });
     }
   };
 
@@ -157,7 +130,8 @@ function JoinForm() {
   const onChangeConfirmPassword = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     const newValue = limitInputLength(value, 20);
-    const message = value && (value === formValues.password ? "" : "비밀번호가 일치하지 않습니다.");
+    const message =
+      value && (value === formValues.password ? "" : "* 비밀번호가 일치하지 않습니다.");
     setFormValues({ ...formValues, [name]: newValue });
     setErrorMessage({ ...errorMessage, [name]: message });
   };
@@ -167,7 +141,7 @@ function JoinForm() {
     const { name, value } = e.target;
     const newValue = limitInputLength(value, 10);
     setFormValues({ ...formValues, [name]: newValue });
-    const message = "이름은 한글 혹은 영어로 10자리까지 가능합니다.";
+    const message = "* 이름은 한글 혹은 영어로 10자리까지 가능합니다.";
     const error = handleInputError(name, newValue, message);
     setErrorMessage({ ...errorMessage, [name]: error });
   };
@@ -198,7 +172,6 @@ function JoinForm() {
 
   //체크박스
   const onChangeCheckbox = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // const value = e.target.checked.toString();
     setFormValues({ ...formValues, ["checkBox"]: e.target.checked });
   };
 
@@ -209,19 +182,22 @@ function JoinForm() {
 
   //사업자 등록번호
   const onChangeRegistrationNumber = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    const newValue = limitInputLength(value, 10).replace(/[^0-9]/g, "");
-    setSellerValues({ ...sellerValues, [name]: newValue });
-    const message = "사업자 등록 번호는 숫자 10자로 이루어져야 합니다.";
-    if (newValue.length > 0 && newValue.length < 10) {
-      setErrorMessage({ ...errorMessage, [name]: message });
-      setRegistrationBtn(false);
-    } else if (newValue.length === 0) {
-      setErrorMessage({ ...errorMessage, [name]: "" });
-      setRegistrationBtn(false);
-    } else {
-      setErrorMessage({ ...errorMessage, [name]: "" });
-      setRegistrationBtn(true);
+    if (companyStatus === "succeeded") dispatch(resetCompany());
+    else {
+      const { name, value } = e.target;
+      const newValue = limitInputLength(value, 10).replace(/[^0-9]/g, "");
+      setSellerValues({ ...sellerValues, [name]: newValue });
+      const message = "사업자 등록 번호는 숫자 10자로 이루어져야 합니다.";
+      if (newValue.length > 0 && newValue.length < 10) {
+        setErrorMessage({ ...errorMessage, [name]: message });
+        setRegistrationBtn(false);
+      } else if (newValue.length === 0) {
+        setErrorMessage({ ...errorMessage, [name]: "" });
+        setRegistrationBtn(false);
+      } else {
+        setErrorMessage({ ...errorMessage, [name]: "" });
+        setRegistrationBtn(true);
+      }
     }
   };
 
@@ -231,10 +207,19 @@ function JoinForm() {
   };
 
   //회원가입 폼 제출
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (nameStatus !== "succeeded") {
+      alert("아이디 인증을 완료해 주세요.");
+      return;
+    }
+    if (userType === "SELLER" && companyStatus !== "succeeded") {
+      alert("사업자 등록 번호 인증을 완료해 주세요.");
+      return;
+    }
+
     const { username, password, confirmPassword, name, phone1, phone2, phone3 } = formValues;
-    let userData: RegisterProps = {
+    let userData: RegisterPostData = {
       username,
       password,
       password2: confirmPassword,
@@ -253,14 +238,14 @@ function JoinForm() {
   };
 
   //가입하기 버튼 클릭시 로딩 화면 보여주기
-  if (validRegister === "Loading") {
+  if (registerStatus === "loading") {
     return <Spinner />;
   }
 
   return (
     <S.JoinFormSection>
       <ToggleBtn />
-      <S.JoinForm onSubmit={handleSubmit}>
+      <S.JoinForm onSubmit={onSubmit}>
         <S.InputBoxs>
           <InputBox
             label="아이디"
@@ -270,7 +255,7 @@ function JoinForm() {
             onChange={onChangeUsername}
             onClick={checkUserNameVaild}
             onButton={onNameVaildBtn}
-            error={errorMessage.username}
+            error={nameMessage || errorMessage.username}
             value={formValues.username}
           />
           <InputBox
@@ -319,7 +304,7 @@ function JoinForm() {
             value2={formValues.email2}
             error={errorMessage.email}
           />
-          {userType === "SELLER" && (
+          {userType === "SELLER" ? (
             <>
               <InputBox
                 label="사업자 등록번호"
@@ -329,7 +314,7 @@ function JoinForm() {
                 onChange={onChangeRegistrationNumber}
                 onClick={checkRegistrationNumber}
                 onButton={onRegistrationBtn}
-                error={errorMessage.registrationNumber}
+                error={companyMessage || errorMessage.registrationNumber}
                 value={sellerValues.registrationNumber}
               />
               <InputBox
@@ -340,12 +325,12 @@ function JoinForm() {
                 value={sellerValues.storeName}
               />
             </>
-          )}
+          ) : null}
         </S.InputBoxs>
         <CheckLabel color="#767676" onChange={onChangeCheckbox}>
           유니콘샵의 <u>이용약관</u> 및 <u>개인정보처리방침</u>에 대한 내용을 확인하였고 동의합니다.
         </CheckLabel>
-        <NormalBtn type="submit" disabled={!canJoin} width="480px" padding="19px 0">
+        <NormalBtn type="submit" width="480px" padding="19px 0">
           가입하기
         </NormalBtn>
       </S.JoinForm>

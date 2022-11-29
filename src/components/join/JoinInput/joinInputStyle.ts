@@ -14,8 +14,8 @@ const LabelText = styled.label`
   color: var(--color-darkGrey);
 `;
 
-const Input = styled.input<{ width: string; icon?: string }>`
-  width: ${({ width }) => width};
+const Input = styled.input<{ width?: string; icon?: string }>`
+  width: ${({ width }) => (width ? width : "100%")};
   padding: 16px;
   font-size: 1.6rem;
   line-height: 2rem;

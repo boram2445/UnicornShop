@@ -1,9 +1,9 @@
 import React, { useRef, useEffect } from "react";
 import { NormalBtn } from "../../common/Button/Button";
 import SelectInput from "../../common/SelectInput/SelectInput";
-import * as S from "./inputBoxStyle";
+import * as S from "./joinInputStyle";
 
-type InputProps = {
+interface InputProps {
   label: string;
   type: string;
   name: string;
@@ -14,19 +14,10 @@ type InputProps = {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   error?: string;
   onButton?: boolean;
-};
+}
 
 //일반, 버튼, 아이콘 입력 폼
-function InputBox({
-  icon,
-  width,
-  onClick,
-  onChange,
-  onButton,
-  error,
-  value,
-  ...props
-}: InputProps) {
+function InputBox({ onClick, onChange, onButton, error, value, ...props }: InputProps) {
   const inputRef = useRef() as React.MutableRefObject<HTMLInputElement>;
   //페이지 렌더링시 아이디 input에 focus
   useEffect(() => {
@@ -47,34 +38,32 @@ function InputBox({
       <S.Input
         {...props}
         id={props.name}
-        required
-        autoComplete="off"
         ref={inputRef}
         onChange={onChange}
-        width={width || "100%"}
-        icon={icon}
         value={value}
+        autoComplete="off"
+        required
       />
       {onButton?.toString() && (
         <NormalBtn onClick={handleBtnClick} disabled={!onButton} width="122px" padding="16px 0">
           {props.name === "username" ? "중복확인" : "인증"}
         </NormalBtn>
       )}
-      {value && error && <S.ErrorText>{error}</S.ErrorText>}
+      {value && error ? <S.ErrorText>{error}</S.ErrorText> : null}
     </S.InputBox>
   );
 }
 
-type InputPhoneProps = {
+//휴대폰 번호 입력 폼
+interface InputPhoneProps {
   onClick: (selected: string) => void;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   value1: string;
   value2: string;
   value3: string;
   error: string;
-};
+}
 
-//휴대폰 번호 입력 폼
 function InputPhone({ onClick, onChange, value1, value2, value3, error }: InputPhoneProps) {
   const selectItems = ["010", "011", "016", "017", "018", "019"];
 
@@ -95,20 +84,19 @@ function InputPhone({ onClick, onChange, value1, value2, value3, error }: InputP
           name="phone2"
           type="text"
           width="150px"
-          autoComplete="off"
-          required
           onChange={onChange}
           value={value2}
+          autoComplete="off"
+          required
         />
         <S.InputPhone
-          id="phone"
           name="phone3"
           type="text"
           width="150px"
-          autoComplete="off"
-          required
           onChange={onChange}
           value={value3}
+          autoComplete="off"
+          required
         />
       </div>
       {error && <S.ErrorText>{error}</S.ErrorText>}
@@ -116,14 +104,14 @@ function InputPhone({ onClick, onChange, value1, value2, value3, error }: InputP
   );
 }
 
-type InputEmailProps = {
+//이메일 입력 폼
+interface InputEmailProps {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   value1: string;
   value2: string;
   error: string;
-};
+}
 
-//이메일 입력 폼
 function InputEmail({ onChange, value1, value2, error }: InputEmailProps) {
   return (
     <S.InputEmailBox>
@@ -133,21 +121,20 @@ function InputEmail({ onChange, value1, value2, error }: InputEmailProps) {
         type="text"
         name="email1"
         width="218px"
-        autoComplete="off"
-        required
         onChange={onChange}
         value={value1}
+        autoComplete="off"
+        required
       />
       <span>@</span>
       <S.Input
-        id="email"
         type="text"
         name="email2"
         width="218px"
-        autoComplete="off"
-        required
         onChange={onChange}
         value={value2}
+        autoComplete="off"
+        required
       />
       {error && <S.ErrorText>{error}</S.ErrorText>}
     </S.InputEmailBox>
