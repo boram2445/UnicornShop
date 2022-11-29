@@ -6,7 +6,7 @@ import minusDisableIcon from "../../../assets/icons/icon-minus-line-disabled.svg
 import * as S from "./amountStyle";
 import { fetchPutCartQuantity, CartItem } from "../../../features/cartListSlice";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
-import { getToken } from "../../../features/authSlice";
+import { getToken } from "../../../features/loginSlice";
 
 interface AmountBtnProps {
   count?: number;

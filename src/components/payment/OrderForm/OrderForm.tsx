@@ -17,7 +17,7 @@ import FinalPayCheck from "../FinalPayCheck/FinalPayCheck";
 import PayMethod from "../PayMethod/PayMethod";
 import PostAddress from "../PostAddress/PostAddress";
 import * as S from "./orderFormStyle";
-import { getToken } from "../../../features/authSlice";
+import { getToken } from "../../../features/loginSlice";
 import { useNavigate } from "react-router-dom";
 
 function OrderForm() {

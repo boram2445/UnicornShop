@@ -31,6 +31,11 @@ function Modal({ children, onClickYes }: ModalProps) {
     }
   };
 
+  const handleYesBtn = () => {
+    onClickYes();
+    dispatch(closeModal());
+  };
+
   return ReactDOM.createPortal(
     <S.ModalBackGround ref={background} onClick={onBackgroundClick}>
       <S.ModalContainer>
@@ -48,7 +53,7 @@ function Modal({ children, onClickYes }: ModalProps) {
           >
             {BtnText.no}
           </NormalBtn>
-          <NormalBtn width="100px" fontSize="1.6rem" padding="8px" onClick={onClickYes}>
+          <NormalBtn width="100px" fontSize="1.6rem" padding="8px" onClick={handleYesBtn}>
             {BtnText.yes}
           </NormalBtn>
         </S.BtnWrap>

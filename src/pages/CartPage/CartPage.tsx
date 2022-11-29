@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { useNavigate } from "react-router-dom";
-import { getToken } from "../../features/authSlice";
+import { getToken } from "../../features/loginSlice";
 import { CircleCheckBtn } from "../../components/common/CheckBtn/CheckBtn";
 import { NormalBtn } from "../../components/common/Button/Button";
 import CartItem from "../../components/cart/CartItem/CartItem";

@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { getToken } from "../../../features/authSlice";
+import { getToken } from "../../../features/loginSlice";
 import {
   fetchPostItem,
   fetchPutSellerItem,
-  getSellerStatus,
   ItemPostType,
   reset,
   selectModifyId,

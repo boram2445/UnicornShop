@@ -6,7 +6,7 @@ import { NormalBtn } from "../../components/common/Button/Button";
 import AmountBtn from "../../components/common/AmountBtn/AmountBtn";
 import { selectProductById } from "../../features/productSlice";
 import * as S from "./detailPageStyle";
-import { getToken, selectUserType } from "../../features/authSlice";
+import { getToken, getLoginUserType } from "../../features/loginSlice";
 import DetailTab from "../../components/detail/DetailTab";
 
 function DetailPage() {
@@ -15,7 +15,7 @@ function DetailPage() {
   const dispatch = useAppDispatch();
   const detail = useAppSelector((state) => selectProductById(state, Number(productId)));
   const TOKEN = useAppSelector(getToken) || "";
-  const USER_TYPE = useAppSelector(selectUserType);
+  const USER_TYPE = useAppSelector(getLoginUserType);
   const [selectedCount, setSelectedCount] = useState(1);
 
   const getProductCount = (res: number) => {

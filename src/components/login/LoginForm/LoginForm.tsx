@@ -4,7 +4,7 @@ import {
   fetchPostLogin,
   getLoginStatus,
   getLoginError,
-  getUserType,
+  getLoginUserType,
 } from "../../../features/loginSlice";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
 import { NormalBtn } from "../../common/Button/Button";
@@ -25,7 +25,7 @@ function LoginForm() {
   const [message, setMessage] = useState("");
 
   const loginStatus = useAppSelector(getLoginStatus);
-  const loginType = useAppSelector(getUserType);
+  const loginType = useAppSelector(getLoginUserType);
   const loginError = useAppSelector(getLoginError);
 
   useEffect(() => {

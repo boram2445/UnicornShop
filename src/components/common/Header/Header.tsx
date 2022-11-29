@@ -6,7 +6,8 @@ import cartIcon from "../../../assets/icons/icon-shopping-cart.svg";
 import userIcon from "../../../assets/icons/icon-user.svg";
 import searchIcon from "../../../assets/icons/search.svg";
 import shoppingBag from "../../../assets/icons/icon-shopping-bag.svg";
-import { getToken, logout, resetAll, selectUserType } from "../../../features/authSlice";
+import { getToken, logout, getLoginUserType } from "../../../features/loginSlice";
+import { resetAll } from "../../../features/registerSlice";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
 import { NormalBtn } from "../Button/Button";
 import ArrowModal from "../ArrowModal/ArrowModal";
@@ -15,7 +16,7 @@ export function Header() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const TOKEN = useAppSelector(getToken);
-  const USER = useAppSelector(selectUserType);
+  const USER = useAppSelector(getLoginUserType);
 
   const onLogout = () => {
     dispatch(logout());
@@ -25,9 +26,21 @@ export function Header() {
 
   const [onArrowModal, setArrowModal] = useState(false);
   const arrowList = [
-    { label: "마이페이지", onClick: () => navigate("/") },
+    { label: "마이페이지", onClick: () => navigate("/mypage") },
     { label: "로그아웃", onClick: () => onLogout() },
   ];
+
+  const [searchContent, setSearchContent] = useState("");
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchContent(e.target.value);
+  };
+
+  const handleSerachBtn = () => {
+    console.log(searchContent);
+    if (searchContent) {
+      // dispatch(fetchGetSearchProducts(searchContent));
+    }
+  };
 
   return (
     <S.HeaderContainer>
@@ -36,8 +49,8 @@ export function Header() {
           <S.Logo onClick={() => navigate("/")}>
             <img src={logo} alt="유니콘 마켓 로고" />
           </S.Logo>
-          <S.Input type="text" placeholder="상품을 검색해보세요!" />
-          <S.InputBtn type="button">
+          <S.Input type="text" placeholder="상품을 검색해보세요!" onChange={handleSearch} />
+          <S.InputBtn type="button" onClick={handleSerachBtn}>
             <img src={searchIcon} alt="검색" />
           </S.InputBtn>
         </S.LeftWrap>

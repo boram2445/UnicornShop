@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getToken, selectUserType } from "../../../features/authSlice";
+import { getLoginUserType, getToken } from "../../../features/loginSlice";
 import {
   fetchDeleteSellerItem,
   fetchGetSellerProduct,
@@ -15,7 +15,7 @@ import * as S from "./chartStyle";
 function Chart() {
   const dispatch = useAppDispatch();
   const TOKEN = useAppSelector(getToken);
-  const USER_TYPE = useAppSelector(selectUserType);
+  const USER_TYPE = useAppSelector(getLoginUserType);
 
   const sellerStatus = useAppSelector(getSellerStatus);
   const products = useAppSelector(selectSellerProducts);

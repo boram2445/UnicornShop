@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { TabMenuBtn } from "../../components/common/Button/Button";
 import Chart from "../../components/common/Chart/Chart";
-import { getToken, selectUserType } from "../../features/authSlice";
+import { getToken, getLoginUserType } from "../../features/loginSlice";
 import { fetchPostOrderList, selectOrderedInfo } from "../../features/orderSlice";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import * as S from "./myPageStyle";
@@ -9,7 +9,7 @@ import * as S from "./myPageStyle";
 function MyPage() {
   const dispatch = useAppDispatch();
   const TOKEN = useAppSelector(getToken);
-  const USER_TYPE = useAppSelector(selectUserType);
+  const USER_TYPE = useAppSelector(getLoginUserType);
   const orderedInfo = useAppSelector(selectOrderedInfo);
 
   useEffect(() => {
