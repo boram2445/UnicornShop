@@ -6,7 +6,7 @@ const LabelBox = styled.div`
   justify-content: center;
 `;
 
-const CheckBox = styled.input`
+const CheckInput = styled.input`
   height: 16px;
   width: 16px;
   border-radius: 3px;
@@ -25,4 +25,4 @@ const LabelText = styled.label<{ color?: string }>`
   }
 `;
 
-export { LabelBox, CheckBox, LabelText };
+export { LabelBox, CheckInput, LabelText };

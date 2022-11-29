@@ -10,7 +10,7 @@ type CheckLabelProps = {
 function CheckLabel({ children, color, onChange }: CheckLabelProps) {
   return (
     <S.LabelBox>
-      <S.CheckBox type="checkbox" id="check" onChange={onChange} />
+      <S.CheckInput type="checkbox" id="check" onChange={onChange} required />
       <S.LabelText htmlFor="check" color={color}>
         {children}
       </S.LabelText>
