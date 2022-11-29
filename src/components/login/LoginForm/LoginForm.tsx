@@ -60,7 +60,7 @@ function LoginForm() {
     dispatch(fetchPostLogin(userData));
   };
 
-  if (loginStatus === "Loading") {
+  if (loginStatus === "loading") {
     return <Spinner />;
   }
 

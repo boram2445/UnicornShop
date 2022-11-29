@@ -8,30 +8,30 @@ const item = sessionStorage.getItem("token");
 const TOKEN = item === null ? null : JSON.parse(item).token;
 const USER_TYPE = item === null ? null : JSON.parse(item).user_type;
 
-interface IPostLogin {
+interface LoginData {
   username: string;
   password: string;
   login_type: string;
 }
 
-interface ILoginState {
+interface LoginState {
   token?: string | null;
   userType: string;
-  loginStatus: string;
+  status: string;
   error: string;
 }
 
-const initialState: ILoginState = {
+const initialState: LoginState = {
   token: TOKEN ? TOKEN : null,
   userType: USER_TYPE ? USER_TYPE : "BUYER",
-  loginStatus: "idle",
+  status: "idle",
   error: "",
 };
 
 //로그인
 export const fetchPostLogin = createAsyncThunk(
   "login/fetchPostLogin",
-  async ({ username, password, login_type }: IPostLogin, { rejectWithValue }) => {
+  async ({ username, password, login_type }: LoginData, { rejectWithValue }) => {
     try {
       const data = { username, password, login_type };
       const result = await axios.post(`${BASE_URL}/accounts/login/`, data);
@@ -63,14 +63,14 @@ export const loginSlice = createSlice({
   extraReducers: (builder) => {
     //로그인
     builder.addCase(fetchPostLogin.pending, (state) => {
-      state.loginStatus = "Loading";
+      state.status = "loading";
     });
     builder.addCase(fetchPostLogin.fulfilled, (state, action) => {
-      state.loginStatus = "succeeded";
+      state.status = "succeeded";
       state.token = action.payload.token || "";
     });
     builder.addCase(fetchPostLogin.rejected, (state, action) => {
-      state.loginStatus = "failed";
+      state.status = "failed";
       if (action.payload) {
         state.error = (action.payload as string) && "아이디 또는 패스워드가 일치하지 않습니다.";
       } else {
@@ -85,7 +85,7 @@ export const loginSlice = createSlice({
 });
 
 export const getToken = (state: RootState) => state.login.token;
-export const getLoginStatus = (state: RootState) => state.login.loginStatus;
+export const getLoginStatus = (state: RootState) => state.login.status;
 export const getLoginError = (state: RootState) => state.login.error;
 export const getUserType = (state: RootState) => state.login.userType;
 
