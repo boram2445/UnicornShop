@@ -8,7 +8,7 @@ const item = sessionStorage.getItem("token");
 const TOKEN = item === null ? null : JSON.parse(item).token;
 const USER_TYPE = item === null ? null : JSON.parse(item).user_type;
 
-interface LoginData {
+interface LoginPostData {
   username: string;
   password: string;
   login_type: string;
@@ -31,7 +31,7 @@ const initialState: LoginState = {
 //로그인
 export const fetchPostLogin = createAsyncThunk(
   "login/fetchPostLogin",
-  async ({ username, password, login_type }: LoginData, { rejectWithValue }) => {
+  async ({ username, password, login_type }: LoginPostData, { rejectWithValue }) => {
     try {
       const data = { username, password, login_type };
       const result = await axios.post(`${BASE_URL}/accounts/login/`, data);
@@ -56,7 +56,7 @@ export const loginSlice = createSlice({
   name: "login",
   initialState,
   reducers: {
-    setUserType: (state, action) => {
+    setLoginUserType: (state, action) => {
       state.userType = action.payload;
     },
   },
@@ -87,8 +87,8 @@ export const loginSlice = createSlice({
 export const getToken = (state: RootState) => state.login.token;
 export const getLoginStatus = (state: RootState) => state.login.status;
 export const getLoginError = (state: RootState) => state.login.error;
-export const getUserType = (state: RootState) => state.login.userType;
+export const getLoginUserType = (state: RootState) => state.login.userType;
 
-export const { setUserType } = loginSlice.actions;
+export const { setLoginUserType } = loginSlice.actions;
 
 export default loginSlice.reducer;
