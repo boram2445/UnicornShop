@@ -64,6 +64,10 @@ const NavButton = styled.button<{ color?: string }>`
   }
 `;
 
+const MyPageWrap = styled.div`
+  position: relative;
+`;
+
 // Center Header
 const CenterContents = styled(HeaderContents)`
   max-width: 1380px;
@@ -95,4 +99,5 @@ export {
   SmallLogo,
   TitleText,
   CenterContents,
+  MyPageWrap,
 };

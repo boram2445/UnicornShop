@@ -73,11 +73,13 @@ export function Header() {
           <S.RightWrap>
             {USER === "SELLER" ? (
               <>
-                <S.NavButton onClick={() => setArrowModal(!onArrowModal)} color={myPageIconColor}>
-                  <UserIcon stroke={myPageIconColor} />
-                  <span>마이페이지</span>
+                <S.MyPageWrap>
+                  <S.NavButton onClick={() => setArrowModal(!onArrowModal)} color={myPageIconColor}>
+                    <UserIcon stroke={myPageIconColor} />
+                    <span>마이페이지</span>
+                  </S.NavButton>
                   <ArrowModal on={onArrowModal} list={arrowList} />
-                </S.NavButton>
+                </S.MyPageWrap>
                 <NormalBtn
                   onClick={() => navigate("/center")}
                   icon={shoppingBag}
@@ -96,11 +98,13 @@ export function Header() {
                   <CartIcon stroke={cartIconColor} />
                   <span>장바구니</span>
                 </S.NavButton>
-                <S.NavButton onClick={() => setArrowModal(!onArrowModal)} color={myPageIconColor}>
-                  <UserIcon stroke={myPageIconColor} />
-                  <span>마이페이지</span>
+                <S.MyPageWrap>
+                  <S.NavButton onClick={() => setArrowModal(!onArrowModal)} color={myPageIconColor}>
+                    <UserIcon stroke={myPageIconColor} />
+                    <span>마이페이지</span>
+                  </S.NavButton>
                   <ArrowModal on={onArrowModal} list={arrowList} />
-                </S.NavButton>
+                </S.MyPageWrap>
               </>
             )}
           </S.RightWrap>
