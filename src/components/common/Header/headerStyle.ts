@@ -18,7 +18,11 @@ const LeftWrap = styled.div`
   position: relative;
 `;
 
-const Logo = styled.h1`
+const Logo = styled.h1<{ logoUrl: string }>`
+  width: 124px;
+  height: 38px;
+  background: url(${({ logoUrl }) => logoUrl}) no-repeat center;
+  background-size: cover;
   cursor: pointer;
 `;
 
@@ -31,19 +35,21 @@ const Input = styled.input`
   font-size: 1.6rem;
 `;
 
-const InputBtn = styled.button`
+const InputBtn = styled.button<{ icon: string }>`
   padding: 0;
+  width: 28px;
   height: 28px;
   position: absolute;
   right: 22px;
+  background: url(${({ icon }) => icon}) no-repeat center;
 `;
 
-const RightWrap = styled.ul`
+const RightWrap = styled.div`
   display: flex;
   gap: 26px;
 `;
 
-const NavButton = styled.li`
+const NavButton = styled.button<{ color?: string }>`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -52,8 +58,10 @@ const NavButton = styled.li`
   position: relative;
   max-width: 60px;
   cursor: pointer;
-  color: #767676;
   font-size: 1.2rem;
+  span {
+    color: ${({ color }) => color};
+  }
 `;
 
 // Center Header
@@ -64,10 +72,8 @@ const CenterContents = styled(HeaderContents)`
 `;
 
 const SmallLogo = styled(Logo)`
-  img {
-    width: 80px;
-    height: 30px;
-  }
+  width: 80px;
+  height: 24px;
 `;
 
 const TitleText = styled.h2`

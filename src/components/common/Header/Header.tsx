@@ -1,20 +1,22 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import * as S from "./headerStyle";
-import logo from "../../../assets/icons/Logo-hodu.svg";
-import cartIcon from "../../../assets/icons/icon-shopping-cart.svg";
-import userIcon from "../../../assets/icons/icon-user.svg";
-import searchIcon from "../../../assets/icons/search.svg";
-import shoppingBag from "../../../assets/icons/icon-shopping-bag.svg";
+import { useLocation, useNavigate } from "react-router-dom";
 import { getToken, logout, getLoginUserType } from "../../../features/loginSlice";
 import { resetAll } from "../../../features/registerSlice";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
 import { NormalBtn } from "../Button/Button";
+import logo from "../../../assets/icons/Logo-hodu.svg";
+import searchIcon from "../../../assets/icons/search.svg";
+import shoppingBag from "../../../assets/icons/icon-shopping-bag.svg";
+import { ReactComponent as CartIcon } from "../../../assets/icons/icon-shopping-cart.svg";
+import { ReactComponent as UserIcon } from "../../../assets/icons/icon-user.svg";
 import ArrowModal from "../ArrowModal/ArrowModal";
+import * as S from "./headerStyle";
 
 export function Header() {
+  const { pathname } = useLocation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+
   const TOKEN = useAppSelector(getToken);
   const USER = useAppSelector(getLoginUserType);
 
@@ -42,36 +44,35 @@ export function Header() {
     }
   };
 
+  const CartIconColor = pathname.includes("cart") ? "#FA897B" : "#767676";
+  const MyPageIconColor = pathname.includes("mypage") || onArrowModal ? "#FA897B" : "#767676";
+
   return (
     <S.HeaderContainer>
       <S.HeaderContents>
         <S.LeftWrap>
-          <S.Logo onClick={() => navigate("/")}>
-            <img src={logo} alt="유니콘 마켓 로고" />
-          </S.Logo>
+          <S.Logo logoUrl={logo} onClick={() => navigate("/")} />
           <S.Input type="text" placeholder="상품을 검색해보세요!" onChange={handleSearch} />
-          <S.InputBtn type="button" onClick={handleSerachBtn}>
-            <img src={searchIcon} alt="검색" />
-          </S.InputBtn>
+          <S.InputBtn type="button" onClick={handleSerachBtn} icon={searchIcon} />
         </S.LeftWrap>
         <S.RightWrap>
           {TOKEN ? (
             USER === "BUYER" ? (
               <>
-                <S.NavButton onClick={() => navigate("/cart")}>
-                  <img src={cartIcon} />
+                <S.NavButton onClick={() => navigate("/cart")} color={CartIconColor}>
+                  <CartIcon stroke={CartIconColor} />
                   <span>장바구니</span>
                 </S.NavButton>
-                <S.NavButton onClick={() => setArrowModal(!onArrowModal)}>
-                  <img src={userIcon} />
+                <S.NavButton onClick={() => setArrowModal(!onArrowModal)} color={MyPageIconColor}>
+                  <UserIcon stroke={MyPageIconColor} />
                   <span>마이페이지</span>
                   <ArrowModal on={onArrowModal} list={arrowList} />
                 </S.NavButton>
               </>
             ) : (
               <>
-                <S.NavButton onClick={() => setArrowModal(!onArrowModal)}>
-                  <img src={userIcon} />
+                <S.NavButton onClick={() => setArrowModal(!onArrowModal)} color={MyPageIconColor}>
+                  <UserIcon stroke={MyPageIconColor} />
                   <span>마이페이지</span>
                   <ArrowModal on={onArrowModal} list={arrowList} />
                 </S.NavButton>
@@ -86,8 +87,8 @@ export function Header() {
               </>
             )
           ) : (
-            <S.NavButton onClick={() => navigate("/login")}>
-              <img src={userIcon} />
+            <S.NavButton onClick={() => navigate("/login")} color={MyPageIconColor}>
+              <UserIcon stroke={MyPageIconColor} />
               <span>로그인</span>
             </S.NavButton>
           )}
@@ -103,9 +104,7 @@ export function CenterHeader() {
   return (
     <S.HeaderContainer>
       <S.CenterContents>
-        <S.SmallLogo onClick={() => navigate("/")}>
-          <img src={logo} alt="유니콘 마켓 로고" />
-        </S.SmallLogo>
+        <S.SmallLogo logoUrl={logo} onClick={() => navigate("/")} />
         <S.TitleText>판매자 센터</S.TitleText>
       </S.CenterContents>
     </S.HeaderContainer>
