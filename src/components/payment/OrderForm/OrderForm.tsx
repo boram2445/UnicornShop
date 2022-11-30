@@ -10,7 +10,7 @@ import {
 import { closeModal, openModal, selectOpenState } from "../../../features/modalSlice";
 import { selectOrderItems, reset } from "../../../features/orderSlice";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
-import { limitInputLength } from "../../../utils/checkInputValid";
+import  limitLength  from "../../../utils/limitLength";
 import { NormalBtn } from "../../common/Button/Button";
 import SelectInput from "../../common/SelectInput/SelectInput";
 import FinalPayCheck from "../FinalPayCheck/FinalPayCheck";
@@ -93,11 +93,11 @@ function OrderForm() {
   const limitInputValue = (name: string, value: string) => {
     let newValue = "";
     if (name === "name") {
-      newValue = limitInputLength(value, 10);
+      newValue = limitLength(value, 10);
     } else if (name === "phone1") {
-      newValue = limitInputLength(value, 3).replace(/[^0-9]/g, "");
+      newValue = limitLength(value, 3).replace(/[^0-9]/g, "");
     } else if (name === "phone2" || name === "phone3") {
-      newValue = limitInputLength(value, 4).replace(/[^0-9]/g, "");
+      newValue = limitLength(value, 4).replace(/[^0-9]/g, "");
     } else {
       newValue = value;
     }

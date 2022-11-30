@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import * as S from "./inputBoxStyle";
-import { limitInputLength } from "../../../utils/checkInputValid";
+import limitLength from "../../../utils/limitLength";
 
 interface TextInputProps {
   label: string;
@@ -13,7 +13,7 @@ function TextInput({ label, name, value, handleOnChange }: TextInputProps) {
   const [inputText, setInputText] = useState(value);
 
   const handleTextInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = limitInputLength(e.target.value, 20);
+    const value = limitLength(e.target.value, 20);
     handleOnChange(name, value);
     setInputText(value);
   };
@@ -40,7 +40,7 @@ interface NumInputProps {
 function NumInput({ label, name, unit, value, handleOnChange }: NumInputProps) {
   const [priceText, setPriceText] = useState(value);
   const handlePriceInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = limitInputLength(e.target.value, 10).replace(/[^0-9]/g, "");
+    const value = limitLength(e.target.value, 10).replace(/[^0-9]/g, "");
     handleOnChange(name, Number(value));
     setPriceText(Number(value));
   };

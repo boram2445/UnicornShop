@@ -19,12 +19,22 @@ import {
   resetCompany,
   RegisterPostData,
 } from "../../../features/registerSlice";
-import { handleInputError, limitInputLength } from "../../../utils/checkInputValid";
 import ToggleBtn from "../../common/ToggleBtn/ToggleBtn";
 import CheckLabel from "../../common/CheckLabel/CheckLabel";
 import checkOnIcon from "../../../assets/icons/icon-check-on.svg";
 import checkOffIcon from "../../../assets/icons/icon-check-off.svg";
 import Spinner from "../../common/Spinner/Spinner";
+import limitLength from "../../../utils/limitLength";
+import {
+  email1RegExp,
+  email2RegExp,
+  idRegExp,
+  nameRegExp,
+  passwordRegExp,
+  phone1RegExp,
+  phone2RegExp,
+  phone3RegExp,
+} from "../../../utils/regExp";
 import * as S from "./joinFormStyle";
 
 function JoinForm() {
@@ -103,9 +113,9 @@ function JoinForm() {
     if (nameStatus !== "idle") dispatch(resetName());
     else {
       const { name, value } = e.target;
-      const newValue = limitInputLength(value, 20);
+      const newValue = limitLength(value, 20);
       const message = "* 아이디는 3-20자 이내의 영어 소문자, 대문자, 숫자만 가능합니다.";
-      const error = handleInputError(name, newValue, message);
+      const error = newValue.match(idRegExp) ? "" : message;
       setFormValues({ ...formValues, [name]: newValue });
       setErrorMessage({ ...errorMessage, [name]: error });
       error ? setNameVaildBtn(false) : setNameVaildBtn(true);
@@ -115,9 +125,9 @@ function JoinForm() {
   //비밀번호
   const onChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    const newValue = limitInputLength(value, 20);
+    const newValue = limitLength(value, 20);
     const message = "비밀번호는 영문, 숫자 조합 8-20자리를 입력해주세요.";
-    const error = handleInputError(name, newValue, message);
+    const error = newValue.match(passwordRegExp) ? "" : message;
     setFormValues({ ...formValues, [name]: newValue });
     setErrorMessage({ ...errorMessage, [name]: error });
 
@@ -129,7 +139,7 @@ function JoinForm() {
   //비밀번호 재확인
   const onChangeConfirmPassword = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    const newValue = limitInputLength(value, 20);
+    const newValue = limitLength(value, 20);
     const message =
       value && (value === formValues.password ? "" : "* 비밀번호가 일치하지 않습니다.");
     setFormValues({ ...formValues, [name]: newValue });
@@ -139,10 +149,10 @@ function JoinForm() {
   //이름
   const onChangeName = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    const newValue = limitInputLength(value, 10);
+    const newValue = limitLength(value, 10);
     setFormValues({ ...formValues, [name]: newValue });
     const message = "* 이름은 한글 혹은 영어로 10자리까지 가능합니다.";
-    const error = handleInputError(name, newValue, message);
+    const error = newValue.match(nameRegExp) ? "" : message;
     setErrorMessage({ ...errorMessage, [name]: error });
   };
 
@@ -154,9 +164,10 @@ function JoinForm() {
   const onChangePhone = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     //숫자 4자리만 입력 가능
-    const newValue = limitInputLength(value, 4).replace(/[^0-9]/g, "");
+    const newValue = limitLength(value, 4).replace(/[^0-9]/g, "");
     const message = "* 휴대폰번호 입력 형식을 확인해주세요";
-    const error = handleInputError(name, newValue, message);
+    const regExp = name === "phone2" ? phone2RegExp : phone3RegExp;
+    const error = newValue.match(regExp) ? "" : message;
     setFormValues({ ...formValues, [name]: newValue });
     setErrorMessage({ ...errorMessage, ["phone"]: error });
   };
@@ -166,7 +177,8 @@ function JoinForm() {
     const { name, value } = e.target;
     const message = "* 이메일 형식을 확인해 주세요";
     setFormValues({ ...formValues, [name]: value });
-    const error = handleInputError(name, value, message);
+    const regExp = name === "email1" ? email1RegExp : email2RegExp;
+    const error = value.match(regExp) ? "" : message;
     setErrorMessage({ ...errorMessage, ["email"]: error });
   };
 
@@ -185,7 +197,7 @@ function JoinForm() {
     if (companyStatus === "succeeded") dispatch(resetCompany());
     else {
       const { name, value } = e.target;
-      const newValue = limitInputLength(value, 10).replace(/[^0-9]/g, "");
+      const newValue = limitLength(value, 10).replace(/[^0-9]/g, "");
       setSellerValues({ ...sellerValues, [name]: newValue });
       const message = "사업자 등록 번호는 숫자 10자로 이루어져야 합니다.";
       if (newValue.length > 0 && newValue.length < 10) {
