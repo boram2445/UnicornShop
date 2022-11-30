@@ -9,38 +9,40 @@ const pageList = styled.ul`
 
 const pageItem = styled.li<{ on?: string }>`
   margin: 0.4rem 0.5rem;
-  width: 30px;
-  line-height: 3rem;
+  width: 40px;
+  height: 40px;
+  line-height: 4rem;
   text-align: center;
-  font-size: 2.2rem;
+  font-size: 1.8rem;
   font-weight: 500;
+  border-radius: 50%;
   cursor: pointer;
-  &:hover {
-    color: var(--color-main);
-  }
   ${({ on }) => {
     if (on === "true") {
       return css`
-        background-color: var(--color-main);
+        background-color: rgba(0, 0, 0, 0.2);
         color: var(--color-white);
-        border-radius: 5px;
-        :hover {
-          color: var(--color-white);
+      `;
+    } else {
+      return css`
+        &:hover {
+          background-color: rgba(0, 0, 0, 0.1);
         }
       `;
     }
   }}
 `;
 
-const ArrowItem = styled.li<{ icon: string }>`
-  margin: auto 0.8rem;
+const ArrowBtn = styled.button`
   width: 30px;
   height: 30px;
-  background: url(${({ icon }) => icon}) no-repeat center;
   cursor: pointer;
   &:hover {
-    transform: scale(1.2);
+    transform: scale(1.1);
+  }
+  &:disabled {
+    cursor: default;
   }
 `;
 
-export { pageList, pageItem, ArrowItem };
+export { pageList, pageItem, ArrowBtn };
