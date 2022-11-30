@@ -1,12 +1,10 @@
 import React, { useState } from "react";
-import plusIcon from "../../../assets/icons/icon-plus-line.svg";
-import minusIcon from "../../../assets/icons/icon-minus-line.svg";
-import plusDisableIcon from "../../../assets/icons/icon-plus-line-disabled.svg";
-import minusDisableIcon from "../../../assets/icons/icon-minus-line-disabled.svg";
-import * as S from "./amountStyle";
+import { getToken } from "../../../features/loginSlice";
 import { fetchPutCartQuantity, CartItem } from "../../../features/cartListSlice";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
-import { getToken } from "../../../features/loginSlice";
+import { ReactComponent as PlusIcon } from "../../../assets/icons/icon-plus-line.svg";
+import { ReactComponent as MinusIcon } from "../../../assets/icons/icon-minus-line.svg";
+import * as S from "./amountStyle";
 
 interface AmountBtnProps {
   count?: number;
@@ -53,11 +51,11 @@ function AmountBtn({ count, getCount, item, stock }: AmountBtnProps) {
   return (
     <S.AmountBtnBox>
       <S.MinusBtn onClick={onDecrease} disabled={amount <= 1}>
-        <img src={amount > 1 ? minusIcon : minusDisableIcon} />
+        <MinusIcon stroke={amount > 1 ? "#767676" : "#F2F2F2"} />
       </S.MinusBtn>
       <S.AmountText>{amount}</S.AmountText>
       <S.PlusBtn onClick={onIncrease} disabled={!onIncreaseBtn}>
-        <img src={onIncreaseBtn ? plusIcon : plusDisableIcon} />
+        <PlusIcon stroke={onIncreaseBtn ? "#767676" : "#F2F2F2"} />
       </S.PlusBtn>
     </S.AmountBtnBox>
   );
