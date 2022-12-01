@@ -118,7 +118,7 @@ export const orderSlice = createSlice({
   initialState,
   reducers: {
     reset: () => initialState,
-    getOrderItem: (state, action) => {
+    setOrderItem: (state, action) => {
       const orderInfo: { type: string; items: CartItem[] } = action.payload;
       state.order_kind = orderInfo.type;
       state.orderItems = orderInfo.items;
@@ -159,12 +159,12 @@ export const orderSlice = createSlice({
 export const getOrderStatus = (state: RootState) => state.order.status;
 export const getOrderError = (state: RootState) => state.order.error;
 
-export const selectOrderItems = (state: RootState) => state.order.orderItems;
-export const selectTotalPrice = (state: RootState) => state.order.totalPrice;
-export const selectDeliveryPrice = (state: RootState) => state.order.shippingfee;
-export const selectOrderType = (state: RootState) => state.order.order_kind;
+export const getTotalPrice = (state: RootState) => state.order.totalPrice;
+export const getDeliveryPrice = (state: RootState) => state.order.shippingfee;
 
+export const selectOrderItems = (state: RootState) => state.order.orderItems;
+export const selectOrderType = (state: RootState) => state.order.order_kind;
 export const selectOrderedInfo = (state: RootState) => state.order.orderedInfo;
 
-export const { reset, getOrderItem } = orderSlice.actions;
+export const { reset, setOrderItem } = orderSlice.actions;
 export default orderSlice.reducer;

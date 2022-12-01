@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { CartInfoBox as InfoBox, InfoText } from "../CartPage/cartPageStyle";
+import { CartInfoBox as InfoBox } from "../CartPage/cartPageStyle";
 
 const PaymentSection = styled.section`
   margin: 30px auto;
@@ -26,9 +26,10 @@ const CartInfoBox = styled(InfoBox)`
   grid-template-columns: 140px 3fr 1fr 1fr 1fr;
 `;
 
-const Text = styled(InfoText)`
+const Text = styled.p`
   position: static;
   text-align: center;
+  left: 364px;
 `;
 
 const TotalPayText = styled.p`

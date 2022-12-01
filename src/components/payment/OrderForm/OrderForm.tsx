@@ -3,14 +3,14 @@ import {
   fetchPostOrder,
   getOrderError,
   getOrderStatus,
-  selectDeliveryPrice,
   selectOrderType,
-  selectTotalPrice,
+  getDeliveryPrice,
+  getTotalPrice,
 } from "../../../features/orderSlice";
 import { closeModal, openModal, selectOpenState } from "../../../features/modalSlice";
 import { selectOrderItems, reset } from "../../../features/orderSlice";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
-import  limitLength  from "../../../utils/limitLength";
+import limitLength from "../../../utils/limitLength";
 import { NormalBtn } from "../../common/Button/Button";
 import SelectInput from "../../common/SelectInput/SelectInput";
 import FinalPayCheck from "../FinalPayCheck/FinalPayCheck";
@@ -28,8 +28,8 @@ function OrderForm() {
   const TOKEN = useAppSelector(getToken) || "";
 
   const orderedItems = useAppSelector(selectOrderItems);
-  const totalPrice = useAppSelector(selectTotalPrice);
-  const deliveryPrice = useAppSelector(selectDeliveryPrice);
+  const totalPrice = useAppSelector(getTotalPrice);
+  const deliveryPrice = useAppSelector(getDeliveryPrice);
   const orderType = useAppSelector(selectOrderType);
 
   const phoneSelect = ["010", "011", "016", "017", "018", "019"];

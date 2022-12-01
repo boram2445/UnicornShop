@@ -1,5 +1,5 @@
 import React from "react";
-import { selectDeliveryPrice, selectTotalPrice } from "../../../features/orderSlice";
+import { getDeliveryPrice, getTotalPrice } from "../../../features/orderSlice";
 import { useAppSelector } from "../../../hooks";
 import { NormalBtn } from "../../common/Button/Button";
 import CheckLabel from "../../common/CheckLabel/CheckLabel";
@@ -11,8 +11,9 @@ interface FinalCheckProps {
 }
 
 function FinalPayCheck({ canOrder, onChange }: FinalCheckProps) {
-  const totalPrice = useAppSelector(selectTotalPrice);
-  const deliveryPrice = useAppSelector(selectDeliveryPrice);
+  const totalPrice = useAppSelector(getTotalPrice);
+  const deliveryPrice = useAppSelector(getDeliveryPrice);
+
   return (
     <S.FinalPaySection>
       <S.Title>최종결제 정보</S.Title>

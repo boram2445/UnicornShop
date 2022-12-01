@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { CartItem } from "../../features/cartListSlice";
 import { useAppDispatch, useAppSelector } from "../../hooks";
-import { getOrderItem, selectOrderItems, selectTotalPrice } from "../../features/orderSlice";
+import { setOrderItem, selectOrderItems, getTotalPrice } from "../../features/orderSlice";
 import OrderForm from "../../components/payment/OrderForm/OrderForm";
 import OrderItem from "../../components/payment/OrderItem/OrderItem";
 import * as S from "./paymentPageStyle";
@@ -9,13 +9,13 @@ import * as S from "./paymentPageStyle";
 function PaymentPage() {
   const dispatch = useAppDispatch();
   const orderedItems = useAppSelector(selectOrderItems);
-  const totalPrice = useAppSelector(selectTotalPrice);
+  const totalPrice = useAppSelector(getTotalPrice);
 
   useEffect(() => {
     const orderInfo: { type: string; items: CartItem[] } = JSON.parse(
       sessionStorage.getItem("order") || "{}"
     );
-    dispatch(getOrderItem(orderInfo));
+    dispatch(setOrderItem(orderInfo));
   }, []);
 
   return (
