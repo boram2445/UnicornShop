@@ -17,12 +17,12 @@ export interface Item {
   stock: number;
 }
 
-type CartInfo = {
-  count: number;
-  next: string | null;
-  previous: string | null;
-  results: CartItem[];
-};
+// interface CartInfo {
+//   count: number;
+//   next: string | null;
+//   previous: string | null;
+//   results: CartItem[];
+// };
 
 export interface CartItem {
   my_cart: number;
@@ -34,15 +34,15 @@ export interface CartItem {
   item: Item;
 }
 
-interface PutItemCount {
+interface CountPutData {
   TOKEN: string;
-  is_active: boolean;
   cart_item_id: number;
   product_id: number;
   quantity: number;
+  is_active: boolean;
 }
 
-interface CartListType {
+interface CartListState {
   status: string;
   detailStatus: string;
   cartItems: CartItem[];
@@ -51,7 +51,7 @@ interface CartListType {
   error: string;
 }
 
-const initialState: CartListType = {
+const initialState: CartListState = {
   status: "idle",
   detailStatus: "idle",
   cartItems: [],
@@ -100,23 +100,15 @@ export const fetchGetDetail = createAsyncThunk(
 //장바구니 수량 수정
 export const fetchPutCartQuantity = createAsyncThunk(
   "cartList/fetchPutCartQuantity",
-  async ({ TOKEN, product_id, quantity, cart_item_id, is_active }: PutItemCount) => {
-    try {
-      const config = {
-        headers: {
-          Authorization: `JWT ${TOKEN}`,
-        },
-      };
-      const data = { product_id, quantity, is_active };
-      const result = await axios.put(`${BASE_URL}/cart/${cart_item_id}/`, data, config);
-      return result.data;
-    } catch (err) {
-      if (err instanceof Error) {
-        console.log(err.message);
-      } else {
-        console.log("Unexpected error", err);
-      }
-    }
+  async ({ TOKEN, product_id, quantity, cart_item_id, is_active }: CountPutData) => {
+    const config = {
+      headers: {
+        Authorization: `JWT ${TOKEN}`,
+      },
+    };
+    const data = { product_id, quantity, is_active };
+    const result = await axios.put(`${BASE_URL}/cart/${cart_item_id}/`, data, config);
+    return result.data;
   }
 );
 
@@ -130,11 +122,7 @@ export const cartListSlice = createSlice({
       const { productId, isChecked } = payload;
       state.cartItems.map((item) => {
         if (item.product_id === productId) {
-          if (isChecked === true) {
-            item.isChecked = true;
-          } else if (isChecked === false) {
-            item.isChecked = false;
-          }
+          isChecked ? (item.isChecked = true) : (item.isChecked = false);
         }
       });
     },
@@ -142,15 +130,11 @@ export const cartListSlice = createSlice({
     checkAllItem: (state, { payload }) => {
       const { isChecked } = payload;
       state.cartItems.map((item) => {
-        if (isChecked === true) {
-          item.isChecked = true;
-        } else if (isChecked === false) {
-          item.isChecked = false;
-        }
+        isChecked ? (item.isChecked = true) : (item.isChecked = false);
       });
     },
-    // 전체 가격 가져오기
-    getTotalPrice: (state) => {
+    // 전체 가격 계산
+    setTotalPrice: (state) => {
       let totalPrice = 0;
       let deliveryPrice = 0;
       state.cartItems.map((item) => {
@@ -166,12 +150,11 @@ export const cartListSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(fetchGetCartList.pending, (state) => {
       state.status = "Loading";
-    });
-    builder.addCase(fetchGetCartList.fulfilled, (state, action: PayloadAction<CartInfo>) => {
-      const { results } = action.payload;
-      state.status = "succeeded";
       state.error = "";
-      state.cartItems = results;
+    });
+    builder.addCase(fetchGetCartList.fulfilled, (state, action) => {
+      state.status = "succeeded";
+      state.cartItems = action.payload.results;
     });
     builder.addCase(fetchGetCartList.rejected, (state, action) => {
       state.status = "failed";
@@ -180,11 +163,11 @@ export const cartListSlice = createSlice({
     //디테일 가져오기
     builder.addCase(fetchGetDetail.pending, (state) => {
       state.detailStatus = "Loading";
+      state.error = "";
     });
     builder.addCase(fetchGetDetail.fulfilled, (state, action) => {
       const { product_id } = action.payload;
       state.detailStatus = "succeeded";
-      state.error = "";
       state.cartItems.map((item, index) => {
         if (item.product_id === product_id) {
           state.cartItems[index].item = action.payload;
@@ -200,13 +183,15 @@ export const cartListSlice = createSlice({
       state.status = "succeeded";
       state.error = "";
       const cart_item_id = action.payload;
+      state.cartItems = state.cartItems.filter((item) => item.cart_item_id !== cart_item_id);
+      //가격 재 계산
       state.cartItems.map((item, index) => {
         if (item.cart_item_id === cart_item_id && item.isChecked) {
           state.totalPrice -= state.cartItems[index].quantity * state.cartItems[index].item.price;
         }
       });
-      state.cartItems = state.cartItems.filter((item) => item.cart_item_id !== cart_item_id);
     });
+    //장바구니 수량 수정
     builder.addCase(fetchPutCartQuantity.fulfilled, (state, action) => {
       state.status = "succeeded";
       const { product_id, quantity } = action.payload;
@@ -225,15 +210,17 @@ export const cartListSlice = createSlice({
   },
 });
 
-export const selectCartList = (state: RootState) => state.cartList.cartItems;
 export const getCartListStatus = (state: RootState) => state.cartList.status;
 export const getCartListError = (state: RootState) => state.cartList.error;
 
-export const selectTotalPrice = (state: RootState) => state.cartList.totalPrice;
-export const selectDeliveryPrice = (state: RootState) => state.cartList.deliveryPrice;
+export const getTotalPrice = (state: RootState) => state.cartList.totalPrice;
+export const getDeliveryPrice = (state: RootState) => state.cartList.deliveryPrice;
+
+export const selectCartList = (state: RootState) => state.cartList.cartItems;
 export const selectCheckAllState = (state: RootState) =>
   state.cartList.cartItems.every((item) => item.isChecked === true);
 export const selectCheckedItems = (state: RootState) =>
   state.cartList.cartItems.filter((item) => item.isChecked === true);
-export const { reset, checkItem, checkAllItem, getTotalPrice } = cartListSlice.actions;
+
+export const { reset, checkItem, checkAllItem, setTotalPrice } = cartListSlice.actions;
 export default cartListSlice.reducer;

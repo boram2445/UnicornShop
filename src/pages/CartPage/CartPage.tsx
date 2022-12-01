@@ -13,7 +13,7 @@ import {
   getCartListStatus,
   getCartListError,
   selectCheckAllState,
-  getTotalPrice,
+  setTotalPrice,
   checkAllItem,
   checkItem,
   reset,
@@ -102,7 +102,7 @@ function CartPage() {
     } else {
       dispatch(checkItem({ productId, isChecked: checked }));
     }
-    dispatch(getTotalPrice());
+    dispatch(setTotalPrice());
   };
 
   //결제 페이지로 넘어가기
