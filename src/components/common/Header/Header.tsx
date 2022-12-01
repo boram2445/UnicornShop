@@ -99,9 +99,12 @@ export function Header() {
                   <span>장바구니</span>
                 </S.NavButton>
                 <S.MyPageWrap>
-                  <S.NavButton onClick={() => setArrowModal(!onArrowModal)} color={myPageIconColor}>
+                  <S.NavButton
+                    onClick={TOKEN ? () => setArrowModal(!onArrowModal) : () => navigate("/login")}
+                    color={myPageIconColor}
+                  >
                     <UserIcon stroke={myPageIconColor} />
-                    <span>마이페이지</span>
+                    <span>{TOKEN ? "마이페이지" : "로그인"}</span>
                   </S.NavButton>
                   <ArrowModal on={onArrowModal} list={arrowList} />
                 </S.MyPageWrap>
