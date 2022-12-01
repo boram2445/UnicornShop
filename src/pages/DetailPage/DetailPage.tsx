@@ -8,14 +8,20 @@ import { selectProductById } from "../../features/productSlice";
 import * as S from "./detailPageStyle";
 import { getToken, getLoginUserType } from "../../features/loginSlice";
 import DetailTab from "../../components/detail/DetailTab";
+import { openModal, selectOpenState } from "../../features/modalSlice";
+import Modal from "../../components/common/Modal/Modal";
 
 function DetailPage() {
   const { productId } = useParams();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const detail = useAppSelector((state) => selectProductById(state, Number(productId)));
+
   const TOKEN = useAppSelector(getToken) || "";
   const USER_TYPE = useAppSelector(getLoginUserType);
+
+  const detail = useAppSelector((state) => selectProductById(state, Number(productId)));
+  const modal = useAppSelector(selectOpenState);
+
   const [selectedCount, setSelectedCount] = useState(1);
 
   const getProductCount = (res: number) => {
@@ -37,14 +43,26 @@ function DetailPage() {
     dispatch(
       fetchPostCart({ TOKEN, product_id: detail?.product_id, quantity: selectedCount, check: true })
     );
-    if (confirm("장바구니에 등록되었습니다.\n확인하시겠습니까?") === true) {
-      navigate("/cart");
-    }
-    return;
+    dispatch(openModal("예"));
   };
+
+  const putInCartModal = (
+    <Modal onClickYes={() => navigate("/cart")}>
+      장바구니에 등록되었습니다. <br />
+      확인하시겠습니까?
+    </Modal>
+  );
+
+  const needLoginModal = (
+    <Modal onClickYes={() => navigate("/login")}>
+      로그인이 필요한 서비스 입니다. <br /> 로그인 하시겠습니까?
+    </Modal>
+  );
 
   return (
     <>
+      {!TOKEN && modal ? needLoginModal : null}
+      {TOKEN && modal ? putInCartModal : null}
       {detail && (
         <S.ProductSection>
           <S.ImageBox>
@@ -90,7 +108,11 @@ function DetailPage() {
             </S.PriceBox>
             {/* 상품 구매 버튼 */}
             <S.ButtonBox>
-              <NormalBtn onClick={getProductNow} padding="18px 0" disabled={USER_TYPE === "SELLER"}>
+              <NormalBtn
+                onClick={TOKEN ? getProductNow : () => dispatch(openModal("예"))}
+                padding="18px 0"
+                disabled={USER_TYPE === "SELLER"}
+              >
                 바로 구매
               </NormalBtn>
               <NormalBtn
