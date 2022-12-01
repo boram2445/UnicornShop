@@ -3,7 +3,7 @@ import styled from "styled-components";
 const TotalPriceBox = styled.div`
   margin: 40px auto 40px;
   padding: 44px 0 42px;
-  width: 1280px;
+  width: 100%;
   display: grid;
   grid-template-columns: 1fr 34px 1fr 34px 1fr 1fr;
   align-items: center;
@@ -22,11 +22,12 @@ const TitleText = styled.p<{ type?: string }>`
   font-weight: ${({ type }) => (type ? "700" : "400")};
 `;
 
-const IconCircle = styled.span<{ icon: string }>`
+const IconCircle = styled.div`
   width: 34px;
   height: 34px;
-  display: block;
-  background: url(${({ icon }) => icon}) no-repeat center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background-color: var(--color-white);
   border-radius: 50%;
 `;

@@ -1,6 +1,9 @@
 import styled from "styled-components";
 
 const CartPageLayout = styled.section`
+  width: 100%;
+  max-width: 1280px;
+  padding: 0 30px;
   margin: 54px auto 160px;
   display: flex;
   flex-direction: column;
@@ -17,14 +20,18 @@ const CartPageText = styled.h2`
 const CartInfoBox = styled.div`
   position: relative;
   margin: 52px auto 32px;
-  width: 1280px;
+  width: 100%;
   height: 60px;
-  padding: 19px 0 18px;
-  background-color: #f2f2f2;
+  display: grid;
+  grid-template-columns: 4fr 1fr 1fr;
+  gap: 30px;
+  padding: 19px 100px 18px 90px;
+  background-color: var(--color-brightGrey);
   border-radius: 10px;
   strong {
     font-size: 1.8rem;
     line-height: 2.2rem;
+    text-align: center;
   }
 `;
 
@@ -33,17 +40,8 @@ const InfoText = styled.strong`
   left: 364px;
 `;
 
-const CountText = styled.strong`
-  position: absolute;
-  left: 810px;
-`;
-
-const PriceText = styled.strong`
-  position: absolute;
-  right: 131px;
-`;
-
 const CartList = styled.ul`
+  width: 100%;
   & > button {
     margin: 10px 0 0 10px;
   }
@@ -69,13 +67,4 @@ const NoItemBox = styled.div`
   }
 `;
 
-export {
-  CartPageLayout,
-  CartPageText,
-  CartInfoBox,
-  InfoText,
-  CountText,
-  PriceText,
-  CartList,
-  NoItemBox,
-};
+export { CartPageLayout, CartPageText, CartInfoBox, InfoText, CartList, NoItemBox };

@@ -1,37 +1,37 @@
 import styled from "styled-components";
 
 const CartItemArticle = styled.article`
-  margin: 5px auto;
-  display: flex;
+  margin-top: 5px;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 4fr 1fr 1fr;
+  gap: 30px;
   align-items: center;
-  width: 1280px;
   padding: 20px 100px 20px 90px;
-  border: 2px solid #e0e0e0;
+  border: 2px solid var(--color-brightGrey);
   border-radius: 10px;
   position: relative;
 `;
 
-const ImageBox = styled.div`
+const ProductInfoBox = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const ImageBox = styled.div<{ imgUrl?: string }>`
   margin-right: 36px;
   width: 160px;
   height: 160px;
+  border: 1px solid var(--color-grey);
   border-radius: 10px;
-  img {
-    width: 100%;
-    height: 160px;
-    object-fit: cover;
-  }
-`;
-
-const InfoBox = styled.div`
-  margin-right: 48px;
-  width: 418px;
+  background: url(${({ imgUrl }) => imgUrl}) no-repeat center;
+  background-size: cover;
 `;
 
 const ShopText = styled.p`
   font-size: 1.4rem;
   line-height: 1.8rem;
-  color: #767676;
+  color: var(--color-darkGrey);
 `;
 
 const ProductText = styled.strong`
@@ -51,7 +51,6 @@ const PriceText = styled.p`
 const ShipText = styled(ShopText)``;
 
 const OrderBox = styled.div`
-  margin-left: 148px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -61,7 +60,7 @@ const OrderBox = styled.div`
 const PriceAllText = styled.p`
   font-size: 1.8rem;
   line-height: 2.3rem;
-  color: #eb5757;
+  color: var(--color-red);
 `;
 
 const DeleteBtn = styled.button`
@@ -75,8 +74,8 @@ const DeleteBtn = styled.button`
 
 export {
   CartItemArticle,
+  ProductInfoBox,
   ImageBox,
-  InfoBox,
   ShopText,
   ProductText,
   PriceText,

@@ -6,7 +6,6 @@ import { CircleCheckBtn } from "../../components/common/CheckBtn/CheckBtn";
 import { NormalBtn } from "../../components/common/Button/Button";
 import CartItem from "../../components/cart/CartItem/CartItem";
 import TotalPrice from "../../components/cart/TotalPrice/TotalPrice";
-import * as S from "./cartPageStyle";
 import {
   fetchGetCartList,
   fetchDeleteCartItem,
@@ -23,6 +22,8 @@ import {
 } from "../../features/cartListSlice";
 import Modal from "../../components/common/Modal/Modal";
 import { closeModal, openModal, selectOpenState } from "../../features/modalSlice";
+import * as S from "./cartPageStyle";
+import Spinner from "../../components/common/Spinner/Spinner";
 
 function CartPage() {
   const dispatch = useAppDispatch();
@@ -117,7 +118,7 @@ function CartPage() {
   //카트 상품 리스트
   let content;
   if (cartStatus === "Loading" && !getAllDetail) {
-    content = <p>Loading...</p>;
+    content = <Spinner />;
   } else if (cartStatus === "succeeded" && getAllDetail) {
     content =
       cartLists.length !== 0 ? (
@@ -162,16 +163,18 @@ function CartPage() {
     <>
       {modal ? (
         <Modal onClickYes={deleteType === "one" ? deleteCartItem : deleteSelectItems}>
-          {deleteType === "one" ? "상품을 삭제하시겠습니까?" : "선택한 상품 모두 삭제하시겠습니까?"}
+          {deleteType === "one" || selectedItemNum === 1
+            ? "상품을 삭제하시겠습니까?"
+            : "선택한 상품 모두 삭제하시겠습니까?"}
         </Modal>
       ) : null}
       <S.CartPageLayout>
         <S.CartPageText>장바구니</S.CartPageText>
         <S.CartInfoBox>
           <CircleCheckBtn name="allSelect" checkHandler={checkHandler} isChecked={isAllChecked} />
-          <S.InfoText>상품정보</S.InfoText>
-          <S.CountText>수량</S.CountText>
-          <S.PriceText>상품금액</S.PriceText>
+          <strong>상품정보</strong>
+          <strong>수량</strong>
+          <strong>상품금액</strong>
         </S.CartInfoBox>
         {content}
       </S.CartPageLayout>

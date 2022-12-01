@@ -1,13 +1,13 @@
 import React, { useEffect } from "react";
-import * as S from "./totalPriceStyle";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
 import {
   getTotalPrice,
   selectDeliveryPrice,
   selectTotalPrice,
 } from "../../../features/cartListSlice";
-import plusIcon from "../../../assets/icons/icon-plus-line.svg";
-import minusIcon from "../../../assets/icons/icon-minus-line.svg";
+import { ReactComponent as PlusIcon } from "../../../assets/icons/icon-plus-line.svg";
+import { ReactComponent as MinusIcon } from "../../../assets/icons/icon-minus-line.svg";
+import * as S from "./totalPriceStyle";
 
 function TotalPrice() {
   const dispatch = useAppDispatch();
@@ -27,14 +27,18 @@ function TotalPrice() {
           <span> 원</span>
         </S.ResultText>
       </S.PriceBox>
-      <S.IconCircle icon={minusIcon} />
+      <S.IconCircle>
+        <MinusIcon stroke="#C4C4C4" />
+      </S.IconCircle>
       <S.PriceBox>
         <S.TitleText>상품 할인</S.TitleText>
         <S.ResultText>
           0<span> 원</span>
         </S.ResultText>
       </S.PriceBox>
-      <S.IconCircle icon={plusIcon} />
+      <S.IconCircle>
+        <PlusIcon stroke="#C4C4C4" />
+      </S.IconCircle>
       <S.PriceBox>
         <S.TitleText>배송비</S.TitleText>
         <S.ResultText>
@@ -45,7 +49,7 @@ function TotalPrice() {
       <S.PriceBox>
         <S.TitleText type="strong">결제 예정 금액</S.TitleText>
         <S.FinalText>
-          {totalPrice.toLocaleString()}
+          {(totalPrice + deliveryPrice).toLocaleString()}
           <span> 원</span>
         </S.FinalText>
       </S.PriceBox>

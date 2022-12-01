@@ -34,18 +34,18 @@ function CartItem({ item, detail, OpenDeleteModal, checkHandler }: ItemProps) {
         checkHandler={checkHandler}
         isChecked={isChecked}
       />
-      <S.ImageBox>
-        <img src={detail?.image} />
-      </S.ImageBox>
-      <S.InfoBox>
-        <S.ShopText>{detail?.store_name}</S.ShopText>
-        <S.ProductText>{detail?.product_name}</S.ProductText>
-        <S.PriceText>{detail?.price.toLocaleString()}원</S.PriceText>
-        <S.ShipText>
-          {detail.shipping_method === "PARCEL" ? "직접배송" : "택배배송"} /{" "}
-          {detail?.shipping_fee ? `${detail?.shipping_fee.toLocaleString()} 원` : "무료배송"}
-        </S.ShipText>
-      </S.InfoBox>
+      <S.ProductInfoBox>
+        <S.ImageBox imgUrl={detail?.image} />
+        <div>
+          <S.ShopText>{detail?.store_name}</S.ShopText>
+          <S.ProductText>{detail?.product_name}</S.ProductText>
+          <S.PriceText>{detail?.price.toLocaleString()}원</S.PriceText>
+          <S.ShipText>
+            {detail.shipping_method === "PARCEL" ? "직접배송" : "택배배송"} /{" "}
+            {detail?.shipping_fee ? `${detail?.shipping_fee.toLocaleString()} 원` : "무료배송"}
+          </S.ShipText>
+        </div>
+      </S.ProductInfoBox>
       {/* 상품 개수 버튼 */}
       <AmountBtn count={quantity} item={item} stock={item.item.stock} />
       <S.OrderBox>
