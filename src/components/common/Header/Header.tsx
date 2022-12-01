@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
 import { getToken, logout, getLoginUserType } from "../../../features/loginSlice";
-import { resetAll } from "../../../features/registerSlice";
 import { NormalBtn } from "../Button/Button";
 import ArrowModal from "../ArrowModal/ArrowModal";
 import Modal from "../Modal/Modal";
@@ -24,17 +23,18 @@ export function Header() {
   const USER = useAppSelector(getLoginUserType);
   const modal = useAppSelector(selectOpenState);
 
-  //로그아웃 함수
-  const onLogout = () => {
-    dispatch(logout());
-    dispatch(resetAll());
-    navigate("/");
-  };
-
   const [onArrowModal, setArrowModal] = useState(false);
   const [searchContent, setSearchContent] = useState("");
 
-  //화살포 선택 모달 정보
+  console.log(TOKEN, modal);
+  //로그아웃 함수
+  const onLogout = () => {
+    setArrowModal(false);
+    dispatch(logout());
+    navigate("/");
+  };
+
+  //화살표 선택 모달 정보
   const arrowList = [
     { label: "마이페이지", onClick: () => navigate("/mypage") },
     { label: "로그아웃", onClick: () => onLogout() },
@@ -56,13 +56,15 @@ export function Header() {
     }
   };
 
+  const needLoginModal = (
+    <Modal onClickYes={() => navigate("/login")}>
+      로그인이 필요한 서비스 입니다. <br /> 로그인 하시겠습니까?
+    </Modal>
+  );
+
   return (
     <>
-      {modal ? (
-        <Modal onClickYes={() => navigate("/login")}>
-          로그인이 필요한 서비스 입니다. <br /> 로그인 하시겠습니까?
-        </Modal>
-      ) : null}
+      {!TOKEN && modal ? needLoginModal : null}
       <S.HeaderContainer>
         <S.HeaderContents>
           <S.LeftWrap>

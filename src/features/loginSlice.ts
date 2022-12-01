@@ -49,7 +49,7 @@ export const fetchPostLogin = createAsyncThunk(
 
 //로그아웃
 export const logout = createAsyncThunk("login/logout", async () => {
-  sessionStorage.removeItem("token");
+  sessionStorage.clear();
 });
 
 export const loginSlice = createSlice({
@@ -79,7 +79,10 @@ export const loginSlice = createSlice({
     });
     //로그아웃
     builder.addCase(logout.fulfilled, (state) => {
+      state.status = "idle";
+      state.error = "";
       state.token = null;
+      state.userType = "BUYER";
     });
   },
 });
