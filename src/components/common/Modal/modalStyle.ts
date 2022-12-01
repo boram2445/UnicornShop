@@ -15,14 +15,15 @@ const ModalContainer = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  padding: 50px 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   gap: 40px;
   width: 360px;
   height: 200px;
-  border: 1px solid var(--color-grey);
+  border: 2px solid var(--color-grey);
   background-color: var(--color-white);
   z-index: 1000;
 `;
@@ -37,6 +38,7 @@ const CloseBtn = styled.button`
 `;
 
 const ModalText = styled.p`
+  text-align: center;
   font-size: 1.6rem;
   line-height: 2rem;
 `;
