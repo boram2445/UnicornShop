@@ -1,7 +1,13 @@
 import React from "react";
+import spinnerImg from "../../../assets/spinner.gif";
+import * as S from "./spinnerStyle";
 
 function Spinner() {
-  return <div>로딩중</div>;
+  return (
+    <S.Background>
+      <img src={spinnerImg} alt="로딩중" width="5%" />
+    </S.Background>
+  );
 }
 
 export default Spinner;
