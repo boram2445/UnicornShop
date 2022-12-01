@@ -7,7 +7,8 @@ const CartItemArticle = styled.article`
   grid-template-columns: 4fr 1fr 1fr;
   gap: 30px;
   align-items: center;
-  padding: 20px 100px 20px 90px;
+  justify-content: center;
+  padding: 18px 88px 18px 88px;
   border: 2px solid var(--color-brightGrey);
   border-radius: 10px;
   position: relative;

@@ -1,4 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "../../../hooks";
+import { getToken } from "../../../features/loginSlice";
 import {
   fetchPostOrder,
   getOrderError,
@@ -7,18 +10,16 @@ import {
   getDeliveryPrice,
   getTotalPrice,
 } from "../../../features/orderSlice";
-import { closeModal, openModal, selectOpenState } from "../../../features/modalSlice";
 import { selectOrderItems, reset } from "../../../features/orderSlice";
-import { useAppDispatch, useAppSelector } from "../../../hooks";
-import limitLength from "../../../utils/limitLength";
+import { closeModal, openModal, selectOpenState } from "../../../features/modalSlice";
 import { NormalBtn } from "../../common/Button/Button";
+import limitLength from "../../../utils/limitLength";
 import SelectInput from "../../common/SelectInput/SelectInput";
 import FinalPayCheck from "../FinalPayCheck/FinalPayCheck";
 import PayMethod from "../PayMethod/PayMethod";
 import PostAddress from "../PostAddress/PostAddress";
 import * as S from "./orderFormStyle";
-import { getToken } from "../../../features/loginSlice";
-import { useNavigate } from "react-router-dom";
+import { emailRegExp, nameRegExp } from "../../../utils/regExp";
 
 function OrderForm() {
   const dispatch = useAppDispatch();
@@ -128,6 +129,7 @@ function OrderForm() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const { name, phone1, phone2, phone3, address, message } = receiverInfo;
+    //바로 주문, 카트에서 상품 하나 주문
     if (orderType === "direct_order" || orderType === "cart_one_order") {
       orderedItems.forEach((item) => {
         const info = {
@@ -143,7 +145,8 @@ function OrderForm() {
         };
         dispatch(fetchPostOrder({ TOKEN, info }));
       });
-    } else if (orderType === "cart_order") {
+    } //카트 상품 모두 주문
+    else if (orderType === "cart_order") {
       const info = {
         order_kind: orderType,
         total_price: totalPrice + deliveryPrice,
@@ -172,7 +175,7 @@ function OrderForm() {
             <S.Input
               type="text"
               name="name"
-              pattern="^[ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z]{0,10}$"
+              pattern={nameRegExp}
               onChange={onChangeOrdererInfo}
               value={ordererInfo.name}
               autoComplete="off"
@@ -220,7 +223,7 @@ function OrderForm() {
               name="email"
               value={ordererInfo.email}
               onChange={onChangeOrdererInfo}
-              pattern="[-a-zA-Z0-9~!$%^&amp;*_=+}{'?]+(\.[-a-zA-Z0-9~!$%^&amp;*_=+}{'?]+)*@([a-zA-Z0-9_][-a-zA-Z0-9_]*(\.[-a-zA-Z0-9_]+)*\.([cC][oO][mM]))(:[0-9]{1,5})?"
+              pattern={emailRegExp}
               autoComplete="off"
             />
             <S.ErrorText>* 이메일 형식을 확인해주세요</S.ErrorText>
@@ -247,7 +250,7 @@ function OrderForm() {
             <S.Input
               name="name"
               type="text"
-              pattern="^[ㄱ-ㅎㅏ-ㅣ가-힣a-zA-Z]{0,10}$"
+              pattern={nameRegExp}
               onChange={onChangeReceiverInfo}
               value={receiverInfo.name}
               autoComplete="off"
@@ -313,7 +316,9 @@ function OrderForm() {
             <S.Input
               name="address"
               type="text"
-              width="600px"
+              width="80%"
+              maxWidth="600px"
+              minWidth="400px"
               placeholder="주소"
               defaultValue={receiverInfo.address}
               readOnly
@@ -339,7 +344,9 @@ function OrderForm() {
               setReceiverInfo({ ...receiverInfo, ["message"]: selected })
             }
             checkItem={receiverInfo.message}
-            width="600px"
+            width="80%"
+            maxWidth="600px"
+            minWidth="400px"
             padding="9px 10px"
             textAlign="start"
           />

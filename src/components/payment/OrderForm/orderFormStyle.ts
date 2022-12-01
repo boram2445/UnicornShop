@@ -1,17 +1,11 @@
 import styled from "styled-components";
 
 const Title = styled.h3`
+  padding-bottom: 8px;
   font-weight: 500;
   font-size: 2.4rem;
   line-height: 3rem;
-  &:after {
-    margin-top: 18px;
-    display: block;
-    content: "";
-    width: 1280px;
-    height: 2px;
-    background-color: var(--color-grey);
-  }
+  border-bottom: 2px solid var(--color-grey);
 `;
 
 const ErrorText = styled.small`
@@ -23,18 +17,12 @@ const ErrorText = styled.small`
 
 const SectionTitle = styled.h4`
   margin-top: 40px;
+  padding-bottom: 8px;
   text-align: start;
   font-weight: 500;
   font-size: 1.8rem;
   line-height: 2.3rem;
-  &:after {
-    margin-top: 8px;
-    display: block;
-    content: "";
-    width: 1280px;
-    height: 2px;
-    background-color: var(--color-grey);
-  }
+  border-bottom: 2px solid var(--color-grey);
   button {
     margin-left: 20px;
   }
@@ -47,24 +35,19 @@ const LabelText = styled.strong`
 `;
 
 const Row = styled.div`
-  padding-top: 4px;
+  padding: 4px 0 4px;
   display: grid;
   grid-template-columns: 170px auto;
-  &:after {
-    margin-top: 4px;
-    display: block;
-    content: "";
-    width: 1280px;
-    height: 1px;
-    background-color: var(--color-grey);
-  }
+  border-bottom: 1px solid var(--color-grey);
 `;
 
-const Input = styled.input<{ width?: string }>`
+const Input = styled.input<{ width?: string; maxWidth?: string; minWidth?: string }>`
   margin: 4px auto;
   padding: 0 8px;
   height: 40px;
   width: ${({ width }) => width || "334px"};
+  max-width: ${({ maxWidth }) => maxWidth};
+  min-width: ${({ minWidth }) => minWidth};
   font-size: 1.6rem;
   border: 1px solid var(--color-grey);
   outline-color: var(--color-brightPink);
@@ -88,6 +71,7 @@ const BottomWrap = styled.div`
   margin-top: 70px;
   display: flex;
   justify-content: space-between;
+  gap: 20px;
 `;
 
 export { Title, ErrorText, SectionTitle, LabelText, Row, Input, BtnWrapper, BottomWrap };

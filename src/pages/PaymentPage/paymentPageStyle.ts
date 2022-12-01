@@ -3,7 +3,9 @@ import { CartInfoBox as InfoBox } from "../CartPage/cartPageStyle";
 
 const PaymentSection = styled.section`
   margin: 30px auto;
-  width: 1280px;
+  padding: 0 30px;
+  width: 100%;
+  max-width: 1280px;
 `;
 
 const Title = styled.h2`
@@ -15,21 +17,15 @@ const Title = styled.h2`
 `;
 
 const CartBox = styled.div`
-  margin-bottom: 98px;
+  margin-bottom: 60px;
 `;
 
 const CartInfoBox = styled(InfoBox)`
   margin-bottom: 0;
   padding-left: 8px;
   padding-right: 8px;
-  display: grid;
-  grid-template-columns: 140px 3fr 1fr 1fr 1fr;
-`;
-
-const Text = styled.p`
-  position: static;
-  text-align: center;
-  left: 364px;
+  grid-template-columns: 3fr 1fr 1fr 1fr;
+  gap: 0;
 `;
 
 const TotalPayText = styled.p`
@@ -47,4 +43,4 @@ const TotalPayText = styled.p`
   }
 `;
 
-export { PaymentSection, CartBox, TotalPayText, Title, CartInfoBox, Text };
+export { PaymentSection, CartBox, TotalPayText, Title, CartInfoBox };

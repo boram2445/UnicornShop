@@ -1,18 +1,21 @@
 import styled from "styled-components";
 
-const SelectArticle = styled.article<{ width: string }>`
+const SelectArticle = styled.article<{ width: string; maxWidth?: string; minWidth?: string }>`
   width: ${({ width }) => width};
   display: inline-block;
 `;
 
 const InputWrap = styled.div<{
-  width: string;
+  maxWidth?: string;
+  minWidth?: string;
   radius?: string;
   textAlign?: string;
   padding: string;
 }>`
   position: relative;
-  width: ${({ width }) => width};
+  width: 100%;
+  max-width: ${({ maxWidth }) => maxWidth};
+  min-width: ${({ minWidth }) => minWidth};
   padding: ${({ padding }) => padding};
   display: grid;
   grid-template-columns: 1fr 22px;
@@ -34,7 +37,7 @@ const SelectInput = styled.input<{ textAlign?: string }>`
   outline: none;
 `;
 
-const InputBtn = styled.div<{ width: string }>`
+const InputBtn = styled.div`
   position: absolute;
   cursor: pointer;
   top: 50%;
@@ -42,10 +45,19 @@ const InputBtn = styled.div<{ width: string }>`
   transform: translateY(-50%);
 `;
 
-const SelectList = styled.ul<{ on: string; width: string; radius?: string; textAlign?: string }>`
+const SelectList = styled.ul<{
+  on: string;
+  width: string;
+  maxWidth?: string;
+  minWidth?: string;
+  radius?: string;
+  textAlign?: string;
+}>`
   margin-top: 6px;
   position: absolute;
   width: ${({ width }) => width};
+  max-width: ${({ maxWidth }) => maxWidth};
+  min-width: ${({ minWidth }) => minWidth};
   max-height: 152px;
   overflow-y: scroll;
   box-shadow: 4px 4px 14px 0px #00000026;

@@ -8,6 +8,8 @@ type SelectInputProps = {
   onClick: (selected: string) => void;
   checkItem?: string;
   width: string;
+  minWidth?: string;
+  maxWidth?: string;
   radius?: string;
   padding: string;
   textAlign?: string;
@@ -18,6 +20,8 @@ function SelectInput({
   onClick,
   checkItem,
   width,
+  maxWidth,
+  minWidth,
   radius,
   padding,
   textAlign,
@@ -30,14 +34,25 @@ function SelectInput({
   };
 
   return (
-    <S.SelectArticle width={width}>
-      <S.InputWrap width={width} radius={radius} padding={padding}>
-        <S.SelectInput value={checkItem ? checkItem : selectItems[0]} textAlign={textAlign} />
-        <S.InputBtn onClick={() => setOnToggle(!onToggle)} width={width}>
+    <S.SelectArticle width={width} maxWidth={maxWidth} minWidth={minWidth}>
+      <S.InputWrap maxWidth={maxWidth} minWidth={minWidth} radius={radius} padding={padding}>
+        <S.SelectInput
+          value={checkItem ? checkItem : selectItems[0]}
+          textAlign={textAlign}
+          onChange={() => console.log("입력중")}
+        />
+        <S.InputBtn onClick={() => setOnToggle(!onToggle)}>
           <img src={onToggle ? ArrowDownIcon : ArrowUpIcon} alt="검색" />
         </S.InputBtn>
       </S.InputWrap>
-      <S.SelectList on={onToggle.toString()} width={width} radius={radius} textAlign={textAlign}>
+      <S.SelectList
+        on={onToggle.toString()}
+        width={width}
+        maxWidth={maxWidth}
+        minWidth={minWidth}
+        radius={radius}
+        textAlign={textAlign}
+      >
         {selectItems.map((item, index) => (
           <li key={index}>
             <button type="button" onClick={() => handleItemClick(item)}>

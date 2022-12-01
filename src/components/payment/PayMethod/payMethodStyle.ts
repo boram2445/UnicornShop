@@ -16,23 +16,28 @@ const PayMentBox = styled.div`
   padding: 18px 0 18px 12px;
   border-top: 2px solid var(--color-grey);
   border-bottom: 2px solid var(--color-grey);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
 `;
 
-const InputWrap = styled.span`
-  position: relative;
+const InputWrap = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 5px;
 `;
 
 const Label = styled.label`
-  margin: 0 20px 0 30px;
   font-size: 1.6rem;
   line-height: 2rem;
   cursor: pointer;
 `;
 
 const CircleInput = styled(CircleCheckBtn)`
+  margin: 0;
+  position: static;
+  transform: translateY(0);
   border-color: var(--color-grey);
-  left: 0;
-  top: 2px;
   &:checked {
     border-color: var(--color-main);
   }

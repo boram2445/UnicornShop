@@ -24,17 +24,16 @@ function PaymentPage() {
       <S.PaymentSection>
         <S.CartBox>
           <S.CartInfoBox>
-            <span></span>
-            <S.Text>상품정보</S.Text>
-            <S.Text>할인</S.Text>
-            <S.Text>배송비</S.Text>
-            <S.Text>상품금액</S.Text>
+            <strong>상품정보</strong>
+            <strong>할인</strong>
+            <strong>배송비</strong>
+            <strong>상품금액</strong>
           </S.CartInfoBox>
           {orderedItems?.map((item) => (
             <OrderItem key={item.product_id} item={item.item} quantity={item.quantity} />
           ))}
           <S.TotalPayText>
-            총 주문금액 <strong>{totalPrice.toLocaleString()}원</strong>
+            총 주문금액 <strong>{totalPrice.toLocaleString()} 원</strong>
           </S.TotalPayText>
         </S.CartBox>
         <OrderForm />
