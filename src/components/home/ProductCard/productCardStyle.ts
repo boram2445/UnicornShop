@@ -5,11 +5,54 @@ const ProductItem = styled.li`
 `;
 
 const ThumbContainer = styled.div<{ image: string }>`
+  position: relative;
   padding-top: 100%;
   background: url(${({ image }) => image}) no-repeat center;
   background-size: cover;
   border: 1px solid #c4c4c4;
   border-radius: 10px;
+  div {
+    display: none;
+  }
+  &:hover {
+    &::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.2);
+      display: block;
+      width: 100%;
+      height: 100%;
+      color: black;
+      border-radius: 10px;
+    }
+    div {
+      display: block;
+      display: flex;
+      gap: 15px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: red;
+      z-index: 50;
+    }
+    button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 50px;
+      height: 50px;
+      background-color: rgba(0, 0, 0, 0.4);
+      border-radius: 50%;
+      &:hover {
+        transform: scale(1.1);
+      }
+    }
+  }
 `;
 
 const SellerText = styled.p`
