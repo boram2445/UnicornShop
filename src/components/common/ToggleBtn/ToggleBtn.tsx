@@ -6,29 +6,33 @@ import { useAppDispatch, useAppSelector } from "../../../hooks";
 import * as S from "./toggleBtnStyle";
 
 function ToggleBtn() {
+  const { pathname } = useLocation();
   const dispatch = useAppDispatch();
-  const path = useLocation()?.pathname;
 
-  const userType = useAppSelector(path.includes("login") ? getLoginUserType : getJoinUserType);
+  const userType = useAppSelector(pathname.includes("login") ? getLoginUserType : getJoinUserType);
 
   const handleToggleBtn = (type: string) => {
     if (type === "BUYER") {
-      path.includes("login") ? dispatch(setLoginUserType(type)) : dispatch(setJoinUserType(type));
+      pathname.includes("login")
+        ? dispatch(setLoginUserType(type))
+        : dispatch(setJoinUserType(type));
     } else {
-      path.includes("login") ? dispatch(setLoginUserType(type)) : dispatch(setJoinUserType(type));
+      pathname.includes("login")
+        ? dispatch(setLoginUserType(type))
+        : dispatch(setJoinUserType(type));
     }
   };
 
   return (
     <S.ToggleBox>
       <S.ToggleBtn on={(userType === "BUYER").toString()} onClick={() => handleToggleBtn("BUYER")}>
-        구매회원 {path.includes("login") ? "로그인" : "회원가입"}
+        구매회원 {pathname.includes("login") ? "로그인" : "회원가입"}
       </S.ToggleBtn>
       <S.ToggleBtn
         on={(userType === "SELLER").toString()}
         onClick={() => handleToggleBtn("SELLER")}
       >
-        판매회원 {path.includes("login") ? "로그인" : "회원가입"}
+        판매회원 {pathname.includes("login") ? "로그인" : "회원가입"}
       </S.ToggleBtn>
     </S.ToggleBox>
   );
