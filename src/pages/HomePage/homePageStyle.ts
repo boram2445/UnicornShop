@@ -1,15 +1,15 @@
 import styled from "styled-components";
 
-const ProductLists = styled.ul`
-  display: grid;
-  grid-template-columns: 380px 380px 380px;
-  gap: 70px;
+const ProductSection = styled.section`
+  margin: 0 auto;
+  padding: 80px 30px 0;
+  max-width: 1200px;
 `;
 
-const ProductContainer = styled.div`
-  margin: 80px auto 120px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+const ProductLists = styled.ul`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5vh 5vw;
 `;
-export { ProductLists, ProductContainer };
+
+export { ProductSection, ProductLists };

@@ -4,18 +4,11 @@ const ProductItem = styled.li`
   cursor: pointer;
 `;
 
-const ThumbContainer = styled.div`
-  margin-bottom: 16px;
-  width: 380px;
-  height: 380px;
+const ThumbContainer = styled.div<{ image: string }>`
+  padding-top: 100%;
+  background: url(${({ image }) => image}) no-repeat center;
+  background-size: cover;
   border: 1px solid #c4c4c4;
-  border-radius: 10px;
-`;
-
-const ThumbImg = styled.img`
-  width: 100%;
-  height: 380px;
-  object-fit: cover;
   border-radius: 10px;
 `;
 
@@ -29,8 +22,15 @@ const SellerText = styled.p`
   }
 `;
 
+const TextWrap = styled.div`
+  margin-top: 10px;
+  padding-left: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+`;
+
 const ProductText = styled.p`
-  margin: 10px 0;
   font-size: 1.8rem;
   font-weight: 500;
   line-height: 22px;
@@ -42,9 +42,10 @@ const PriceText = styled.strong`
   line-height: 3rem;
 `;
 
-const WordWon = styled.span`
+const WonText = styled.span`
   font-size: 1.6rem;
   line-height: 2rem;
+  font-weight: 400;
 `;
 
-export { ProductItem, ThumbContainer, ThumbImg, SellerText, ProductText, PriceText, WordWon };
+export { ProductItem, ThumbContainer, TextWrap, SellerText, ProductText, PriceText, WonText };
