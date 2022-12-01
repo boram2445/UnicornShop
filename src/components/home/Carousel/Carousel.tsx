@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import * as S from "./carouselStyle";
 import { carouselData } from "./carouselData";
 import { Link } from "react-router-dom";
-import leftArrow from "../../../assets/icons/icon-swiper-1.svg";
-import rightArrow from "../../../assets/icons/icon-swiper-2.svg";
+import { ReactComponent as LeftArrow } from "../../../assets/icons/icon-swiper-1.svg";
+import { ReactComponent as RightArrow } from "../../../assets/icons/icon-swiper-2.svg";
 
 function Carousel() {
   const [carouselIndex, setCarouselIndex] = useState(1);
@@ -50,8 +50,12 @@ function Carousel() {
         );
       })}
       {/* 캐러셀 화살표 이동 버튼 */}
-      <S.ArrowBtn type="button" direct="left" onClick={movePrevImg} icon={leftArrow} />
-      <S.ArrowBtn type="button" direct="right" onClick={moveNextImg} icon={rightArrow} />
+      <S.ArrowBtn type="button" direct="left" onClick={movePrevImg}>
+        <LeftArrow stroke="black" />
+      </S.ArrowBtn>
+      <S.ArrowBtn type="button" direct="right" onClick={moveNextImg}>
+        <RightArrow stroke="black" />
+      </S.ArrowBtn>
       {/* 캐러셀 닷 버튼 */}
       <S.DotBox>
         {Array.from({ length: carouselData.length }).map((_, index) => {

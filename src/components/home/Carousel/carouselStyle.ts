@@ -20,7 +20,7 @@ const ImgBox = styled.div<{ opacity: string }>`
   }
 `;
 
-const ArrowBtn = styled.button<{ direct: string; icon: string }>`
+const ArrowBtn = styled.button<{ direct: string }>`
   position: absolute;
   left: ${(props) => props.direct === "left" && "0px"};
   right: ${(props) => props.direct === "right" && "0px"};
@@ -28,7 +28,6 @@ const ArrowBtn = styled.button<{ direct: string; icon: string }>`
   transform: translateY(-50%);
   width: 100px;
   height: 100%;
-  background: url(${({ icon }) => icon}) no-repeat center;
   cursor: pointer;
 `;
 
