@@ -86,8 +86,8 @@ function Chart() {
 
   return (
     <>
-      {modal ? <Modal onClickYes={deleteItem}>상품을 삭제하시겠습니까?</Modal> : null}
       <S.ChartContainer>{content}</S.ChartContainer>
+      {modal ? <Modal onClickYes={deleteItem}>상품을 삭제하시겠습니까?</Modal> : null}
     </>
   );
 }

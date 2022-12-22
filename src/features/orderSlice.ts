@@ -131,7 +131,7 @@ export const orderSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(fetchPostOrder.pending, (state) => {
-      state.status = "Loading";
+      state.status = "loading";
     });
     builder.addCase(fetchPostOrder.fulfilled, (state, action) => {
       state.status = action.payload.FAIL_Message ? "failed" : "succeeded";
@@ -142,7 +142,7 @@ export const orderSlice = createSlice({
       state.error = action.error.message || "Something is wrong in company number:<";
     });
     builder.addCase(fetchPostOrderList.pending, (state) => {
-      state.status = "Loading";
+      state.status = "loading";
     });
     builder.addCase(fetchPostOrderList.fulfilled, (state, action) => {
       state.status = "succeeded";

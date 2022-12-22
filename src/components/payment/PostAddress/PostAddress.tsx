@@ -4,13 +4,13 @@ import DaumPostcode from "react-daum-postcode";
 import * as S from "./postAddressStyle";
 import deleteIcon from "../../../assets/icons/icon-delete.svg";
 import { useAppDispatch } from "../../../hooks";
-import { closeModal } from "../../../features/modalSlice";
 
 type PostAddressProps = {
   getAddress: (zoneCode: string, address: string) => void;
+  closeModal: () => void;
 };
 
-function PostAddress({ getAddress }: PostAddressProps) {
+function PostAddress({ getAddress, closeModal }: PostAddressProps) {
   const dispatch = useAppDispatch();
   const background = useRef() as React.MutableRefObject<HTMLInputElement>;
 
@@ -25,9 +25,10 @@ function PostAddress({ getAddress }: PostAddressProps) {
   //배경화면 클릭시 모달창 닫기
   const onBackgroundClick = (e: React.MouseEvent<HTMLElement>) => {
     if (background.current === e.target) {
-      dispatch(closeModal());
+      closeModal();
     }
   };
+
   const onCompletePost = (data: any) => {
     let fullAddr = data.address;
     let extraAddr = "";
@@ -44,6 +45,7 @@ function PostAddress({ getAddress }: PostAddressProps) {
       fullAddr += extraAddr !== "" ? ` (${extraAddr})` : "";
     }
     getAddress(data.zonecode, fullAddr);
+    closeModal();
   };
 
   const customStyles = {
@@ -54,7 +56,7 @@ function PostAddress({ getAddress }: PostAddressProps) {
   return ReactDOM.createPortal(
     <S.ModalBackGround ref={background} onClick={onBackgroundClick}>
       <S.ModalWrapper>
-        <S.CloseBtn onClick={() => dispatch(closeModal())}>
+        <S.CloseBtn onClick={closeModal}>
           <img src={deleteIcon} />
         </S.CloseBtn>
         <DaumPostcode autoClose onComplete={onCompletePost} style={customStyles} />

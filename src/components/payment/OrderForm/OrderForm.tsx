@@ -20,6 +20,7 @@ import PayMethod from "../PayMethod/PayMethod";
 import PostAddress from "../PostAddress/PostAddress";
 import * as S from "./orderFormStyle";
 import { emailRegExp, nameRegExp } from "../../../utils/regExp";
+import Modal from "../../common/Modal/Modal";
 
 function OrderForm() {
   const dispatch = useAppDispatch();
@@ -27,6 +28,9 @@ function OrderForm() {
   const navigate = useNavigate();
 
   const TOKEN = useAppSelector(getToken) || "";
+
+  const orderStatus = useAppSelector(getOrderStatus);
+  const orderError = useAppSelector(getOrderError);
 
   const orderedItems = useAppSelector(selectOrderItems);
   const totalPrice = useAppSelector(getTotalPrice);
@@ -40,9 +44,7 @@ function OrderForm() {
     "부재시 전화주시거나 문자 남겨 주세요.",
     "직접 입력",
   ];
-
-  const orderStatus = useAppSelector(getOrderStatus);
-  const orderError = useAppSelector(getOrderError);
+  const [addressModal, setAddressModal] = useState(false);
 
   useEffect(() => {
     return () => {
@@ -159,213 +161,224 @@ function OrderForm() {
       dispatch(fetchPostOrder({ TOKEN, info }));
     }
     sessionStorage.removeItem("order");
-    navigate("/");
+    dispatch(openModal("예"));
   };
 
+  const modalContent = (
+    <Modal onClickYes={() => navigate("/myPage")}>
+      주문이 완료되었습니다. <br /> 마이페이지로 이동하시겠습니까?
+    </Modal>
+  );
+
   return (
-    <form onSubmit={handleSubmit}>
-      <S.Title>
-        배송정보 <S.ErrorText>* 모든 항목 입력 필수</S.ErrorText>
-      </S.Title>
-      <section>
-        <S.SectionTitle>주문자 정보</S.SectionTitle>
-        <S.Row>
-          <S.LabelText>이름</S.LabelText>
-          <div>
-            <S.Input
-              type="text"
-              name="name"
-              pattern={nameRegExp}
-              onChange={onChangeOrdererInfo}
-              value={ordererInfo.name}
-              autoComplete="off"
-            />
-            <S.ErrorText>* 정확한 이름을 입력해 주세요.</S.ErrorText>
-          </div>
-        </S.Row>
-        <S.Row>
-          <S.LabelText>휴대폰번호</S.LabelText>
-          <div>
-            <SelectInput
-              selectItems={phoneSelect}
-              onClick={(selected: string) => {
-                setOrdererInfo({ ...ordererInfo, ["phone1"]: selected });
-              }}
-              checkItem={ordererInfo.phone1}
-              width="100px"
-              padding="10px 6px"
-            />
-            &nbsp; - &nbsp;
-            <S.Input
-              type="text"
-              width="100px"
-              name="phone2"
-              onChange={onChangeOrdererInfo}
-              value={ordererInfo.phone2}
-              autoComplete="off"
-            />
-            &nbsp; - &nbsp;
-            <S.Input
-              type="text"
-              width="100px"
-              name="phone3"
-              onChange={onChangeOrdererInfo}
-              value={ordererInfo.phone3}
-              autoComplete="off"
-            />
-          </div>
-        </S.Row>
-        <S.Row>
-          <S.LabelText>이메일</S.LabelText>
-          <div>
-            <S.Input
-              type="email"
-              name="email"
-              value={ordererInfo.email}
-              onChange={onChangeOrdererInfo}
-              pattern={emailRegExp}
-              autoComplete="off"
-            />
-            <S.ErrorText>* 이메일 형식을 확인해주세요</S.ErrorText>
-          </div>
-        </S.Row>
-      </section>
-      <section>
-        <S.SectionTitle>
-          <strong>배송지 정보</strong>
-          <NormalBtn
-            type="button"
-            color="white"
-            width="150px"
-            padding="6px 0"
-            fontSize="1.6rem"
-            onClick={handleSameInfoBtn}
-          >
-            주문자 정보와 동일
-          </NormalBtn>
-        </S.SectionTitle>
-        <S.Row>
-          <S.LabelText>수령인</S.LabelText>
-          <div>
-            <S.Input
-              name="name"
-              type="text"
-              pattern={nameRegExp}
-              onChange={onChangeReceiverInfo}
-              value={receiverInfo.name}
-              autoComplete="off"
-            />
-            <S.ErrorText>* 정확한 이름을 입력해 주세요.</S.ErrorText>
-          </div>
-        </S.Row>
-        <S.Row>
-          <S.LabelText>휴대폰번호</S.LabelText>
-          <div>
-            <SelectInput
-              selectItems={phoneSelect}
-              onClick={(selected: string) =>
-                setReceiverInfo({ ...receiverInfo, ["phone1"]: selected })
-              }
-              checkItem={receiverInfo.phone1}
-              padding="9px 10px"
-              width="100px"
-            />
-            &nbsp; - &nbsp;
-            <S.Input
-              name="phone2"
-              type="text"
-              width="100px"
-              onChange={onChangeReceiverInfo}
-              value={receiverInfo.phone2}
-              autoComplete="off"
-            />
-            &nbsp; - &nbsp;
-            <S.Input
-              name="phone3"
-              type="text"
-              width="100px"
-              onChange={onChangeReceiverInfo}
-              value={receiverInfo.phone3}
-              autoComplete="off"
-            />
-          </div>
-        </S.Row>
-        <S.Row>
-          <S.LabelText>배송주소</S.LabelText>
-          <div>
-            <S.Input
-              name="zondCode"
-              type="text"
+    <>
+      {orderStatus === "succeeded" && modal ? modalContent : null}
+      <form onSubmit={handleSubmit}>
+        <S.Title>
+          배송정보 <S.ErrorText>* 모든 항목 입력 필수</S.ErrorText>
+        </S.Title>
+        <section>
+          <S.SectionTitle>주문자 정보</S.SectionTitle>
+          <S.Row>
+            <S.LabelText>이름</S.LabelText>
+            <div>
+              <S.Input
+                type="text"
+                name="name"
+                pattern={nameRegExp}
+                onChange={onChangeOrdererInfo}
+                value={ordererInfo.name}
+                autoComplete="off"
+              />
+              <S.ErrorText>* 정확한 이름을 입력해 주세요.</S.ErrorText>
+            </div>
+          </S.Row>
+          <S.Row>
+            <S.LabelText>휴대폰번호</S.LabelText>
+            <div>
+              <SelectInput
+                selectItems={phoneSelect}
+                onClick={(selected: string) => {
+                  setOrdererInfo({ ...ordererInfo, ["phone1"]: selected });
+                }}
+                checkItem={ordererInfo.phone1}
+                width="100px"
+                padding="10px 6px"
+              />
+              &nbsp; - &nbsp;
+              <S.Input
+                type="text"
+                width="100px"
+                name="phone2"
+                onChange={onChangeOrdererInfo}
+                value={ordererInfo.phone2}
+                autoComplete="off"
+              />
+              &nbsp; - &nbsp;
+              <S.Input
+                type="text"
+                width="100px"
+                name="phone3"
+                onChange={onChangeOrdererInfo}
+                value={ordererInfo.phone3}
+                autoComplete="off"
+              />
+            </div>
+          </S.Row>
+          <S.Row>
+            <S.LabelText>이메일</S.LabelText>
+            <div>
+              <S.Input
+                type="email"
+                name="email"
+                value={ordererInfo.email}
+                onChange={onChangeOrdererInfo}
+                pattern={emailRegExp}
+                autoComplete="off"
+              />
+              <S.ErrorText>* 이메일 형식을 확인해주세요</S.ErrorText>
+            </div>
+          </S.Row>
+        </section>
+        <section>
+          <S.SectionTitle>
+            <strong>배송지 정보</strong>
+            <NormalBtn
+              type="button"
+              color="white"
               width="150px"
-              placeholder="우편번호"
-              defaultValue={receiverInfo.zoneCode}
-              readOnly
-            />
-            <S.BtnWrapper>
-              <NormalBtn
-                type="button"
-                width="110px"
-                fontSize="1.6rem"
-                onClick={() => dispatch(openModal(""))}
-              >
-                우편번호 찾기
-              </NormalBtn>
-            </S.BtnWrapper>
-            {modal && <PostAddress getAddress={getAddress} />}
-            <br />
-            <S.Input
-              name="address"
-              type="text"
+              padding="6px 0"
+              fontSize="1.6rem"
+              onClick={handleSameInfoBtn}
+            >
+              주문자 정보와 동일
+            </NormalBtn>
+          </S.SectionTitle>
+          <S.Row>
+            <S.LabelText>수령인</S.LabelText>
+            <div>
+              <S.Input
+                name="name"
+                type="text"
+                pattern={nameRegExp}
+                onChange={onChangeReceiverInfo}
+                value={receiverInfo.name}
+                autoComplete="off"
+              />
+              <S.ErrorText>* 정확한 이름을 입력해 주세요.</S.ErrorText>
+            </div>
+          </S.Row>
+          <S.Row>
+            <S.LabelText>휴대폰번호</S.LabelText>
+            <div>
+              <SelectInput
+                selectItems={phoneSelect}
+                onClick={(selected: string) =>
+                  setReceiverInfo({ ...receiverInfo, ["phone1"]: selected })
+                }
+                checkItem={receiverInfo.phone1}
+                padding="9px 10px"
+                width="100px"
+              />
+              &nbsp; - &nbsp;
+              <S.Input
+                name="phone2"
+                type="text"
+                width="100px"
+                onChange={onChangeReceiverInfo}
+                value={receiverInfo.phone2}
+                autoComplete="off"
+              />
+              &nbsp; - &nbsp;
+              <S.Input
+                name="phone3"
+                type="text"
+                width="100px"
+                onChange={onChangeReceiverInfo}
+                value={receiverInfo.phone3}
+                autoComplete="off"
+              />
+            </div>
+          </S.Row>
+          <S.Row>
+            <S.LabelText>배송주소</S.LabelText>
+            <div>
+              <S.Input
+                name="zondCode"
+                type="text"
+                width="150px"
+                placeholder="우편번호"
+                defaultValue={receiverInfo.zoneCode}
+                readOnly
+              />
+              <S.BtnWrapper>
+                <NormalBtn
+                  type="button"
+                  width="110px"
+                  fontSize="1.6rem"
+                  onClick={() => setAddressModal(true)}
+                >
+                  우편번호 찾기
+                </NormalBtn>
+              </S.BtnWrapper>
+              {addressModal ? (
+                <PostAddress getAddress={getAddress} closeModal={() => setAddressModal(false)} />
+              ) : null}
+              <br />
+              <S.Input
+                name="address"
+                type="text"
+                width="80%"
+                maxWidth="600px"
+                minWidth="400px"
+                placeholder="주소"
+                defaultValue={receiverInfo.address}
+                readOnly
+              />
+              <br />
+              <S.Input
+                name="addressDetail"
+                type="text"
+                width="400px"
+                placeholder="상세주소"
+                autoComplete="off"
+                onChange={onChangeReceiverInfo}
+                value={receiverInfo.addressDetail}
+                ref={addressDetailRef}
+              />
+            </div>
+          </S.Row>
+          <S.Row>
+            <S.LabelText>배송 메세지</S.LabelText>
+            <SelectInput
+              selectItems={messageSelect}
+              onClick={(selected: string) =>
+                setReceiverInfo({ ...receiverInfo, ["message"]: selected })
+              }
+              checkItem={receiverInfo.message}
               width="80%"
               maxWidth="600px"
               minWidth="400px"
-              placeholder="주소"
-              defaultValue={receiverInfo.address}
-              readOnly
+              padding="9px 10px"
+              textAlign="start"
             />
-            <br />
-            <S.Input
-              name="addressDetail"
-              type="text"
-              width="400px"
-              placeholder="상세주소"
-              autoComplete="off"
-              onChange={onChangeReceiverInfo}
-              value={receiverInfo.addressDetail}
-              ref={addressDetailRef}
-            />
-          </div>
-        </S.Row>
-        <S.Row>
-          <S.LabelText>배송 메세지</S.LabelText>
-          <SelectInput
-            selectItems={messageSelect}
-            onClick={(selected: string) =>
-              setReceiverInfo({ ...receiverInfo, ["message"]: selected })
+          </S.Row>
+        </section>
+        <S.BottomWrap>
+          <PayMethod
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setCheckBox({ ...checkBox, ["payMethod"]: e.target.id })
             }
-            checkItem={receiverInfo.message}
-            width="80%"
-            maxWidth="600px"
-            minWidth="400px"
-            padding="9px 10px"
-            textAlign="start"
           />
-        </S.Row>
-      </section>
-      <S.BottomWrap>
-        <PayMethod
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            setCheckBox({ ...checkBox, ["payMethod"]: e.target.id })
-          }
-        />
-        <FinalPayCheck
-          canOrder={canOrder}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-            setCheckBox({ ...checkBox, ["finalCheck"]: e.target.checked })
-          }
-        />
-      </S.BottomWrap>
-    </form>
+          <FinalPayCheck
+            canOrder={canOrder}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setCheckBox({ ...checkBox, ["finalCheck"]: e.target.checked })
+            }
+          />
+        </S.BottomWrap>
+      </form>
+    </>
   );
 }
 

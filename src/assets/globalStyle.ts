@@ -26,7 +26,7 @@ const GlobalStyle = createGlobalStyle`
     height:100%;
   }
 
-  html, button, input{
+  html, button, input, textArea{
     font-size: 10px;
     font-family: SpoqaHanSansNeo, sans-serif;
   } 
@@ -41,6 +41,12 @@ const GlobalStyle = createGlobalStyle`
   a{
     color:inherit;
     text-decoration:none; 
+  }
+
+  .txt-ellipsis{
+    white-space: nowrap;
+    overflow:hidden;
+    text-overflow: ellipsis;
   }
 
   .ir {
