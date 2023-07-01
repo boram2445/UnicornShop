@@ -4,13 +4,9 @@ import { Product } from "../../../features/productSlice";
 import { ReactComponent as CartIcon } from "../../../assets/icons/icon-shopping-cart.svg";
 import { ReactComponent as HeartIcon } from "../../../assets/icons/icon-heart.svg";
 import * as S from "./productCardStyle";
-import { useAppSelector } from "../../../hooks";
-import { getToken } from "../../../features/loginSlice";
-import Modal from "../../common/Modal/Modal";
 
 function ProductCard({ product }: { product: Product }) {
   const navigate = useNavigate();
-  const TOKEN = useAppSelector(getToken) || "";
 
   const handleCartIcon = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -25,7 +21,7 @@ function ProductCard({ product }: { product: Product }) {
             <CartIcon stroke="white" />
           </button>
           <button type="button" name="좋아요">
-            <HeartIcon />
+            <HeartIcon stroke="white" />
           </button>
         </div>
       </S.ThumbContainer>
