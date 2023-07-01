@@ -1,15 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { fetchPostCart } from "../../features/postCartSlice";
+import { getToken, getLoginUserType } from "../../features/loginSlice";
+import { openModal, selectOpenState } from "../../features/modalSlice";
 import { NormalBtn } from "../../components/common/Button/Button";
 import AmountBtn from "../../components/common/AmountBtn/AmountBtn";
-import { selectProductById } from "../../features/productSlice";
-import * as S from "./detailPageStyle";
-import { getToken, getLoginUserType } from "../../features/loginSlice";
 import DetailTab from "../../components/detail/DetailTab";
-import { openModal, selectOpenState } from "../../features/modalSlice";
 import Modal from "../../components/common/Modal/Modal";
+import * as S from "./detailPageStyle";
+import { fetchProductDetail, getProductDetail } from "../../features/detailSlice";
 
 function DetailPage() {
   const { productId } = useParams();
@@ -19,10 +19,14 @@ function DetailPage() {
   const TOKEN = useAppSelector(getToken) || "";
   const USER_TYPE = useAppSelector(getLoginUserType);
 
-  const detail = useAppSelector((state) => selectProductById(state, Number(productId)));
+  const detail = useAppSelector(getProductDetail);
   const modal = useAppSelector(selectOpenState);
 
   const [selectedCount, setSelectedCount] = useState(1);
+
+  useEffect(() => {
+    dispatch(fetchProductDetail(Number(productId)));
+  }, []);
 
   const getProductCount = (res: number) => {
     setSelectedCount(res);

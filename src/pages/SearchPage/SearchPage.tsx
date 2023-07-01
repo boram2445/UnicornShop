@@ -10,7 +10,7 @@ import * as S from "./searchPageStyle";
 
 function SearchPage() {
   const { keyword } = useParams();
-  const { status, products } = useAppSelector(getSearchState);
+  const { status, products, postType } = useAppSelector(getSearchState);
 
   if (status === "loading") return <Spinner />;
 
@@ -29,13 +29,21 @@ function SearchPage() {
         </ul>
       </S.DescriptionBox>
     );
-  } else {
+  } else if (postType === "album") {
     content = (
       <S.ProductLists>
         {products?.map((product) => (
           <ProductCard key={product.product_id} product={product} />
         ))}
       </S.ProductLists>
+    );
+  } else {
+    content = (
+      <ul>
+        {products?.map((product) => (
+          <ProductListCard key={product.product_id} product={product} />
+        ))}
+      </ul>
     );
   }
 
@@ -46,11 +54,6 @@ function SearchPage() {
       </S.Title>
       <SortNavbar />
       {content}
-      {/* <ul>
-      {products?.map((product) => (
-        <ProductListCard key={product.product_id} product={product} />
-      ))}
-    </ul> */}
     </S.Container>
   );
 }
