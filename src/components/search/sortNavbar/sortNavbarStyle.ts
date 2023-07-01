@@ -1,7 +1,10 @@
 import styled, { css } from "styled-components";
 
 const SortNavbar = styled.nav`
-  padding: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem 1rem 1.5rem;
   border: 1px solid var(--color-brightGrey);
   border-radius: 10px;
 `;
@@ -27,4 +30,9 @@ const SortType = styled.li<{ type?: string }>`
   }}
 `;
 
-export { SortNavbar, SortTypeList, SortType };
+const PostTypeBtn = styled.button`
+  margin: 0 0.7rem;
+  cursor: pointer;
+`;
+
+export { SortNavbar, SortTypeList, SortType, PostTypeBtn };

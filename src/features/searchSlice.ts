@@ -8,6 +8,7 @@ interface SearchSliceState {
   error: string;
   quantity: number;
   sortType: string;
+  postType: string;
   products: Product[];
 }
 
@@ -16,6 +17,7 @@ const initialState: SearchSliceState = {
   error: "",
   quantity: 0,
   sortType: "latestDate",
+  postType: "list",
   products: [],
 };
 
@@ -32,6 +34,7 @@ const searchSlice = createSlice({
   name: "search",
   initialState,
   reducers: {
+    searchReset: () => initialState,
     sortLatestDate(state) {
       state.products.sort(
         (prev, curr) => Date.parse(curr.created_at) - Date.parse(prev.created_at)
@@ -45,6 +48,9 @@ const searchSlice = createSlice({
     sortUpperPrice(state) {
       state.products.sort((prev, curr) => curr.price - prev.price);
       state.sortType = "upperPrice";
+    },
+    switchPostType(state, action) {
+      state.postType = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -67,5 +73,6 @@ const searchSlice = createSlice({
 
 export const getSearchState = (state: RootState) => state.search;
 
-export const { sortLatestDate, sortLowerPrice, sortUpperPrice } = searchSlice.actions;
+export const { searchReset, sortLatestDate, sortLowerPrice, sortUpperPrice, switchPostType } =
+  searchSlice.actions;
 export default searchSlice.reducer;
