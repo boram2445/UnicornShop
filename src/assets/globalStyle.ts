@@ -15,6 +15,13 @@ const GlobalStyle = createGlobalStyle`
     --color-darkGrey:#767676;
     --color-black:#000000;
     --color-brightPink:#ffebee;
+
+    /* shadow */
+    --shadow-light: 0px 4px 12px 0px #51459f14;
+    --shadow-dark:0 2px 5px 1px rgba(64,60,67,.16);
+
+    /* transition */
+    --transition-smooth: all ease 200ms;
   }
 
   * {
