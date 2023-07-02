@@ -44,6 +44,6 @@ const detailSlice = createSlice({
   },
 });
 
-export const getProductDetail = (state: RootState) => state.detail.detail;
+export const getDetailState = (state: RootState) => state.detail;
 
 export default detailSlice.reducer;
