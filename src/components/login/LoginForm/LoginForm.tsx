@@ -1,11 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  fetchPostLogin,
-  getLoginStatus,
-  getLoginError,
-  getLoginUserType,
-} from "../../../features/loginSlice";
+import { fetchPostLogin, getAuthState } from "../../../features/loginSlice";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
 import { NormalBtn } from "../../common/Button/Button";
 import ToggleBtn from "../../common/ToggleBtn/ToggleBtn";
@@ -24,21 +19,19 @@ function LoginForm() {
   const [formValues, setFormValues] = useState(initialValues);
   const [message, setMessage] = useState("");
 
-  const loginStatus = useAppSelector(getLoginStatus);
-  const loginType = useAppSelector(getLoginUserType);
-  const loginError = useAppSelector(getLoginError);
+  const { status, error, userType } = useAppSelector(getAuthState);
 
   useEffect(() => {
-    if (loginStatus === "failed") {
-      setMessage(loginError);
+    if (status === "failed") {
+      setMessage(error);
       passwordRef.current.value = "";
       passwordRef.current.focus();
     }
-    if (loginStatus === "succeeded") {
+    if (status === "succeeded") {
       setFormValues(initialValues);
       navigate("/");
     }
-  }, [loginStatus]);
+  }, [status]);
 
   //아이디 & 비밀번호 입력
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -55,12 +48,12 @@ function LoginForm() {
     const userData = {
       username,
       password,
-      login_type: loginType,
+      login_type: userType,
     };
     dispatch(fetchPostLogin(userData));
   };
 
-  if (loginStatus === "loading") {
+  if (status === "loading") {
     return <Spinner />;
   }
 

@@ -1,5 +1,5 @@
 import { RootState } from "../app/store";
-import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
 const BASE_URL = "https://openmarket.weniv.co.kr";
@@ -16,13 +16,6 @@ export interface Item {
   shipping_method: string;
   stock: number;
 }
-
-// interface CartInfo {
-//   count: number;
-//   next: string | null;
-//   previous: string | null;
-//   results: CartItem[];
-// };
 
 export interface CartItem {
   my_cart: number;
@@ -149,7 +142,7 @@ export const cartListSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(fetchGetCartList.pending, (state) => {
-      state.status = "Loading";
+      state.status = "loading";
       state.error = "";
     });
     builder.addCase(fetchGetCartList.fulfilled, (state, action) => {
@@ -162,7 +155,7 @@ export const cartListSlice = createSlice({
     });
     //디테일 가져오기
     builder.addCase(fetchGetDetail.pending, (state) => {
-      state.detailStatus = "Loading";
+      state.detailStatus = "loading";
       state.error = "";
     });
     builder.addCase(fetchGetDetail.fulfilled, (state, action) => {

@@ -7,7 +7,7 @@ const BASE_URL = "https://openmarket.weniv.co.kr";
 const item = sessionStorage.getItem("token");
 const TOKEN = item === null ? null : JSON.parse(item).token;
 const USER_TYPE = item === null ? null : JSON.parse(item).user_type;
-
+const USER_NAME = item === null ? null : JSON.parse(item).username;
 interface LoginPostData {
   username: string;
   password: string;
@@ -15,15 +15,17 @@ interface LoginPostData {
 }
 
 interface LoginState {
-  token?: string | null;
+  userName: string;
   userType: string;
+  TOKEN?: string | null;
   status: string;
   error: string;
 }
 
 const initialState: LoginState = {
-  token: TOKEN ? TOKEN : null,
+  userName: USER_NAME ? USER_NAME : "",
   userType: USER_TYPE ? USER_TYPE : "BUYER",
+  TOKEN: TOKEN ? TOKEN : null,
   status: "idle",
   error: "",
 };
@@ -31,16 +33,17 @@ const initialState: LoginState = {
 //로그인
 export const fetchPostLogin = createAsyncThunk(
   "login/fetchPostLogin",
-  async ({ username, password, login_type }: LoginPostData, { rejectWithValue }) => {
+  async (data: LoginPostData, { rejectWithValue }) => {
     try {
-      const data = { username, password, login_type };
+      const { username } = data;
       const result = await axios.post(`${BASE_URL}/accounts/login/`, data);
 
       if (result.data) {
-        sessionStorage.setItem("token", JSON.stringify(result.data));
+        sessionStorage.setItem("token", JSON.stringify({ username, ...result.data }));
       }
 
-      return result.data;
+      console.log();
+      return { username, ...result.data };
     } catch (error: any) {
       return rejectWithValue(error.response.data.FAIL_Message);
     }
@@ -67,7 +70,8 @@ export const loginSlice = createSlice({
     });
     builder.addCase(fetchPostLogin.fulfilled, (state, action) => {
       state.status = "succeeded";
-      state.token = action.payload.token || "";
+      state.userName = action.payload.username;
+      state.TOKEN = action.payload.token || "";
     });
     builder.addCase(fetchPostLogin.rejected, (state, action) => {
       state.status = "failed";
@@ -81,15 +85,14 @@ export const loginSlice = createSlice({
     builder.addCase(logout.fulfilled, (state) => {
       state.status = "idle";
       state.error = "";
-      state.token = null;
+      state.TOKEN = null;
       state.userType = "BUYER";
     });
   },
 });
 
-export const getToken = (state: RootState) => state.login.token;
-export const getLoginStatus = (state: RootState) => state.login.status;
-export const getLoginError = (state: RootState) => state.login.error;
+export const getAuthState = (state: RootState) => state.login;
+export const getToken = (state: RootState) => state.login.TOKEN;
 export const getLoginUserType = (state: RootState) => state.login.userType;
 
 export const { setLoginUserType } = loginSlice.actions;

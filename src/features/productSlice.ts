@@ -15,6 +15,7 @@ export interface Product {
   shipping_fee: number;
   shipping_method: string;
   stock: number;
+  created_at: string;
 }
 //state 초기값 타입
 interface ProductSliceState {
@@ -32,7 +33,7 @@ const initialState: ProductSliceState = {
   products: [],
 };
 
-//cretateAsyncThunk(액션명, 콜백함수-비동기로직)
+//페이지별 상품 가져오기
 export const fetchGetProducts = createAsyncThunk(
   "products/fetchPostProducts",
   async (pageParam: number) => {
@@ -46,10 +47,9 @@ export const productSlice = createSlice({
   name: "products",
   initialState,
   reducers: {},
-  //redux thunk 관리
   extraReducers: (builder) => {
     builder.addCase(fetchGetProducts.pending, (state) => {
-      state.status = "Loading";
+      state.status = "loading";
     });
     builder.addCase(fetchGetProducts.fulfilled, (state, action) => {
       state.status = "succeeded";

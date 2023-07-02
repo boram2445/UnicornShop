@@ -7,6 +7,8 @@ import orderReducer from "../features/orderSlice";
 import sellerReducer from "../features/sellerSlice";
 import loginReducer from "../features/loginSlice";
 import registerReducer from "../features/registerSlice";
+import searchReducer from "../features/searchSlice";
+import detailReducer from "../features/detailSlice";
 
 //state 저장소
 const store = configureStore({
@@ -19,6 +21,8 @@ const store = configureStore({
     modal: modalReducer,
     order: orderReducer,
     seller: sellerReducer,
+    search: searchReducer,
+    detail: detailReducer,
   },
 });
 

@@ -127,7 +127,7 @@ const sellerSlice = createSlice({
   extraReducers: (builder) => {
     //상품 불러오기
     builder.addCase(fetchGetSellerProduct.pending, (state) => {
-      state.status = "Loading";
+      state.status = "loading";
     });
     builder.addCase(fetchGetSellerProduct.fulfilled, (state, action) => {
       state.status = "succeeded";
@@ -141,7 +141,7 @@ const sellerSlice = createSlice({
     });
     // 판매자 상품 삭제
     builder.addCase(fetchDeleteSellerItem.pending, (state) => {
-      state.status = "Loading";
+      state.status = "loading";
     });
     builder.addCase(fetchDeleteSellerItem.fulfilled, (state, action) => {
       state.status = "succeeded";
@@ -155,7 +155,7 @@ const sellerSlice = createSlice({
     });
     //판매자 상품 등록
     builder.addCase(fetchPostItem.pending, (state) => {
-      state.status = "Loading";
+      state.status = "loading";
     });
     builder.addCase(fetchPostItem.fulfilled, (state, action) => {
       state.status = "succeeded";
@@ -168,7 +168,7 @@ const sellerSlice = createSlice({
     });
     //판매자 상품 수정
     builder.addCase(fetchPutSellerItem.pending, (state) => {
-      state.status = "Loading";
+      state.status = "loading";
     });
     builder.addCase(fetchPutSellerItem.fulfilled, (state, action) => {
       state.status = "succeeded";

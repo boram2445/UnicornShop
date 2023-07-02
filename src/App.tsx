@@ -11,6 +11,7 @@ import JoinPage from "./pages/JoinPage/JoinPage";
 import CenterPage from "./pages/CenterPage/CenterPage";
 import UploadPage from "./pages/UploadPage/UploadPage";
 import MyPage from "./pages/MyPage/MyPage";
+import SearchPage from "./pages/SearchPage/SearchPage";
 import ErrorPage from "./pages/ErrorPage/ErrorPage";
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
           <Route path="/products/:productId" element={<DetailPage />} />
           <Route path="/payment" element={<PaymentPage />} />
           <Route path="/mypage" element={<MyPage />} />
+          <Route path={"/search/:keyword"} element={<SearchPage />} />
         </Route>
         <Route element={<CenterLayout />}>
           <Route path="/center" element={<CenterPage />} />
