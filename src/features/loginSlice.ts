@@ -7,7 +7,7 @@ const BASE_URL = "https://openmarket.weniv.co.kr";
 const item = sessionStorage.getItem("token");
 const TOKEN = item === null ? null : JSON.parse(item).token;
 const USER_TYPE = item === null ? null : JSON.parse(item).user_type;
-
+const USER_NAME = item === null ? null : JSON.parse(item).username;
 interface LoginPostData {
   username: string;
   password: string;
@@ -17,15 +17,15 @@ interface LoginPostData {
 interface LoginState {
   userName: string;
   userType: string;
-  token?: string | null;
+  TOKEN?: string | null;
   status: string;
   error: string;
 }
 
 const initialState: LoginState = {
-  userName: "",
+  userName: USER_NAME ? USER_NAME : "",
   userType: USER_TYPE ? USER_TYPE : "BUYER",
-  token: TOKEN ? TOKEN : null,
+  TOKEN: TOKEN ? TOKEN : null,
   status: "idle",
   error: "",
 };
@@ -70,9 +70,8 @@ export const loginSlice = createSlice({
     });
     builder.addCase(fetchPostLogin.fulfilled, (state, action) => {
       state.status = "succeeded";
-      console.log(action.payload);
       state.userName = action.payload.username;
-      state.token = action.payload.token || "";
+      state.TOKEN = action.payload.token || "";
     });
     builder.addCase(fetchPostLogin.rejected, (state, action) => {
       state.status = "failed";
@@ -86,18 +85,14 @@ export const loginSlice = createSlice({
     builder.addCase(logout.fulfilled, (state) => {
       state.status = "idle";
       state.error = "";
-      state.token = null;
+      state.TOKEN = null;
       state.userType = "BUYER";
     });
   },
 });
 
 export const getAuthState = (state: RootState) => state.login;
-
-export const getUserName = (state: RootState) => state.login.userName;
-export const getToken = (state: RootState) => state.login.token;
-export const getLoginStatus = (state: RootState) => state.login.status;
-export const getLoginError = (state: RootState) => state.login.error;
+export const getToken = (state: RootState) => state.login.TOKEN;
 export const getLoginUserType = (state: RootState) => state.login.userType;
 
 export const { setLoginUserType } = loginSlice.actions;
