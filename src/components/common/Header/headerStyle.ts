@@ -1,5 +1,7 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import DeleteIcon from "../../../assets/icons/icon-delete.svg";
+import ArrowDownIcon from "../../../assets/icons/icon-Triangle-down.svg";
+import ArrowUpIcon from "../../../assets/icons/icon-Triangle-up.svg";
 
 const HeaderContainer = styled.header`
   box-shadow: var(--shadow-light);
@@ -15,12 +17,19 @@ const HeaderContents = styled.div`
 
 const LeftWrap = styled.div`
   display: flex;
+  align-items: center;
   gap: 3rem;
 `;
 
+const RightWrap = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+`;
+
 const Logo = styled.h1<{ logoUrl: string }>`
-  width: 124px;
-  height: 38px;
+  width: 12.4rem;
+  height: 3.8rem;
   background: url(${({ logoUrl }) => logoUrl}) no-repeat center;
   background-size: cover;
   cursor: pointer;
@@ -53,7 +62,7 @@ const Input = styled.input<{ text?: string; icon?: string }>`
 
 const InputBtn = styled.button<{ icon: string }>`
   position: absolute;
-  right: 22px;
+  right: 2.2rem;
   top: calc(50% - 15px);
   width: 2.8rem;
   height: 2.8rem;
@@ -61,21 +70,12 @@ const InputBtn = styled.button<{ icon: string }>`
   background: url(${({ icon }) => icon}) no-repeat center;
 `;
 
-const RightWrap = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-`;
-
-const NavBtn = styled.button<{ color?: string }>`
+const NavBtn = styled.button`
   position: relative;
   width: 4.5rem;
   height: 4.5rem;
   border-radius: 50%;
   cursor: pointer;
-  span {
-    color: ${({ color }) => color};
-  }
   svg {
     width: 2.5rem;
     height: 2.5rem;
@@ -85,17 +85,33 @@ const NavBtn = styled.button<{ color?: string }>`
   }
 `;
 
-const UserBtn = styled(NavBtn)`
-  width: 12rem;
-  padding: 0 1rem;
+const UserBtn = styled(NavBtn)<{ arrow?: string }>`
+  padding-left: ${({ arrow }) => (arrow ? " 1.5rem" : "1rem")};
+  width: ${({ arrow }) => (arrow ? "14rem" : "11rem")};
   display: flex;
   align-items: center;
-  justify-content: center;
+  gap: ${({ arrow }) => (arrow ? "0.5rem" : "0rem")};
   border-radius: 2rem;
   font-size: 1.2rem;
-  svg {
-    margin-right: 1rem;
+  small {
+    width: 7rem;
   }
+  ${({ arrow }) => {
+    if (arrow === "open") {
+      return css`
+        background: url(${ArrowDownIcon}) no-repeat right 10px center;
+        background-color: var(--color-brightGrey);
+      `;
+    } else if (arrow === "close") {
+      return css`
+        background: url(${ArrowUpIcon}) no-repeat right 10px center;
+      `;
+    } else {
+      return css`
+        justify-content: center;
+      `;
+    }
+  }}
 `;
 
 const UerModalWrap = styled.div`

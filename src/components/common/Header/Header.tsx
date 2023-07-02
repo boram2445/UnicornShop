@@ -7,7 +7,6 @@ import { fetchSearchProducts, searchReset } from "../../../features/searchSlice"
 import { NormalBtn } from "../Button/Button";
 import { ReactComponent as CartIcon } from "../../../assets/icons/icon-shopping-cart.svg";
 import { ReactComponent as UserIcon } from "../../../assets/icons/icon-user.svg";
-import { ReactComponent as HeartIcon } from "../../../assets/icons/icon-heart.svg";
 import logo from "../../../assets/icons/Logo-hodu.svg";
 import searchIcon from "../../../assets/icons/search.svg";
 import shoppingBag from "../../../assets/icons/icon-shopping-bag.svg";
@@ -66,8 +65,7 @@ export function Header() {
   ];
 
   //헤더 아이콘 색상 변경
-  const cartIconColor = pathname.includes("cart") ? "#FA897B" : "#000000";
-  const myPageIconColor = pathname.includes("mypage") || onArrowModal ? "#FA897B" : "#000000";
+  const arrowModalIcon = !TOKEN ? undefined : onArrowModal ? "open" : "close";
 
   return (
     <>
@@ -98,8 +96,8 @@ export function Header() {
                   판매자 센터
                 </NormalBtn>
                 <S.UerModalWrap>
-                  <S.UserBtn onClick={() => setArrowModal(!onArrowModal)} color={myPageIconColor}>
-                    <UserIcon stroke={myPageIconColor} />
+                  <S.UserBtn onClick={() => setArrowModal(!onArrowModal)} arrow={arrowModalIcon}>
+                    <UserIcon stroke={"black"} />
                     <small>{TOKEN ? "아이디" : "로그인"}</small>
                   </S.UserBtn>
                   <ArrowModal on={onArrowModal} list={arrowList} />
@@ -107,22 +105,18 @@ export function Header() {
               </>
             ) : (
               <>
-                <S.NavBtn>
-                  <HeartIcon stroke={"black"} />
-                </S.NavBtn>
                 <S.NavBtn
                   onClick={TOKEN ? () => navigate("/cart") : () => dispatch(openModal("예"))}
-                  color={cartIconColor}
                 >
-                  <CartIcon stroke={cartIconColor} />
+                  <CartIcon stroke={"black"} />
                 </S.NavBtn>
                 <S.UerModalWrap>
                   <S.UserBtn
                     onClick={TOKEN ? () => setArrowModal(!onArrowModal) : () => navigate("/login")}
-                    color={myPageIconColor}
+                    arrow={arrowModalIcon}
                   >
-                    <UserIcon stroke={myPageIconColor} />
-                    <small>{TOKEN ? "아이디" : "로그인"}</small>
+                    <UserIcon stroke={"black"} />
+                    <small className="txt-ellipsis">{TOKEN ? "아이디dkdleldkd" : "로그인"}</small>
                   </S.UserBtn>
                   <ArrowModal on={onArrowModal} list={arrowList} />
                 </S.UerModalWrap>
