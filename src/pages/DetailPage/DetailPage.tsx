@@ -9,10 +9,10 @@ import { openModal, selectOpenState } from "../../features/modalSlice";
 import { NormalBtn } from "../../components/common/Button/Button";
 import AmountBtn from "../../components/common/AmountBtn/AmountBtn";
 import DetailTab from "../../components/detail/DetailTab";
+import Badge from "../../components/common/Badge/Badge";
 import Modal from "../../components/common/Modal/Modal";
 import Spinner from "../../components/common/Spinner/Spinner";
 import * as S from "./detailPageStyle";
-import Badge from "../../components/common/Badge/Badge";
 
 function DetailPage() {
   const { productId } = useParams();
@@ -123,7 +123,7 @@ function DetailPage() {
                 <NormalBtn
                   onClick={TOKEN ? getProductNow : () => dispatch(openModal("예"))}
                   padding="18px 0"
-                  disabled={USER_TYPE === "SELLER"}
+                  disabled={USER_TYPE === "SELLER" || detail.stock === 0}
                 >
                   바로 구매
                 </NormalBtn>
@@ -131,7 +131,7 @@ function DetailPage() {
                   color="dark"
                   onClick={getProductCart}
                   padding="18px 0"
-                  disabled={USER_TYPE === "SELLER"}
+                  disabled={USER_TYPE === "SELLER" || detail.stock === 0}
                 >
                   장바구니
                 </NormalBtn>
