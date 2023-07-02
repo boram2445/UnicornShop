@@ -1,7 +1,5 @@
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import DeleteIcon from "../../../assets/icons/icon-delete.svg";
-import ArrowDownIcon from "../../../assets/icons/icon-Triangle-down.svg";
-import ArrowUpIcon from "../../../assets/icons/icon-Triangle-up.svg";
 
 const HeaderContainer = styled.header`
   box-shadow: var(--shadow-light);
@@ -70,54 +68,6 @@ const InputBtn = styled.button<{ icon: string }>`
   background: url(${({ icon }) => icon}) no-repeat center;
 `;
 
-const NavBtn = styled.button`
-  position: relative;
-  width: 4.5rem;
-  height: 4.5rem;
-  border-radius: 50%;
-  cursor: pointer;
-  svg {
-    width: 2.5rem;
-    height: 2.5rem;
-  }
-  &:hover {
-    background-color: var(--color-brightGrey);
-  }
-`;
-
-const UserBtn = styled(NavBtn)<{ arrow?: string }>`
-  padding-left: ${({ arrow }) => (arrow ? " 1.5rem" : "1rem")};
-  width: ${({ arrow }) => (arrow ? "14rem" : "11rem")};
-  display: flex;
-  align-items: center;
-  gap: ${({ arrow }) => (arrow ? "0.5rem" : "0rem")};
-  border-radius: 2rem;
-  font-size: 1.2rem;
-  small {
-    width: 7rem;
-  }
-  ${({ arrow }) => {
-    if (arrow === "open") {
-      return css`
-        background: url(${ArrowDownIcon}) no-repeat right 10px center;
-        background-color: var(--color-brightGrey);
-      `;
-    } else if (arrow === "close") {
-      return css`
-        background: url(${ArrowUpIcon}) no-repeat right 10px center;
-      `;
-    } else {
-      return css`
-        justify-content: center;
-      `;
-    }
-  }}
-`;
-
-const UerModalWrap = styled.div`
-  position: relative;
-`;
-
 // Center Header
 const CenterContents = styled(HeaderContents)`
   align-items: center;
@@ -145,10 +95,7 @@ export {
   SearchForm,
   Input,
   InputBtn,
-  NavBtn,
-  UserBtn,
   SmallLogo,
   TitleText,
   CenterContents,
-  UerModalWrap,
 };
