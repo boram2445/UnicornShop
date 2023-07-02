@@ -6,7 +6,7 @@ const UerModalWrap = styled.div`
   position: relative;
 `;
 
-const NavBtn = styled.button`
+const NavBtn = styled.button<{ quantity?: number }>`
   position: relative;
   width: 4.5rem;
   height: 4.5rem;
@@ -22,6 +22,25 @@ const NavBtn = styled.button`
   &:hover {
     background-color: var(--color-brightGrey);
   }
+  ${({ quantity }) => {
+    if (quantity && quantity > 0) {
+      return css`
+        ::after {
+          position: absolute;
+          top: 0.4rem;
+          right: 0.2rem;
+          display: block;
+          content: "${quantity}";
+          line-height: 1.7rem;
+          width: 1.7rem;
+          height: 1.7rem;
+          border-radius: 50%;
+          color: var(--color-white);
+          background-color: var(--color-main);
+        }
+      `;
+    }
+  }}
 `;
 
 const WideNavBtn = styled(NavBtn)<{ arrow?: string }>`

@@ -210,6 +210,8 @@ export const getTotalPrice = (state: RootState) => state.cartList.totalPrice;
 export const getDeliveryPrice = (state: RootState) => state.cartList.deliveryPrice;
 
 export const selectCartList = (state: RootState) => state.cartList.cartItems;
+
+export const getCartQuantity = (state: RootState) => state.cartList.cartItems.length;
 export const selectCheckAllState = (state: RootState) =>
   state.cartList.cartItems.every((item) => item.isChecked === true);
 export const selectCheckedItems = (state: RootState) =>

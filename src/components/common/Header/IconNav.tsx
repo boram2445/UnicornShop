@@ -10,6 +10,7 @@ import { ReactComponent as CartIcon } from "../../../assets/icons/icon-shopping-
 import { ReactComponent as UserIcon } from "../../../assets/icons/icon-user.svg";
 import { ReactComponent as BagIcon } from "../../../assets/icons/icon-shopping-bag.svg";
 import * as S from "./iconNavStyle";
+import { getCartQuantity, reset } from "../../../features/cartListSlice";
 
 function IconNav() {
   const dispatch = useAppDispatch();
@@ -20,6 +21,8 @@ function IconNav() {
 
   const modal = useAppSelector(selectOpenState);
   const [onArrowModal, setArrowModal] = useState(false);
+
+  const cartQuantity = userType === "BUYER" ? useAppSelector(getCartQuantity) : undefined;
 
   //헤더 화살표 아이콘
   const onArrowIcon = !TOKEN ? undefined : onArrowModal ? "open" : "close";
@@ -37,6 +40,7 @@ function IconNav() {
   const onLogout = () => {
     handleOnModal(false);
     dispatch(logout());
+    dispatch(reset());
     navigate("/");
   };
 
@@ -80,7 +84,10 @@ function IconNav() {
   return (
     <>
       {!TOKEN && modal ? needLoginModal : null}
-      <S.NavBtn onClick={TOKEN ? () => navigate("/cart") : () => dispatch(openModal("예"))}>
+      <S.NavBtn
+        quantity={cartQuantity}
+        onClick={TOKEN ? () => navigate("/cart") : () => dispatch(openModal("예"))}
+      >
         <CartIcon stroke="black" />
       </S.NavBtn>
       {userNav}
