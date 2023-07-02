@@ -2,6 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Product } from "../../../features/productSlice";
 import { convertDate } from "../../../utils/convertDate";
+import Badge from "../../common/Badge/Badge";
 import * as S from "./productListCardStyle";
 
 function ProductListCard({ product }: { product: Product }) {
@@ -10,7 +11,9 @@ function ProductListCard({ product }: { product: Product }) {
   return (
     <S.ListItem onClick={() => navigate(`/products/${product.product_id}`)}>
       <S.ProductInfoBox>
-        <S.ImageBox imgUrl={product.image} />
+        <S.ThumbContainer imgUrl={product.image} stock={product.stock}>
+          {product.stock === 0 && <Badge />}
+        </S.ThumbContainer>
         <div>
           <S.TitleText>{product.product_name}</S.TitleText>
           <S.PriceText>{product.price.toLocaleString()}원</S.PriceText>
