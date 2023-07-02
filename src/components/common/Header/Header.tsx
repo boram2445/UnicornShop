@@ -1,27 +1,28 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
-import { getToken, logout, getLoginUserType } from "../../../features/loginSlice";
+import { logout, getAuthState } from "../../../features/loginSlice";
 import { openModal, selectOpenState } from "../../../features/modalSlice";
 import { fetchSearchProducts, searchReset } from "../../../features/searchSlice";
 import { NormalBtn } from "../Button/Button";
+import ArrowModal from "../ArrowModal/ArrowModal";
+import Modal from "../Modal/Modal";
+
 import { ReactComponent as CartIcon } from "../../../assets/icons/icon-shopping-cart.svg";
 import { ReactComponent as UserIcon } from "../../../assets/icons/icon-user.svg";
 import logo from "../../../assets/icons/Logo-hodu.svg";
 import searchIcon from "../../../assets/icons/search.svg";
 import shoppingBag from "../../../assets/icons/icon-shopping-bag.svg";
-import ArrowModal from "../ArrowModal/ArrowModal";
-import Modal from "../Modal/Modal";
 import * as S from "./headerStyle";
 
 export function Header() {
-  const { pathname } = useLocation();
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-  const inputRef = useRef() as React.MutableRefObject<HTMLInputElement>;
+  const { pathname } = useLocation();
 
-  const TOKEN = useAppSelector(getToken);
-  const USER = useAppSelector(getLoginUserType);
+  const dispatch = useAppDispatch();
+  const { userName, token, userType } = useAppSelector(getAuthState);
+
+  const inputRef = useRef() as React.MutableRefObject<HTMLInputElement>;
   const modal = useAppSelector(selectOpenState);
 
   const [onArrowModal, setArrowModal] = useState(false);
@@ -58,18 +59,18 @@ export function Header() {
     </Modal>
   );
 
-  //화살표 선택 모달 정보
+  //모달 정보
   const arrowList = [
     { label: "마이페이지", onClick: () => navigate("/mypage") },
     { label: "로그아웃", onClick: () => onLogout() },
   ];
 
   //헤더 아이콘 색상 변경
-  const arrowModalIcon = !TOKEN ? undefined : onArrowModal ? "open" : "close";
+  const onArrowIcon = !token ? undefined : onArrowModal ? "open" : "close";
 
   return (
     <>
-      {!TOKEN && modal ? needLoginModal : null}
+      {!token && modal ? needLoginModal : null}
       <S.HeaderContainer>
         <S.HeaderContents>
           <S.LeftWrap>
@@ -85,7 +86,7 @@ export function Header() {
             </S.SearchForm>
           </S.LeftWrap>
           <S.RightWrap>
-            {USER === "SELLER" ? (
+            {userType === "SELLER" ? (
               <>
                 <NormalBtn
                   onClick={() => navigate("/center")}
@@ -96,9 +97,9 @@ export function Header() {
                   판매자 센터
                 </NormalBtn>
                 <S.UerModalWrap>
-                  <S.UserBtn onClick={() => setArrowModal(!onArrowModal)} arrow={arrowModalIcon}>
+                  <S.UserBtn onClick={() => setArrowModal(!onArrowModal)} arrow={onArrowIcon}>
                     <UserIcon stroke={"black"} />
-                    <small>{TOKEN ? "아이디" : "로그인"}</small>
+                    <small>{token ? userName : "로그인"}</small>
                   </S.UserBtn>
                   <ArrowModal on={onArrowModal} list={arrowList} />
                 </S.UerModalWrap>
@@ -106,17 +107,17 @@ export function Header() {
             ) : (
               <>
                 <S.NavBtn
-                  onClick={TOKEN ? () => navigate("/cart") : () => dispatch(openModal("예"))}
+                  onClick={token ? () => navigate("/cart") : () => dispatch(openModal("예"))}
                 >
                   <CartIcon stroke={"black"} />
                 </S.NavBtn>
                 <S.UerModalWrap>
                   <S.UserBtn
-                    onClick={TOKEN ? () => setArrowModal(!onArrowModal) : () => navigate("/login")}
-                    arrow={arrowModalIcon}
+                    onClick={token ? () => setArrowModal(!onArrowModal) : () => navigate("/login")}
+                    arrow={onArrowIcon}
                   >
                     <UserIcon stroke={"black"} />
-                    <small className="txt-ellipsis">{TOKEN ? "아이디dkdleldkd" : "로그인"}</small>
+                    <small className="txt-ellipsis">{token ? userName : "로그인"}</small>
                   </S.UserBtn>
                   <ArrowModal on={onArrowModal} list={arrowList} />
                 </S.UerModalWrap>

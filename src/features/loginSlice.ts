@@ -15,15 +15,17 @@ interface LoginPostData {
 }
 
 interface LoginState {
-  token?: string | null;
+  userName: string;
   userType: string;
+  token?: string | null;
   status: string;
   error: string;
 }
 
 const initialState: LoginState = {
-  token: TOKEN ? TOKEN : null,
+  userName: "",
   userType: USER_TYPE ? USER_TYPE : "BUYER",
+  token: TOKEN ? TOKEN : null,
   status: "idle",
   error: "",
 };
@@ -31,16 +33,17 @@ const initialState: LoginState = {
 //로그인
 export const fetchPostLogin = createAsyncThunk(
   "login/fetchPostLogin",
-  async ({ username, password, login_type }: LoginPostData, { rejectWithValue }) => {
+  async (data: LoginPostData, { rejectWithValue }) => {
     try {
-      const data = { username, password, login_type };
+      const { username } = data;
       const result = await axios.post(`${BASE_URL}/accounts/login/`, data);
 
       if (result.data) {
-        sessionStorage.setItem("token", JSON.stringify(result.data));
+        sessionStorage.setItem("token", JSON.stringify({ username, ...result.data }));
       }
 
-      return result.data;
+      console.log();
+      return { username, ...result.data };
     } catch (error: any) {
       return rejectWithValue(error.response.data.FAIL_Message);
     }
@@ -67,6 +70,8 @@ export const loginSlice = createSlice({
     });
     builder.addCase(fetchPostLogin.fulfilled, (state, action) => {
       state.status = "succeeded";
+      console.log(action.payload);
+      state.userName = action.payload.username;
       state.token = action.payload.token || "";
     });
     builder.addCase(fetchPostLogin.rejected, (state, action) => {
@@ -87,6 +92,9 @@ export const loginSlice = createSlice({
   },
 });
 
+export const getAuthState = (state: RootState) => state.login;
+
+export const getUserName = (state: RootState) => state.login.userName;
 export const getToken = (state: RootState) => state.login.token;
 export const getLoginStatus = (state: RootState) => state.login.status;
 export const getLoginError = (state: RootState) => state.login.error;
