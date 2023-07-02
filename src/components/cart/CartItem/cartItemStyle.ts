@@ -20,11 +20,10 @@ const ProductInfoBox = styled.div`
 `;
 
 const ImageBox = styled.div<{ imgUrl?: string }>`
-  margin-right: 36px;
-  width: 160px;
-  height: 160px;
-  border: 1px solid var(--color-grey);
-  border-radius: 10px;
+  margin-right: 3.6rem;
+  width: 16rem;
+  height: 16rem;
+  border-radius: 1rem;
   background: url(${({ imgUrl }) => imgUrl}) no-repeat center;
   background-size: cover;
 `;
