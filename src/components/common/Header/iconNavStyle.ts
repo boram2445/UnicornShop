@@ -11,6 +11,9 @@ const NavBtn = styled.button`
   width: 4.5rem;
   height: 4.5rem;
   border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
   svg {
     width: 2.5rem;
@@ -22,15 +25,14 @@ const NavBtn = styled.button`
 `;
 
 const WideNavBtn = styled(NavBtn)<{ arrow?: string }>`
-  padding-left: ${({ arrow }) => (arrow ? " 1.5rem" : "1rem")};
-  width: ${({ arrow }) => (arrow ? "14rem" : "11rem")};
-  display: flex;
-  align-items: center;
+  padding: ${({ arrow }) => (arrow ? "0 1.5rem" : "0 0 0 1rem")};
+  width: ${({ arrow }) => (arrow ? "14.5rem" : "11rem")};
+  justify-content: start;
   gap: ${({ arrow }) => (arrow ? "0.5rem" : "0rem")};
   border-radius: 2rem;
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   small {
-    width: 7rem;
+    width: 7.5rem;
   }
   ${({ arrow }) => {
     if (arrow === "open") {
