@@ -1,11 +1,11 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { NormalBtn } from "../../common/Button/Button";
 import { CircleCheckBtn } from "../../common/CheckBtn/CheckBtn";
 import { CartItem as Cart, Item } from "../../../features/cartListSlice";
 import AmountBtn from "../../common/AmountBtn/AmountBtn";
 import deleteIcon from "../../../assets/icons/icon-delete.svg";
 import * as S from "./cartItemStyle";
-import { useNavigate } from "react-router-dom";
 
 type ItemProps = {
   item: Cart;
@@ -47,7 +47,7 @@ function CartItem({ item, detail, OpenDeleteModal, checkHandler }: ItemProps) {
         </div>
       </S.ProductInfoBox>
       {/* 상품 개수 버튼 */}
-      <AmountBtn count={quantity} item={item} stock={item.item.stock} />
+      <AmountBtn selectAmount={quantity} item={item} stock={item.item.stock} />
       <S.OrderBox>
         <S.PriceAllText>
           {detail?.price && (detail?.price * quantity).toLocaleString()}원

@@ -7,53 +7,56 @@ import { ReactComponent as MinusIcon } from "../../../assets/icons/icon-minus-li
 import * as S from "./amountStyle";
 
 interface AmountBtnProps {
-  count?: number;
-  getCount?: (res: number) => void; //선택 개수를 반환
+  selectAmount?: number;
+  stock: number;
   product_id?: number;
   cart_item_id?: number;
   item?: CartItem;
-  stock: number;
+  getCount?: (res: number) => void; //선택 개수를 반환
 }
 
-function AmountBtn({ count, getCount, item, stock }: AmountBtnProps) {
+function AmountBtn({ selectAmount = 0, getCount, item, stock }: AmountBtnProps) {
   const dispatch = useAppDispatch();
-  const [amount, setAmount] = useState(count || 1);
-  const [onIncreaseBtn, setOnIncreaseBtn] = useState(true);
   const TOKEN = useAppSelector(getToken) || "";
+
+  const [amount, setAmount] = useState(selectAmount || 1);
+  const [onIncreaseBtn, setOnIncreaseBtn] = useState(
+    selectAmount ? !(selectAmount === stock) : stock > 0
+  );
 
   const onIncrease = () => {
     if (!onIncreaseBtn) return;
-    const quantity = amount + 1;
-    if (quantity >= stock) {
-      setOnIncreaseBtn(!onIncreaseBtn);
-    }
-    setAmount(quantity);
-    getCount?.(quantity);
-    //장바구니 수량 변경 처리
+    const plusAmount = amount + 1;
+    if (plusAmount >= stock) setOnIncreaseBtn(false);
+    handleChangeAmount(plusAmount);
+  };
+
+  const onDecrease = () => {
+    const minusAmount = amount - 1 < 1 ? 1 : amount - 1;
+    if (!onIncreaseBtn && minusAmount <= stock) setOnIncreaseBtn(true);
+    handleChangeAmount(minusAmount);
+  };
+
+  const handleChangeAmount = (amount: number) => {
+    setAmount(amount);
+    getCount?.(amount);
+    handleCartQuantity(amount);
+  };
+
+  //장바구니 수량 변경 처리
+  const handleCartQuantity = (quantity: number) => {
     if (item) {
       const { product_id, cart_item_id, is_active } = item;
       dispatch(fetchPutCartQuantity({ TOKEN, product_id, quantity, cart_item_id, is_active }));
     }
   };
 
-  const onDecrease = () => {
-    const quantity = amount - 1 < 1 ? 1 : amount - 1;
-    if (!onIncreaseBtn && quantity <= stock) {
-      setOnIncreaseBtn(true);
-    }
-    setAmount(quantity);
-    getCount?.(quantity);
-    if (item) {
-      const { product_id, cart_item_id, is_active } = item;
-      dispatch(fetchPutCartQuantity({ TOKEN, product_id, quantity, cart_item_id, is_active }));
-    }
-  };
   return (
     <S.AmountBtnBox>
       <S.MinusBtn onClick={onDecrease} disabled={amount <= 1}>
         <MinusIcon stroke={amount > 1 ? "#767676" : "#F2F2F2"} />
       </S.MinusBtn>
-      <S.AmountText>{amount}</S.AmountText>
+      <S.AmountText>{stock === 0 ? 0 : amount}</S.AmountText>
       <S.PlusBtn onClick={onIncrease} disabled={!onIncreaseBtn}>
         <PlusIcon stroke={onIncreaseBtn ? "#767676" : "#F2F2F2"} />
       </S.PlusBtn>

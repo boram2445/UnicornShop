@@ -43,6 +43,7 @@ const GlobalStyle = createGlobalStyle`
     background:transparent; 
     border:none; 
     cursor: pointer;
+    transition: var(--transition-smooth);
   }
 
   a{

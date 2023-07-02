@@ -4,16 +4,16 @@ const AmountBtnBox = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   align-items: center;
-  width: 152px;
-  height: 50px;
+  width: 15.2rem;
+  height: 5rem;
   border: 1px solid var(--color-grey);
-  border-radius: 5px;
+  border-radius: 0.5rem;
 `;
 
 const MinusBtn = styled.button`
   height: 100%;
   border-right: 1px solid var(--color-grey);
-  border-radius: 5px 0 0 5px;
+  border-radius: 0.5rem 0 0 0.5rem;
   &:hover {
     background-color: var(--color-brightGrey);
   }
@@ -23,17 +23,10 @@ const MinusBtn = styled.button`
   }
 `;
 
-const PlusBtn = styled.button`
-  height: 100%;
+const PlusBtn = styled(MinusBtn)`
+  border-right: transparent;
   border-left: 1px solid var(--color-grey);
-  border-radius: 0 5px 5px 0;
-  &:hover {
-    background-color: var(--color-brightGrey);
-  }
-  &:disabled {
-    background-color: var(--color-white);
-    cursor: default;
-  }
+  border-radius: 0 0.5rem 0.5rem 0;
 `;
 
 const AmountText = styled.span`

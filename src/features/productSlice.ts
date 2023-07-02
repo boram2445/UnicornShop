@@ -17,6 +17,7 @@ export interface Product {
   stock: number;
   created_at: string;
 }
+
 //state 초기값 타입
 interface ProductSliceState {
   status: string; //idle | loading | succeeded | failed
@@ -65,12 +66,7 @@ export const productSlice = createSlice({
   },
 });
 
-//이렇게 해두면, 컴포넌트에서 함수 명만 가지고 해당 데이터를 부를 수 있다.
-//리턴:state.reducer이름.state값
-export const selectAllProducts = (state: RootState) => state.products.products;
-export const getProductStatus = (state: RootState) => state.products.status;
-export const getTotalPageCount = (state: RootState) => state.products.totalPage;
-
+export const getProductState = (state: RootState) => state.products;
 export const selectProductById = (state: RootState, postId: number) =>
   state.products.products.find((product) => product.product_id === postId);
 

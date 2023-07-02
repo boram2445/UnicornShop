@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import {
   ImageBox,
   ProductInfoBox,
@@ -20,6 +20,30 @@ const ListItem = styled.li`
   &:hover {
     background-color: var(--color-brightGrey);
   }
+`;
+
+const ThumbContainer = styled(ImageBox)<{ stock: number }>`
+  position: relative;
+  ${({ stock }) => {
+    if (stock === 0) {
+      return css`
+        ::after {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background-color: rgba(0, 0, 0, 0.3);
+          display: block;
+          width: 100%;
+          height: 100%;
+          color: black;
+          border-radius: 10px;
+        }
+      `;
+    }
+  }}
 `;
 
 const TitleText = styled(ProductText)`
@@ -56,7 +80,7 @@ const DateText = styled.small`
 
 export {
   ListItem,
-  ImageBox,
+  ThumbContainer,
   ProductInfoBox,
   TitleText,
   PriceText,

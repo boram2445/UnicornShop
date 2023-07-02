@@ -8,7 +8,7 @@ const HeaderContainer = styled.header`
 const HeaderContents = styled.div`
   margin: 0 auto;
   max-width: 1380px;
-  padding: 2rem 3rem;
+  padding: 1.5rem 3rem;
   display: flex;
   justify-content: space-between;
 `;
