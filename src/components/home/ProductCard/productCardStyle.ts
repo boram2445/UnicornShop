@@ -13,7 +13,7 @@ const ProductItem = styled.li`
   }
 `;
 
-const ThumbContainer = styled.div<{ image: string; stock: number }>`
+const ThumbContainer = styled.div<{ image: string; stock?: number }>`
   position: relative;
   padding-top: 100%;
   background: url(${({ image }) => image}) no-repeat center;
