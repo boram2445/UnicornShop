@@ -17,6 +17,7 @@ export function CircleCheckBtn({ name, productId, checkHandler, isChecked = true
       dispatch(checkItem({ productId, isChecked: true }));
     }
   }, []);
+
   return (
     <>
       <S.CircleCheckBtn

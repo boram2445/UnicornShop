@@ -19,7 +19,9 @@ const TopWrap = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-bottom: 10px;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding-bottom: 1rem;
   border-bottom: 1px var(--color-grey) solid;
 `;
 

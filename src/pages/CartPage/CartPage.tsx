@@ -173,8 +173,10 @@ function CartPage() {
         <S.CartInfoBox>
           <CircleCheckBtn name="allSelect" checkHandler={checkHandler} isChecked={isAllChecked} />
           <strong>상품정보</strong>
-          <strong>수량</strong>
-          <strong>상품금액</strong>
+          <div>
+            <strong>수량</strong>
+            <strong>상품금액</strong>
+          </div>
         </S.CartInfoBox>
         {content}
       </S.CartPageLayout>

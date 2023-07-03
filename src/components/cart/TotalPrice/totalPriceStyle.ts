@@ -9,10 +9,20 @@ const TotalPriceBox = styled.div`
   align-items: center;
   background-color: var(--color-brightGrey);
   border-radius: 5px;
+
+  @media screen and (max-width: 768px) {
+    grid-template-columns: 1fr 34px 1fr 34px 1fr;
+  }
 `;
 
 const PriceBox = styled.div`
   text-align: center;
+  &:last-child {
+    @media screen and (max-width: 768px) {
+      margin-top: 3rem;
+      grid-column: 3;
+    }
+  }
 `;
 
 const TitleText = styled.p<{ type?: string }>`

@@ -56,6 +56,10 @@ const Input = styled.input<{ text?: string; icon?: string }>`
     background: url(${DeleteIcon}) center center no-repeat;
     cursor: pointer;
   }
+
+  @media screen and (max-width: 768px) {
+    display: none;
+  }
 `;
 
 const InputBtn = styled.button<{ icon: string }>`
@@ -66,6 +70,10 @@ const InputBtn = styled.button<{ icon: string }>`
   height: 2.8rem;
   padding: 0;
   background: url(${({ icon }) => icon}) no-repeat center;
+
+  @media screen and (max-width: 768px) {
+    display: none;
+  }
 `;
 
 // Center Header

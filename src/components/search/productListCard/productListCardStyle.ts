@@ -1,7 +1,7 @@
 import styled, { css } from "styled-components";
 import {
   ImageBox,
-  ProductInfoBox,
+  LeftWrap as ProductInfoBox,
   ProductText,
   PriceText,
   ShipText,

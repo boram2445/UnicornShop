@@ -23,15 +23,31 @@ const CartInfoBox = styled.div`
   width: 100%;
   height: 60px;
   display: grid;
-  grid-template-columns: 4fr 1fr 1fr;
+  grid-template-columns: 1.4fr 1fr;
   gap: 30px;
-  padding: 19px 100px 18px 90px;
+  padding: 19px 80px 18px 90px;
   background-color: var(--color-brightGrey);
   border-radius: 10px;
   strong {
     font-size: 1.8rem;
     line-height: 2.2rem;
     text-align: center;
+  }
+  div {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    @media screen and (max-width: 768px) {
+      display: none;
+    }
+  }
+  @media screen and (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+  @media screen and (max-width: 600px) {
+    & > input {
+      left: 1.5rem;
+    }
   }
 `;
 
