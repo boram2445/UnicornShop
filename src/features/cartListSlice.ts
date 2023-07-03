@@ -82,11 +82,17 @@ export const fetchDeleteCartItem = createAsyncThunk(
 );
 
 //상품 디테일
-export const fetchGetDetail = createAsyncThunk(
+export const fetchGetAllDetail = createAsyncThunk(
   "detail/fetchGetDetail",
-  async (product_id: number) => {
-    const result = await axios.get(`${BASE_URL}/products/${product_id}/`);
-    return result.data;
+  async (cartItems: CartItem[]) => {
+    console.log(cartItems);
+    const promiseArr = [
+      ...cartItems.map((item) => axios.get(`${BASE_URL}/products/${item.product_id}/`)),
+    ];
+    const cartDetails = await axios
+      .all(promiseArr)
+      .then(axios.spread((...responses) => responses.map((res) => res.data)));
+    return { cartItems, cartDetails };
   }
 );
 
@@ -154,20 +160,21 @@ export const cartListSlice = createSlice({
       state.error = action.error.message || "Something was wrong";
     });
     //디테일 가져오기
-    builder.addCase(fetchGetDetail.pending, (state) => {
+    builder.addCase(fetchGetAllDetail.pending, (state) => {
       state.detailStatus = "loading";
       state.error = "";
     });
-    builder.addCase(fetchGetDetail.fulfilled, (state, action) => {
-      const { product_id } = action.payload;
+    builder.addCase(fetchGetAllDetail.fulfilled, (state, action) => {
       state.detailStatus = "succeeded";
-      state.cartItems.map((item, index) => {
-        if (item.product_id === product_id) {
-          state.cartItems[index].item = action.payload;
-        }
-      });
+      const { cartItems, cartDetails } = action.payload;
+      const res = cartItems.map((item, index) => ({
+        ...item,
+        item: cartDetails[index],
+        isChecked: true,
+      }));
+      state.cartItems = res;
     });
-    builder.addCase(fetchGetDetail.rejected, (state, action) => {
+    builder.addCase(fetchGetAllDetail.rejected, (state, action) => {
       state.detailStatus = "failed";
       state.error = action.error.message || "Something was wrong";
     });
@@ -203,14 +210,7 @@ export const cartListSlice = createSlice({
   },
 });
 
-export const getCartListStatus = (state: RootState) => state.cartList.status;
-export const getCartListError = (state: RootState) => state.cartList.error;
-
-export const getTotalPrice = (state: RootState) => state.cartList.totalPrice;
-export const getDeliveryPrice = (state: RootState) => state.cartList.deliveryPrice;
-
-export const selectCartList = (state: RootState) => state.cartList.cartItems;
-
+export const getCartState = (state: RootState) => state.cartList;
 export const getCartQuantity = (state: RootState) => state.cartList.cartItems.length;
 export const selectCheckAllState = (state: RootState) =>
   state.cartList.cartItems.every((item) => item.isChecked === true);

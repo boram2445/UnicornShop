@@ -9,16 +9,14 @@ import TotalPrice from "../../components/cart/TotalPrice/TotalPrice";
 import {
   fetchGetCartList,
   fetchDeleteCartItem,
-  selectCartList,
-  getCartListStatus,
-  getCartListError,
   selectCheckAllState,
   setTotalPrice,
   checkAllItem,
   checkItem,
   reset,
-  fetchGetDetail,
   selectCheckedItems,
+  getCartState,
+  fetchGetAllDetail,
 } from "../../features/cartListSlice";
 import Modal from "../../components/common/Modal/Modal";
 import { closeModal, openModal, selectOpenState } from "../../features/modalSlice";
@@ -30,9 +28,7 @@ function CartPage() {
   const navigate = useNavigate();
   const TOKEN = useAppSelector(getToken) || "";
 
-  const cartStatus = useAppSelector(getCartListStatus);
-  const cartLists = useAppSelector(selectCartList);
-  const error = useAppSelector(getCartListError);
+  const { status: cartStatus, error, cartItems } = useAppSelector(getCartState);
   const [getAllDetail, setAllDetail] = useState(false);
 
   const checkedItems = useAppSelector(selectCheckedItems);
@@ -50,17 +46,14 @@ function CartPage() {
   }, []);
 
   useEffect(() => {
-    //상품 디테일을 서버에서 하나씩 받아온다.
     if (cartStatus === "succeeded" && !getAllDetail) {
-      cartLists.forEach((item) => {
-        dispatch(fetchGetDetail(item.product_id));
-      });
+      dispatch(fetchGetAllDetail(cartItems));
     }
   }, [cartStatus]);
 
   //상품 디테일을 모두 받아왔는지 확인
   if (cartStatus === "succeeded" && !getAllDetail) {
-    if (cartLists.every((item) => item.item)) {
+    if (cartItems.every((item) => item.item)) {
       setAllDetail(true);
     }
   }
@@ -121,10 +114,10 @@ function CartPage() {
     content = <Spinner />;
   } else if (cartStatus === "succeeded" && getAllDetail) {
     content =
-      cartLists.length !== 0 ? (
+      cartItems.length !== 0 ? (
         <>
           <S.CartList>
-            {cartLists.map((item) => (
+            {cartItems.map((item) => (
               <CartItem
                 key={item.cart_item_id}
                 item={item}
