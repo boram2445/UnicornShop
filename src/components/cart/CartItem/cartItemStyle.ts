@@ -9,13 +9,14 @@ const CartItemArticle = styled.article`
   gap: 3rem;
   align-items: center;
   justify-content: center;
-  padding: 19px 80px 18px 90px;
+  padding: 1.9rem 8rem 1.8rem 9rem;
   border: 0.2rem solid var(--color-brightGrey);
-  border-radius: 10px;
+  border-radius: 1rem;
   position: relative;
 
   @media screen and (max-width: 768px) {
     grid-template-columns: 1fr;
+    padding: 1.9rem 1.5rem 1.8rem 1.5rem;
   }
   @media screen and (max-width: 600px) {
     padding-top: 4rem;
@@ -35,6 +36,11 @@ const RightWrap = styled.div`
   grid-template-columns: 1fr 1fr;
   gap: 3rem;
   align-items: center;
+  @media screen and (max-width: 768px) {
+    display: flex;
+    justify-content: space-between;
+  }
+
   div {
     margin: 0 auto;
 
@@ -71,7 +77,7 @@ const ProductText = styled.strong`
 `;
 
 const PriceText = styled.p`
-  margin-bottom: 40px;
+  margin-bottom: 4rem;
   font-size: 1.6rem;
   line-height: 2rem;
   font-weight: 700;
@@ -83,10 +89,11 @@ const OrderBox = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 28px;
+  gap: 2.8rem;
 
   @media screen and (max-width: 768px) {
     flex-direction: row;
+    gap: 1rem;
   }
 `;
 
@@ -98,10 +105,10 @@ const PriceAllText = styled.p`
 
 const DeleteBtn = styled.button`
   position: absolute;
-  top: 16px;
-  right: 16px;
-  width: 22px;
-  height: 22px;
+  top: 1.6rem;
+  right: 1.6rem;
+  width: 2.2rem;
+  height: 2.2rem;
   background: url(${DeleteIcon}) no-repeat center;
   background-size: cover;
   cursor: pointer;
