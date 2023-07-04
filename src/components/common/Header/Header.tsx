@@ -3,12 +3,12 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
 import { fetchSearchProducts, searchReset } from "../../../features/searchSlice";
 import { getToken } from "../../../features/loginSlice";
+import { fetchGetCartList } from "../../../features/cartListSlice";
 import IconNav from "./IconNav";
 
 import logo from "../../../assets/icons/Logo-hodu.svg";
 import searchIcon from "../../../assets/icons/search.svg";
 import * as S from "./headerStyle";
-import { fetchGetCartList } from "../../../features/cartListSlice";
 
 export function Header() {
   const navigate = useNavigate();
