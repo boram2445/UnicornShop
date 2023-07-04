@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import * as S from "./carouselStyle";
 import { carouselData } from "./carouselData";
 import { Link } from "react-router-dom";
-import { ReactComponent as LeftArrow } from "../../../assets/icons/icon-swiper-1.svg";
-import { ReactComponent as RightArrow } from "../../../assets/icons/icon-swiper-2.svg";
+import { ReactComponent as LeftArrow } from "../../../assets/icons/icon-arrow-left.svg";
+import { ReactComponent as RightArrow } from "../../../assets/icons/icon-arrow-right.svg";
 
 function Carousel() {
   const [carouselIndex, setCarouselIndex] = useState(1);
