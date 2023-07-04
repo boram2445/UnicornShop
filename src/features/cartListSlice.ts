@@ -85,7 +85,6 @@ export const fetchDeleteCartItem = createAsyncThunk(
 export const fetchGetAllDetail = createAsyncThunk(
   "detail/fetchGetDetail",
   async (cartItems: CartItem[]) => {
-    console.log(cartItems);
     const promiseArr = [
       ...cartItems.map((item) => axios.get(`${BASE_URL}/products/${item.product_id}/`)),
     ];
@@ -119,10 +118,9 @@ export const cartListSlice = createSlice({
     //상품 체크 버튼
     checkItem: (state, { payload }) => {
       const { productId, isChecked } = payload;
-      state.cartItems.map((item) => {
-        if (item.product_id === productId) {
+      state.cartItems.forEach((item) => {
+        if (item.product_id === productId)
           isChecked ? (item.isChecked = true) : (item.isChecked = false);
-        }
       });
     },
     //전체 상품 체크
@@ -159,7 +157,7 @@ export const cartListSlice = createSlice({
       state.status = "failed";
       state.error = action.error.message || "Something was wrong";
     });
-    //디테일 가져오기
+    //전체 디테일 가져오기
     builder.addCase(fetchGetAllDetail.pending, (state) => {
       state.detailStatus = "loading";
       state.error = "";
@@ -182,27 +180,27 @@ export const cartListSlice = createSlice({
     builder.addCase(fetchDeleteCartItem.fulfilled, (state, action) => {
       state.status = "succeeded";
       state.error = "";
-      const cart_item_id = action.payload;
-      state.cartItems = state.cartItems.filter((item) => item.cart_item_id !== cart_item_id);
+      const deleteItemId = action.payload;
+      const newCartItems = state.cartItems.filter((item) => item.cart_item_id !== deleteItemId);
       //가격 재 계산
-      state.cartItems.map((item, index) => {
-        if (item.cart_item_id === cart_item_id && item.isChecked) {
-          state.totalPrice -= state.cartItems[index].quantity * state.cartItems[index].item.price;
-        }
+      state.cartItems.forEach((item) => {
+        if (item.cart_item_id === deleteItemId && item.isChecked)
+          state.totalPrice -= item.quantity * item.item.price;
       });
+      state.cartItems = newCartItems;
     });
     //장바구니 수량 수정
     builder.addCase(fetchPutCartQuantity.fulfilled, (state, action) => {
       state.status = "succeeded";
       const { product_id, quantity } = action.payload;
-      state.cartItems.map((item, index) => {
+      state.cartItems.forEach((item) => {
         if (item.product_id === product_id) {
           if (item.isChecked) {
             state.totalPrice -= item.quantity * item.item.price;
-            state.cartItems[index].quantity = quantity;
+            item.quantity = quantity;
             state.totalPrice += quantity * item.item.price;
           } else {
-            state.cartItems[index].quantity = quantity;
+            item.quantity = quantity;
           }
         }
       });
