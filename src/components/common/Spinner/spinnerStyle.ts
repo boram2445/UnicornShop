@@ -1,13 +1,4 @@
-import styled, { keyframes } from "styled-components";
-
-const fadeOut = keyframes`
-  0% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
-`;
+import styled from "styled-components";
 
 const Background = styled.div`
   position: absolute;
@@ -22,7 +13,6 @@ const Background = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  animation: ${fadeOut} 0.2s ease-out;
 `;
 
 export { Background };
