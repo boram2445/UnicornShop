@@ -10,6 +10,13 @@ const ProductLists = styled.ul`
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 6vh 3vw;
+
+  @media screen and (max-width: 900px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  @media screen and (max-width: 580px) {
+    grid-template-columns: repeat(1, 1fr);
+  }
 `;
 
 export { ProductSection, ProductLists };
