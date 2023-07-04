@@ -1,14 +1,13 @@
 import React, { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
-import { setTotalPrice, getDeliveryPrice, getTotalPrice } from "../../../features/cartListSlice";
+import { setTotalPrice, getCartState } from "../../../features/cartListSlice";
 import { ReactComponent as PlusIcon } from "../../../assets/icons/icon-plus-line.svg";
 import { ReactComponent as MinusIcon } from "../../../assets/icons/icon-minus-line.svg";
 import * as S from "./totalPriceStyle";
 
 function TotalPrice() {
   const dispatch = useAppDispatch();
-  const totalPrice = useAppSelector(getTotalPrice);
-  const deliveryPrice = useAppSelector(getDeliveryPrice);
+  const { totalPrice, deliveryPrice } = useAppSelector(getCartState);
 
   useEffect(() => {
     dispatch(setTotalPrice());

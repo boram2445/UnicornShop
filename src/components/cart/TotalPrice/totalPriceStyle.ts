@@ -1,30 +1,50 @@
 import styled from "styled-components";
 
 const TotalPriceBox = styled.div`
-  margin: 40px auto 40px;
-  padding: 44px 0 42px;
-  width: 100%;
+  position: relative;
   display: grid;
-  grid-template-columns: 1fr 34px 1fr 34px 1fr 1fr;
+  grid-template-columns: 1fr 3.4rem 1fr 3.4rem 1fr 1fr;
   align-items: center;
+  margin: 4rem auto 4rem;
+  padding: 4.4rem 0 4.2rem;
+  width: 100%;
   background-color: var(--color-brightGrey);
-  border-radius: 5px;
+  border-radius: 0.5rem;
+
+  @media screen and (max-width: 768px) {
+    grid-template-columns: 1fr 1.5rem 0.8fr 1.5rem 1fr;
+    margin-bottom: 9rem;
+  }
 `;
 
 const PriceBox = styled.div`
   text-align: center;
+  &:last-child {
+    @media screen and (max-width: 768px) {
+      position: absolute;
+      right: 0;
+      bottom: -6rem;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+  }
 `;
 
 const TitleText = styled.p<{ type?: string }>`
-  margin-bottom: 12px;
+  margin-bottom: 1.2rem;
   font-size: 1.6rem;
   line-height: 2rem;
   font-weight: ${({ type }) => (type ? "700" : "400")};
+
+  @media screen and (max-width: 768px) {
+    margin: 0;
+  }
 `;
 
 const IconCircle = styled.div`
-  width: 34px;
-  height: 34px;
+  width: 3.4rem;
+  height: 3.4rem;
   display: flex;
   align-items: center;
   justify-content: center;

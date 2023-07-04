@@ -1,22 +1,53 @@
 import styled from "styled-components";
+import DeleteIcon from "../../../assets/icons/icon-delete.svg";
 
 const CartItemArticle = styled.article`
-  margin-top: 5px;
+  margin-top: 0.5rem;
   width: 100%;
   display: grid;
-  grid-template-columns: 4fr 1fr 1fr;
-  gap: 30px;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 3rem;
   align-items: center;
   justify-content: center;
-  padding: 18px 88px 18px 88px;
-  border: 2px solid var(--color-brightGrey);
-  border-radius: 10px;
+  padding: 1.9rem 8rem 1.8rem 9rem;
+  border: 0.2rem solid var(--color-brightGrey);
+  border-radius: 1rem;
   position: relative;
+
+  @media screen and (max-width: 768px) {
+    grid-template-columns: 1fr;
+    padding: 1.9rem 1.5rem 1.8rem 1.5rem;
+  }
+  @media screen and (max-width: 600px) {
+    padding-top: 4rem;
+    & > input {
+      top: 1.8rem;
+      left: 1.5rem;
+    }
+  }
 `;
 
-const ProductInfoBox = styled.div`
+const LeftWrap = styled.div`
   display: flex;
+`;
+
+const RightWrap = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
   align-items: center;
+  @media screen and (max-width: 768px) {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  div {
+    margin: 0 auto;
+
+    @media screen and (max-width: 768px) {
+      margin: 0;
+    }
+  }
 `;
 
 const ImageBox = styled.div<{ imgUrl?: string }>`
@@ -39,10 +70,14 @@ const ProductText = styled.strong`
   margin: 10px auto;
   font-size: 1.8rem;
   line-height: 2.2rem;
+  &:hover {
+    text-decoration: underline;
+    cursor: pointer;
+  }
 `;
 
 const PriceText = styled.p`
-  margin-bottom: 40px;
+  margin-bottom: 4rem;
   font-size: 1.6rem;
   line-height: 2rem;
   font-weight: 700;
@@ -54,7 +89,12 @@ const OrderBox = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 28px;
+  gap: 2.8rem;
+
+  @media screen and (max-width: 768px) {
+    flex-direction: row;
+    gap: 1rem;
+  }
 `;
 
 const PriceAllText = styled.p`
@@ -65,16 +105,19 @@ const PriceAllText = styled.p`
 
 const DeleteBtn = styled.button`
   position: absolute;
-  top: 16px;
-  right: 16px;
-  width: 22px;
-  height: 22px;
+  top: 1.6rem;
+  right: 1.6rem;
+  width: 2.2rem;
+  height: 2.2rem;
+  background: url(${DeleteIcon}) no-repeat center;
+  background-size: cover;
   cursor: pointer;
 `;
 
 export {
   CartItemArticle,
-  ProductInfoBox,
+  LeftWrap,
+  RightWrap,
   ImageBox,
   ShopText,
   ProductText,

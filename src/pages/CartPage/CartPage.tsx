@@ -2,39 +2,33 @@ import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { useNavigate } from "react-router-dom";
 import { getToken } from "../../features/loginSlice";
-import { CircleCheckBtn } from "../../components/common/CheckBtn/CheckBtn";
+import { closeModal, openModal, selectOpenState } from "../../features/modalSlice";
 import { NormalBtn } from "../../components/common/Button/Button";
+import CartInfo from "../../components/cart/CartInfo/CartInfo";
 import CartItem from "../../components/cart/CartItem/CartItem";
 import TotalPrice from "../../components/cart/TotalPrice/TotalPrice";
 import {
   fetchGetCartList,
   fetchDeleteCartItem,
-  selectCartList,
-  getCartListStatus,
-  getCartListError,
   selectCheckAllState,
   setTotalPrice,
   checkAllItem,
   checkItem,
   reset,
-  fetchGetDetail,
   selectCheckedItems,
+  getCartState,
+  fetchGetAllDetail,
 } from "../../features/cartListSlice";
 import Modal from "../../components/common/Modal/Modal";
-import { closeModal, openModal, selectOpenState } from "../../features/modalSlice";
-import * as S from "./cartPageStyle";
 import Spinner from "../../components/common/Spinner/Spinner";
+import * as S from "./cartPageStyle";
 
 function CartPage() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const TOKEN = useAppSelector(getToken) || "";
 
-  const cartStatus = useAppSelector(getCartListStatus);
-  const cartLists = useAppSelector(selectCartList);
-  const error = useAppSelector(getCartListError);
-  const [getAllDetail, setAllDetail] = useState(false);
-
+  const { status: cartStatus, detailStatus, error, cartItems } = useAppSelector(getCartState);
   const checkedItems = useAppSelector(selectCheckedItems);
   const isAllChecked = useAppSelector(selectCheckAllState);
   const selectedItemNum = Object.keys(checkedItems).length;
@@ -45,25 +39,14 @@ function CartPage() {
 
   useEffect(() => {
     dispatch(reset());
-    setAllDetail(false);
     dispatch(fetchGetCartList(TOKEN));
   }, []);
 
   useEffect(() => {
-    //상품 디테일을 서버에서 하나씩 받아온다.
-    if (cartStatus === "succeeded" && !getAllDetail) {
-      cartLists.forEach((item) => {
-        dispatch(fetchGetDetail(item.product_id));
-      });
+    if (cartStatus === "succeeded" && detailStatus !== "succeeded") {
+      dispatch(fetchGetAllDetail(cartItems));
     }
   }, [cartStatus]);
-
-  //상품 디테일을 모두 받아왔는지 확인
-  if (cartStatus === "succeeded" && !getAllDetail) {
-    if (cartLists.every((item) => item.item)) {
-      setAllDetail(true);
-    }
-  }
 
   //개별 상품 지우기 재확인 모달 열기
   function OpenDeleteModal(cart_item_id: number) {
@@ -95,7 +78,7 @@ function CartPage() {
   }
 
   //체크 박스
-  const checkHandler = (e: React.ChangeEvent<HTMLInputElement>, productId?: number) => {
+  const handleCheckInput = (e: React.ChangeEvent<HTMLInputElement>, productId?: number) => {
     const { name, checked } = e.target;
     if (name === "allSelect") {
       dispatch(checkAllItem({ isChecked: checked }));
@@ -117,30 +100,30 @@ function CartPage() {
 
   //카트 상품 리스트
   let content;
-  if (cartStatus === "Loading" && !getAllDetail) {
+  if (detailStatus !== "succeeded") {
     content = <Spinner />;
-  } else if (cartStatus === "succeeded" && getAllDetail) {
+  } else if (detailStatus === "succeeded") {
     content =
-      cartLists.length !== 0 ? (
+      cartItems.length !== 0 ? (
         <>
           <S.CartList>
-            {cartLists.map((item) => (
+            {cartItems.map((item) => (
               <CartItem
                 key={item.cart_item_id}
                 item={item}
                 detail={item.item}
                 OpenDeleteModal={OpenDeleteModal}
-                checkHandler={checkHandler}
+                onCheckInput={handleCheckInput}
               />
             ))}
-            <NormalBtn color="white" width="110px" fontSize="1.6rem" onClick={OpenDeleteAllModal}>
+            <NormalBtn color="white" width="11rem" fontSize="1.5rem" onClick={OpenDeleteAllModal}>
               선택상품 삭제
             </NormalBtn>
           </S.CartList>
           <TotalPrice />
           <NormalBtn
-            width="220px"
-            padding="18px 0"
+            width="22rem"
+            padding="1.8rem 0"
             fontSize="2.4rem"
             fontWeight="500"
             disabled={!selectedItemNum}
@@ -169,13 +152,8 @@ function CartPage() {
         </Modal>
       ) : null}
       <S.CartPageLayout>
-        <S.CartPageText>장바구니</S.CartPageText>
-        <S.CartInfoBox>
-          <CircleCheckBtn name="allSelect" checkHandler={checkHandler} isChecked={isAllChecked} />
-          <strong>상품정보</strong>
-          <strong>수량</strong>
-          <strong>상품금액</strong>
-        </S.CartInfoBox>
+        <S.CartPageTitle>장바구니</S.CartPageTitle>
+        <CartInfo onCheckInput={handleCheckInput} />
         {content}
       </S.CartPageLayout>
     </>

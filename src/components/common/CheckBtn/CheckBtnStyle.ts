@@ -2,20 +2,20 @@ import styled from "styled-components";
 
 const CircleCheckBtn = styled.input`
   appearance: none;
-  height: 20px;
-  width: 20px;
   display: block;
+  height: 2rem;
+  width: 2rem;
   position: absolute;
-  left: 30px;
+  left: 3rem;
   top: 50%;
   transform: translateY(-50%);
   border-radius: 50%;
-  border: 2px solid #fa897b;
+  border: 0.2rem solid #fa897b;
   cursor: pointer;
   &:after {
     content: "";
-    height: 12px;
-    width: 12px;
+    height: 1.2rem;
+    width: 1.2rem;
     display: block;
     position: absolute;
     left: 50%;

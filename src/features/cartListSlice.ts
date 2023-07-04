@@ -82,11 +82,16 @@ export const fetchDeleteCartItem = createAsyncThunk(
 );
 
 //상품 디테일
-export const fetchGetDetail = createAsyncThunk(
+export const fetchGetAllDetail = createAsyncThunk(
   "detail/fetchGetDetail",
-  async (product_id: number) => {
-    const result = await axios.get(`${BASE_URL}/products/${product_id}/`);
-    return result.data;
+  async (cartItems: CartItem[]) => {
+    const promiseArr = [
+      ...cartItems.map((item) => axios.get(`${BASE_URL}/products/${item.product_id}/`)),
+    ];
+    const cartDetails = await axios
+      .all(promiseArr)
+      .then(axios.spread((...responses) => responses.map((res) => res.data)));
+    return { cartItems, cartDetails };
   }
 );
 
@@ -113,10 +118,9 @@ export const cartListSlice = createSlice({
     //상품 체크 버튼
     checkItem: (state, { payload }) => {
       const { productId, isChecked } = payload;
-      state.cartItems.map((item) => {
-        if (item.product_id === productId) {
+      state.cartItems.forEach((item) => {
+        if (item.product_id === productId)
           isChecked ? (item.isChecked = true) : (item.isChecked = false);
-        }
       });
     },
     //전체 상품 체크
@@ -153,21 +157,22 @@ export const cartListSlice = createSlice({
       state.status = "failed";
       state.error = action.error.message || "Something was wrong";
     });
-    //디테일 가져오기
-    builder.addCase(fetchGetDetail.pending, (state) => {
+    //전체 디테일 가져오기
+    builder.addCase(fetchGetAllDetail.pending, (state) => {
       state.detailStatus = "loading";
       state.error = "";
     });
-    builder.addCase(fetchGetDetail.fulfilled, (state, action) => {
-      const { product_id } = action.payload;
+    builder.addCase(fetchGetAllDetail.fulfilled, (state, action) => {
       state.detailStatus = "succeeded";
-      state.cartItems.map((item, index) => {
-        if (item.product_id === product_id) {
-          state.cartItems[index].item = action.payload;
-        }
-      });
+      const { cartItems, cartDetails } = action.payload;
+      const res = cartItems.map((item, index) => ({
+        ...item,
+        item: cartDetails[index],
+        isChecked: true,
+      }));
+      state.cartItems = res;
     });
-    builder.addCase(fetchGetDetail.rejected, (state, action) => {
+    builder.addCase(fetchGetAllDetail.rejected, (state, action) => {
       state.detailStatus = "failed";
       state.error = action.error.message || "Something was wrong";
     });
@@ -175,27 +180,27 @@ export const cartListSlice = createSlice({
     builder.addCase(fetchDeleteCartItem.fulfilled, (state, action) => {
       state.status = "succeeded";
       state.error = "";
-      const cart_item_id = action.payload;
-      state.cartItems = state.cartItems.filter((item) => item.cart_item_id !== cart_item_id);
+      const deleteItemId = action.payload;
+      const newCartItems = state.cartItems.filter((item) => item.cart_item_id !== deleteItemId);
       //가격 재 계산
-      state.cartItems.map((item, index) => {
-        if (item.cart_item_id === cart_item_id && item.isChecked) {
-          state.totalPrice -= state.cartItems[index].quantity * state.cartItems[index].item.price;
-        }
+      state.cartItems.forEach((item) => {
+        if (item.cart_item_id === deleteItemId && item.isChecked)
+          state.totalPrice -= item.quantity * item.item.price;
       });
+      state.cartItems = newCartItems;
     });
     //장바구니 수량 수정
     builder.addCase(fetchPutCartQuantity.fulfilled, (state, action) => {
       state.status = "succeeded";
       const { product_id, quantity } = action.payload;
-      state.cartItems.map((item, index) => {
+      state.cartItems.forEach((item) => {
         if (item.product_id === product_id) {
           if (item.isChecked) {
             state.totalPrice -= item.quantity * item.item.price;
-            state.cartItems[index].quantity = quantity;
+            item.quantity = quantity;
             state.totalPrice += quantity * item.item.price;
           } else {
-            state.cartItems[index].quantity = quantity;
+            item.quantity = quantity;
           }
         }
       });
@@ -203,14 +208,7 @@ export const cartListSlice = createSlice({
   },
 });
 
-export const getCartListStatus = (state: RootState) => state.cartList.status;
-export const getCartListError = (state: RootState) => state.cartList.error;
-
-export const getTotalPrice = (state: RootState) => state.cartList.totalPrice;
-export const getDeliveryPrice = (state: RootState) => state.cartList.deliveryPrice;
-
-export const selectCartList = (state: RootState) => state.cartList.cartItems;
-
+export const getCartState = (state: RootState) => state.cartList;
 export const getCartQuantity = (state: RootState) => state.cartList.cartItems.length;
 export const selectCheckAllState = (state: RootState) =>
   state.cartList.cartItems.every((item) => item.isChecked === true);

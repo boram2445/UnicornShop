@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { NormalBtn } from "../common/Button/Button";
+import { NormalBtn } from "../../common/Button/Button";
 import * as S from "./detailTabStyle";
 
 function DetailTab() {
