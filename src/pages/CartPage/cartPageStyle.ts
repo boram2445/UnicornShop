@@ -1,74 +1,38 @@
 import styled from "styled-components";
 
-const CartPageLayout = styled.section`
+const CartPageLayout = styled.main`
+  margin: 5.4rem auto 16rem;
+  padding: 0 3rem;
   width: 100%;
-  max-width: 1280px;
-  padding: 0 30px;
-  margin: 54px auto 160px;
+  max-width: 128rem;
   display: flex;
   flex-direction: column;
   align-items: center;
 `;
 
-const CartPageText = styled.h2`
+const CartPageTitle = styled.h2`
   text-align: center;
   font-size: 3.6rem;
-  line-height: 4.4rem;
   font-weight: 700;
-`;
-
-const CartInfoBox = styled.div`
-  position: relative;
-  margin: 52px auto 32px;
-  width: 100%;
-  height: 60px;
-  display: grid;
-  grid-template-columns: 1.4fr 1fr;
-  gap: 30px;
-  padding: 19px 80px 18px 90px;
-  background-color: var(--color-brightGrey);
-  border-radius: 10px;
-  strong {
-    font-size: 1.8rem;
-    line-height: 2.2rem;
-    text-align: center;
-  }
-  div {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 30px;
-    @media screen and (max-width: 768px) {
-      display: none;
-    }
-  }
-  @media screen and (max-width: 768px) {
-    grid-template-columns: 1fr;
-  }
-  @media screen and (max-width: 600px) {
-    & > input {
-      left: 1.5rem;
-    }
-  }
 `;
 
 const InfoText = styled.strong`
   position: absolute;
-  left: 364px;
+  left: 36.4rem;
 `;
 
 const CartList = styled.ul`
   width: 100%;
   & > button {
-    margin: 10px 0 0 10px;
+    margin: 1.5rem 0 0 1rem;
   }
 `;
 
 const NoItemBox = styled.div`
-  margin-top: 200px;
+  margin-top: 20rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-
   p {
     font-weight: 700;
     font-size: 1.8rem;
@@ -76,11 +40,11 @@ const NoItemBox = styled.div`
   }
   small {
     display: block;
-    margin-top: 17px;
+    margin-top: 1.7rem;
     color: var(--color-darkGrey);
     font-size: 1.4rem;
     line-height: 1.8rem;
   }
 `;
 
-export { CartPageLayout, CartPageText, CartInfoBox, InfoText, CartList, NoItemBox };
+export { CartPageLayout, CartPageTitle, InfoText, CartList, NoItemBox };

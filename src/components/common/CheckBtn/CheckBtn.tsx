@@ -3,14 +3,14 @@ import { useAppDispatch } from "../../../hooks";
 import { checkItem } from "../../../features/cartListSlice";
 import * as S from "./CheckBtnStyle";
 
-type CheckBtnProps = {
+interface CheckBtnProps {
   name: "item" | "allSelect";
   productId?: number;
-  checkHandler: (e: React.ChangeEvent<HTMLInputElement>, productId?: number) => void;
+  onCheckInput: (e: React.ChangeEvent<HTMLInputElement>, productId?: number) => void;
   isChecked: boolean;
-};
+}
 
-export function CircleCheckBtn({ name, productId, checkHandler, isChecked = true }: CheckBtnProps) {
+export function CircleCheckBtn({ name, productId, onCheckInput, isChecked = true }: CheckBtnProps) {
   const dispatch = useAppDispatch();
   useEffect(() => {
     if (name !== "allSelect") {
@@ -24,7 +24,7 @@ export function CircleCheckBtn({ name, productId, checkHandler, isChecked = true
         type="checkbox"
         name={name}
         checked={isChecked}
-        onChange={(e) => checkHandler(e, productId)}
+        onChange={(e) => onCheckInput(e, productId)}
       />
     </>
   );

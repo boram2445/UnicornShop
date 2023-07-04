@@ -1,20 +1,19 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { CartItem as Cart, Item } from "../../../features/cartListSlice";
 import { NormalBtn } from "../../common/Button/Button";
 import { CircleCheckBtn } from "../../common/CheckBtn/CheckBtn";
-import { CartItem as Cart, Item } from "../../../features/cartListSlice";
 import AmountBtn from "../../common/AmountBtn/AmountBtn";
-import deleteIcon from "../../../assets/icons/icon-delete.svg";
 import * as S from "./cartItemStyle";
 
-type ItemProps = {
+interface ItemProps {
   item: Cart;
   detail: Item;
   OpenDeleteModal: (id: number) => void;
-  checkHandler: (e: React.ChangeEvent<HTMLInputElement>, productId?: number) => void;
-};
+  onCheckInput: (e: React.ChangeEvent<HTMLInputElement>, productId?: number) => void;
+}
 
-function CartItem({ item, detail, OpenDeleteModal, checkHandler }: ItemProps) {
+function CartItem({ item, detail, OpenDeleteModal, onCheckInput }: ItemProps) {
   const navigate = useNavigate();
   const { cart_item_id, product_id, quantity, isChecked } = item;
 
@@ -31,7 +30,7 @@ function CartItem({ item, detail, OpenDeleteModal, checkHandler }: ItemProps) {
       <CircleCheckBtn
         name="item"
         productId={product_id}
-        checkHandler={checkHandler}
+        onCheckInput={onCheckInput}
         isChecked={isChecked}
       />
       <S.LeftWrap>
@@ -54,7 +53,7 @@ function CartItem({ item, detail, OpenDeleteModal, checkHandler }: ItemProps) {
           <S.PriceAllText>
             {detail?.price && (detail?.price * quantity).toLocaleString()}원
           </S.PriceAllText>
-          <NormalBtn width="130px" padding="10px" onClick={orderOneItem}>
+          <NormalBtn width="11rem" padding="0.7rem" fontSize="1.5rem" onClick={orderOneItem}>
             주문하기
           </NormalBtn>
         </S.OrderBox>

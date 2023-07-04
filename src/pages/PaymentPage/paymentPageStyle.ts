@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { CartInfoBox as InfoBox } from "../CartPage/cartPageStyle";
+import { CartInfoBox as InfoBox } from "../../components/cart/CartInfo/cartInfoStyle";
 
 const PaymentSection = styled.section`
   margin: 30px auto;
