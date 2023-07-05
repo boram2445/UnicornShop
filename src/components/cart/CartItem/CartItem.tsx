@@ -42,13 +42,13 @@ function CartItem({ item, detail, OpenDeleteModal, onCheckInput }: ItemProps) {
           </S.ProductText>
           <S.PriceText>{detail?.price.toLocaleString()}원</S.PriceText>
           <S.ShipText>
-            {detail.shipping_method === "PARCEL" ? "직접배송" : "택배배송"} /{" "}
+            {detail?.shipping_method === "PARCEL" ? "직접배송" : "택배배송"} /{" "}
             {detail?.shipping_fee ? `${detail?.shipping_fee.toLocaleString()} 원` : "무료배송"}
           </S.ShipText>
         </div>
       </S.LeftWrap>
       <S.RightWrap>
-        <AmountBtn selectAmount={quantity} item={item} stock={item.item.stock} />
+        <AmountBtn selectAmount={quantity} item={item} stock={item?.item.stock} />
         <S.OrderBox>
           <S.PriceAllText>
             {detail?.price && (detail?.price * quantity).toLocaleString()}원
