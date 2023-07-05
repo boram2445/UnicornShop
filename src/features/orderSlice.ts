@@ -1,6 +1,7 @@
 import { RootState } from "../app/store";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { CartItem } from "./cartListSlice";
+import { Product } from "./productSlice";
 import axios from "axios";
 
 const BASE_URL = "https://openmarket.weniv.co.kr";
@@ -30,10 +31,19 @@ interface OrderedListType {
   address_message: string;
   payment_method: string;
   total_price: number;
+  created_at: string;
+}
+
+interface OrderProductDetailType {
+  product_id: number;
+  created_at: string;
+  detail: Product;
+  quantity: number;
 }
 
 interface OrderType {
   status: string;
+  detailStatus: string;
   error: string;
   orderItems: CartItem[];
   shippingfee: number;
@@ -41,10 +51,12 @@ interface OrderType {
   order_kind: string;
   orderInfo: OrderInfoType | null;
   orderedInfo: { count: number; next: string; previous: string; results: OrderedListType[] } | null;
+  orderedDetail: OrderProductDetailType[];
 }
 
 const initialState: OrderType = {
   status: "idle",
+  detailStatus: "idle",
   error: "",
   orderItems: [],
   shippingfee: 0,
@@ -52,43 +64,26 @@ const initialState: OrderType = {
   order_kind: "",
   orderInfo: null,
   orderedInfo: null,
+  orderedDetail: [],
 };
 
 //주문하기
 export const fetchPostOrder = createAsyncThunk(
   "order/fetchPostOrder",
   async ({ TOKEN, info }: { TOKEN: string; info: OrderInfoType }) => {
-    const {
-      order_kind,
-      total_price,
-      receiver,
-      receiver_phone_number,
-      address,
-      address_message,
-      payment_method,
-    } = info;
     try {
       const config = {
         headers: {
           Authorization: `JWT ${TOKEN}`,
         },
       };
-      const data = {
-        order_kind,
-        total_price,
-        receiver,
-        receiver_phone_number,
-        address,
-        address_message,
-        payment_method,
-      };
+      const data = info;
       const selectData =
-        order_kind === "cart_order"
+        info.order_kind === "cart_order"
           ? data
-          : { product_id: info.product_id, quantity: info.quantity, ...data };
+          : { ...data, product_id: info.product_id, quantity: info.quantity };
 
       const result = await axios.post(`${BASE_URL}/order/`, selectData, config);
-      console.log(result.data);
       return result.data;
     } catch (error: any) {
       //서버 에러 메세지 받아오기 -개선 필요
@@ -108,8 +103,39 @@ export const fetchPostOrderList = createAsyncThunk(
       },
     };
     const result = await axios.get(`${BASE_URL}/order/`, config);
-    console.log(result.data);
     return result.data;
+  }
+);
+
+//상품 디테일
+export const fetchAllOrderedDetail = createAsyncThunk(
+  "order/fetchAllOrderedDetail",
+  async ({
+    results,
+  }: {
+    count: number;
+    next: string | null;
+    previous: string | null;
+    results: OrderedListType[];
+  }) => {
+    const productArr = results
+      .map((item) => [
+        ...item.order_items.map((data, index) => ({
+          product_id: data,
+          created_at: item.created_at,
+          detail: null,
+          quantity: item.order_quantity[index],
+        })),
+      ])
+      .flat();
+
+    const promiseArr = [
+      ...productArr.map((item) => axios.get(`${BASE_URL}/products/${item.product_id}/`)),
+    ];
+    const orderedDetails = await axios
+      .all(promiseArr)
+      .then(axios.spread((...responses) => responses.map((res) => res.data)));
+    return { productArr, orderedDetails };
   }
 );
 
@@ -152,6 +178,23 @@ export const orderSlice = createSlice({
     builder.addCase(fetchPostOrderList.rejected, (state, action) => {
       state.status = "failed";
       state.error = action.error.message || "Something is wrong in company number:<";
+    });
+    builder.addCase(fetchAllOrderedDetail.pending, (state) => {
+      state.status = "loading";
+      state.error = "";
+    });
+    builder.addCase(fetchAllOrderedDetail.fulfilled, (state, action) => {
+      state.status = "succeeded";
+      const { productArr, orderedDetails } = action.payload;
+      const res = productArr.map((item, index) => ({
+        ...item,
+        detail: orderedDetails[index],
+      }));
+      state.orderedDetail = res;
+    });
+    builder.addCase(fetchAllOrderedDetail.rejected, (state, action) => {
+      state.detailStatus = "failed";
+      state.error = action.error.message || "Something was wrong";
     });
   },
 });

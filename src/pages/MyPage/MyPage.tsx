@@ -1,16 +1,21 @@
 import React, { useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "../../hooks";
+import { getToken, getLoginUserType } from "../../features/loginSlice";
+import {
+  fetchAllOrderedDetail,
+  fetchPostOrderList,
+  getOrderState,
+} from "../../features/orderSlice";
+
 import { TabMenuBtn } from "../../components/common/Button/Button";
 import Chart from "../../components/common/Chart/Chart";
-import { getToken, getLoginUserType } from "../../features/loginSlice";
-import { fetchPostOrderList, getOrderState } from "../../features/orderSlice";
-import { useAppDispatch, useAppSelector } from "../../hooks";
 import * as S from "./myPageStyle";
 
 function MyPage() {
   const dispatch = useAppDispatch();
   const TOKEN = useAppSelector(getToken);
   const USER_TYPE = useAppSelector(getLoginUserType);
-  const { orderInfo } = useAppSelector(getOrderState);
+  const { orderedInfo, orderedDetail } = useAppSelector(getOrderState);
 
   useEffect(() => {
     if (TOKEN && USER_TYPE === "BUYER") {
@@ -18,18 +23,20 @@ function MyPage() {
     }
   }, []);
 
-  //구매정보에 넘버밖에 없어서 또 디테일 정보를 서버에서 받아와야 한다.
-  //구매 완료 후에는 구매 내역을 보여주는 페이지에서 보여주어야 한다.
-  console.log(orderInfo);
+  useEffect(() => {
+    if (USER_TYPE === "BUYER" && orderedInfo) {
+      dispatch(fetchAllOrderedDetail(orderedInfo));
+    }
+  }, [orderedInfo]);
 
   let content;
   if (USER_TYPE === "BUYER") {
     content = (
       <>
         <S.BtnWrap>
-          {/* <TabMenuBtn fixed={true} num={orderInfo?.count}>
+          <TabMenuBtn fixed={true} num={orderedDetail?.length}>
             주문 상품 조회
-          </TabMenuBtn> */}
+          </TabMenuBtn>
           <TabMenuBtn num={1}>문의/리뷰</TabMenuBtn>
           <TabMenuBtn>개인정보 설정</TabMenuBtn>
         </S.BtnWrap>

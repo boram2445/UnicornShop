@@ -11,20 +11,23 @@ import ChartItem from "../ChartItem/ChartItem";
 import Modal from "../Modal/Modal";
 import { closeModal, openModal, selectOpenState } from "../../../features/modalSlice";
 import * as S from "./chartStyle";
+import { getOrderState } from "../../../features/orderSlice";
 
 function Chart() {
   const dispatch = useAppDispatch();
   const TOKEN = useAppSelector(getToken);
-  const USER_TYPE = useAppSelector(getLoginUserType);
+  const userType = useAppSelector(getLoginUserType);
 
-  const sellerStatus = useAppSelector(getSellerStatus);
-  const products = useAppSelector(selectSellerProducts);
+  const sellerStatus = userType === "SELLER" && useAppSelector(getSellerStatus);
+  const sellProducts = userType === "SELLER" ? useAppSelector(selectSellerProducts) : [];
   const modal = useAppSelector(selectOpenState);
+
+  const { orderedDetail } = useAppSelector(getOrderState);
 
   const [selectedItemId, setSelectedItemId] = useState(0);
 
   useEffect(() => {
-    if (TOKEN && USER_TYPE === "SELLER" && sellerStatus === "idle") {
+    if (TOKEN && userType === "SELLER" && sellerStatus === "idle") {
       dispatch(fetchGetSellerProduct(TOKEN));
     }
   }, []);
@@ -45,7 +48,7 @@ function Chart() {
 
   //사용자 종류에 따른 content 변경
   let content;
-  if (USER_TYPE === "SELLER") {
+  if (userType === "SELLER") {
     content = (
       <>
         <S.TopWrap>
@@ -55,20 +58,20 @@ function Chart() {
           <strong>삭제</strong>
         </S.TopWrap>
         <S.ListWrap>
-          {products.length === 0 ? (
+          {sellProducts.length === 0 ? (
             <S.NoItemBox>
               <p>아직 등록 상품이 없습니다.</p>
               <small>판매할 상품을 업로드해 주세요!</small>
             </S.NoItemBox>
           ) : (
-            products.map((item) => (
+            sellProducts.map((item) => (
               <ChartItem key={item.product_id} item={item} deleteModal={OpenDeleteModal} />
             ))
           )}
         </S.ListWrap>
       </>
     );
-  } else if (USER_TYPE === "BUYER") {
+  } else if (userType === "BUYER") {
     content = (
       <>
         <S.TopWrap>
@@ -77,7 +80,24 @@ function Chart() {
           <strong>구매날짜</strong>
           <strong>배송상태</strong>
         </S.TopWrap>
-        <S.ListWrap></S.ListWrap>
+        <S.ListWrap>
+          {orderedDetail.length === 0 ? (
+            <S.NoItemBox>
+              <p>아직 구매한 상품이 없습니다.</p>
+              <small>다양한 상품을 구매해 보세요 :)</small>
+            </S.NoItemBox>
+          ) : (
+            orderedDetail?.map((item) => (
+              <ChartItem
+                key={`${item.product_id}${item.created_at}`}
+                quantity={item.quantity}
+                orderDate={item.created_at}
+                item={item.detail}
+                deleteModal={OpenDeleteModal}
+              />
+            ))
+          )}
+        </S.ListWrap>
       </>
     );
   } else {
