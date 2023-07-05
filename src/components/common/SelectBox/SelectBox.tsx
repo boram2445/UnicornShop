@@ -40,10 +40,7 @@ function SelectBox({
     };
   }, [isOpen]);
 
-  const handleItemClick = (item: string) => {
-    setIsOpen(!isOpen);
-    onClick(item);
-  };
+  const handleItemClick = (item: string) => onClick(item);
 
   return (
     <S.SelectArticle
