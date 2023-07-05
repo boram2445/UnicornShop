@@ -1,9 +1,9 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { NormalBtn } from "../../common/Button/Button";
+import { NormalBtn } from "../../components/common/Button/Button";
 import * as S from "./orderDoneStyle";
 
-function OrderDone() {
+function OrderDonePage() {
   const navigate = useNavigate();
 
   return (
@@ -39,4 +39,4 @@ function OrderDone() {
   );
 }
 
-export default OrderDone;
+export default OrderDonePage;

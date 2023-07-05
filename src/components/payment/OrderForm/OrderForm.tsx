@@ -2,36 +2,33 @@ import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
 import { getToken } from "../../../features/loginSlice";
-import {
-  fetchPostOrder,
-  getOrderError,
-  getOrderStatus,
-  selectOrderType,
-  getDeliveryPrice,
-  getTotalPrice,
-} from "../../../features/orderSlice";
-import { selectOrderItems, reset } from "../../../features/orderSlice";
-import { closeModal, openModal, selectOpenState } from "../../../features/modalSlice";
-import { NormalBtn } from "../../common/Button/Button";
+import { fetchPostOrder, getOrderState, reset } from "../../../features/orderSlice";
+import { fetchGetCartList } from "../../../features/cartListSlice";
 import { emailRegExp, nameRegExp } from "../../../utils/regExp";
 import limitLength from "../../../utils/limitLength";
+
+import { NormalBtn } from "../../common/Button/Button";
 import SelectBox from "../../common/SelectBox/SelectBox";
 import FinalPayCheck from "../FinalPayCheck/FinalPayCheck";
 import PayMethod from "../PayMethod/PayMethod";
+import Spinner from "../../common/Spinner/Spinner";
 import PostAddress from "../PostAddress/PostAddress";
 import * as S from "./orderFormStyle";
 
 function OrderForm() {
   const dispatch = useAppDispatch();
-  const addressDetailRef = useRef() as React.MutableRefObject<HTMLInputElement>;
   const navigate = useNavigate();
+  const addressDetailRef = useRef() as React.MutableRefObject<HTMLInputElement>;
 
   const TOKEN = useAppSelector(getToken) || "";
-  const orderStatus = useAppSelector(getOrderStatus);
-  const orderedItems = useAppSelector(selectOrderItems);
-  const totalPrice = useAppSelector(getTotalPrice);
-  const deliveryPrice = useAppSelector(getDeliveryPrice);
-  const orderType = useAppSelector(selectOrderType);
+  const { status } = useAppSelector(getOrderState);
+
+  const {
+    orderItems,
+    totalPrice,
+    shippingfee,
+    order_kind: orderType,
+  } = useAppSelector(getOrderState);
 
   useEffect(() => {
     return () => {
@@ -57,7 +54,6 @@ function OrderForm() {
   //우편번호, 주소 팝업창에서 받아오기
   const getAddress = (zoneCode: string, address: string) => {
     setReceiverInfo({ ...receiverInfo, zoneCode, address });
-    dispatch(closeModal());
     addressDetailRef.current.focus();
   };
 
@@ -102,7 +98,7 @@ function OrderForm() {
     const { name, phone1, phone2, phone3, address, message } = receiverInfo;
     //바로 주문, 카트에서 상품 하나 주문
     if (orderType === "direct_order" || orderType === "cart_one_order") {
-      orderedItems.forEach((item) => {
+      orderItems.forEach((item) => {
         const info = {
           product_id: item.item.product_id,
           quantity: item.quantity,
@@ -120,7 +116,7 @@ function OrderForm() {
     else if (orderType === "cart_order") {
       const info = {
         order_kind: orderType,
-        total_price: totalPrice + deliveryPrice,
+        total_price: totalPrice + shippingfee,
         receiver: name,
         receiver_phone_number: `${phone1}${phone2}${phone3}`,
         address,
@@ -130,18 +126,14 @@ function OrderForm() {
       dispatch(fetchPostOrder({ TOKEN, info }));
     }
     sessionStorage.removeItem("order");
-    dispatch(openModal("예"));
+    dispatch(fetchGetCartList(TOKEN));
+    navigate("/orderDone");
   };
 
-  // const modalContent = (
-  //   <Modal onClickYes={() => navigate("/myPage")}>
-  //     주문이 완료되었습니다. <br /> 마이페이지로 이동하시겠습니까?
-  //   </Modal>
-  // );
+  if (status === "loading") return <Spinner />;
 
   return (
     <>
-      {/* {orderStatus === "succeeded" && modal ? modalContent : null} */}
       <form onSubmit={handleSubmit}>
         <S.Title>
           배송정보 <S.ErrorText>* 모든 항목 입력 필수</S.ErrorText>
