@@ -1,48 +1,40 @@
 import styled from "styled-components";
+import ArrowDownIcon from "../../../assets/icons/icon-down-arrow.svg";
+import ArrowUpIcon from "../../../assets/icons/icon-up-arrow.svg";
 
 const SelectArticle = styled.article<{ width: string; maxWidth?: string; minWidth?: string }>`
   width: ${({ width }) => width};
   display: inline-block;
+  cursor: pointer;
 `;
 
-const InputWrap = styled.div<{
+const SelectBox = styled.div<{
+  textAlign?: string;
+  isOpen: string;
   maxWidth?: string;
   minWidth?: string;
   radius?: string;
-  textAlign?: string;
   padding: string;
 }>`
-  position: relative;
   width: 100%;
+  display: flex;
+  justify-content: ${({ textAlign }) => textAlign};
   max-width: ${({ maxWidth }) => maxWidth};
   min-width: ${({ minWidth }) => minWidth};
   padding: ${({ padding }) => padding};
-  display: grid;
-  grid-template-columns: 1fr 22px;
+  font-size: 1.6rem;
+  line-height: 2rem;
+
+  background: ${({ isOpen }) =>
+    isOpen === "true"
+      ? `url(${ArrowDownIcon}) no-repeat right 5px center`
+      : `url(${ArrowUpIcon}) no-repeat right 5px center`};
   border: 1px solid var(--color-grey);
   border-radius: ${({ radius }) => radius};
-  outline-color: var(--color-main);
   &:focus {
     border-color: transparent;
     outline: var(--color-main) 2px solid;
   }
-`;
-
-const SelectInput = styled.input<{ textAlign?: string }>`
-  width: 100%;
-  font-size: 1.6rem;
-  line-height: 2rem;
-  text-align: ${({ textAlign }) => (textAlign ? "start" : "center")};
-  border: none;
-  outline: none;
-`;
-
-const InputBtn = styled.div`
-  position: absolute;
-  cursor: pointer;
-  top: 50%;
-  right: 10px;
-  transform: translateY(-50%);
 `;
 
 const SelectList = styled.ul<{
@@ -60,7 +52,7 @@ const SelectList = styled.ul<{
   min-width: ${({ minWidth }) => minWidth};
   max-height: 152px;
   overflow-y: scroll;
-  box-shadow: 4px 4px 14px 0px #00000026;
+  box-shadow: var(--shadow-light);
   border: 1px solid var(--color-grey);
   border-radius: ${({ radius }) => radius};
   background-color: var(--color-white);
@@ -71,7 +63,7 @@ const SelectList = styled.ul<{
     cursor: pointer;
     width: 100%;
     height: 40px;
-    text-align: ${({ textAlign }) => (textAlign ? "start" : "center")};
+    text-align: ${({ textAlign }) => textAlign};
     padding: 0 10px;
     &:hover {
       background-color: var(--color-brightGrey);
@@ -80,4 +72,4 @@ const SelectList = styled.ul<{
   display: ${({ on }) => (on === "true" ? "block" : "none")};
 `;
 
-export { SelectArticle, InputWrap, SelectInput, InputBtn, SelectList };
+export { SelectArticle, SelectBox, SelectList };

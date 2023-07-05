@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from "react";
 import { NormalBtn } from "../../common/Button/Button";
-import SelectInput from "../../common/SelectInput/SelectInput";
+import SelectBox from "../../common/SelectBox/SelectBox";
 import * as S from "./joinInputStyle";
 
 interface InputProps {
@@ -71,13 +71,14 @@ function InputPhone({ onClick, onChange, value1, value2, value3, error }: InputP
     <S.InputPhoneBox>
       <S.LabelText htmlFor="phone">휴대폰번호</S.LabelText>
       <div>
-        <SelectInput
+        <SelectBox
           selectItems={selectItems}
           onClick={onClick}
           checkItem={value1}
-          width="150px"
-          radius="5px"
-          padding="16px 14px 16px 0"
+          width="15rem"
+          radius="0.5rem"
+          padding="1.6rem 1.8rem 1.6rem 0"
+          textAlign="center"
         />
         <S.InputPhone
           id="phone"

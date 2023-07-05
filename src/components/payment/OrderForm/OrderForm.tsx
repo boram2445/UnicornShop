@@ -13,14 +13,14 @@ import {
 import { selectOrderItems, reset } from "../../../features/orderSlice";
 import { closeModal, openModal, selectOpenState } from "../../../features/modalSlice";
 import { NormalBtn } from "../../common/Button/Button";
+import { emailRegExp, nameRegExp } from "../../../utils/regExp";
 import limitLength from "../../../utils/limitLength";
-import SelectInput from "../../common/SelectInput/SelectInput";
+import SelectBox from "../../common/SelectBox/SelectBox";
 import FinalPayCheck from "../FinalPayCheck/FinalPayCheck";
 import PayMethod from "../PayMethod/PayMethod";
 import PostAddress from "../PostAddress/PostAddress";
-import * as S from "./orderFormStyle";
-import { emailRegExp, nameRegExp } from "../../../utils/regExp";
 import Modal from "../../common/Modal/Modal";
+import * as S from "./orderFormStyle";
 
 function OrderForm() {
   const dispatch = useAppDispatch();
@@ -28,22 +28,12 @@ function OrderForm() {
   const navigate = useNavigate();
 
   const TOKEN = useAppSelector(getToken) || "";
-
   const orderStatus = useAppSelector(getOrderStatus);
-  const orderError = useAppSelector(getOrderError);
-
   const orderedItems = useAppSelector(selectOrderItems);
   const totalPrice = useAppSelector(getTotalPrice);
   const deliveryPrice = useAppSelector(getDeliveryPrice);
   const orderType = useAppSelector(selectOrderType);
 
-  const phoneSelect = ["010", "011", "016", "017", "018", "019"];
-  const messageSelect = [
-    "배송전 미리 연락 바랍니다.",
-    "부재시 경비실에 맡겨 주세요.",
-    "부재시 전화주시거나 문자 남겨 주세요.",
-    "직접 입력",
-  ];
   const [addressModal, setAddressModal] = useState(false);
 
   useEffect(() => {
@@ -196,14 +186,15 @@ function OrderForm() {
           <S.Row>
             <S.LabelText>휴대폰번호</S.LabelText>
             <div>
-              <SelectInput
+              <SelectBox
                 selectItems={phoneSelect}
                 onClick={(selected: string) => {
                   setOrdererInfo({ ...ordererInfo, ["phone1"]: selected });
                 }}
                 checkItem={ordererInfo.phone1}
-                width="100px"
-                padding="10px 6px"
+                padding="0.9rem 2.5rem 0.9rem 1rem"
+                width="10rem"
+                textAlign="center"
               />
               &nbsp; - &nbsp;
               <S.Input
@@ -271,14 +262,15 @@ function OrderForm() {
           <S.Row>
             <S.LabelText>휴대폰번호</S.LabelText>
             <div>
-              <SelectInput
+              <SelectBox
                 selectItems={phoneSelect}
                 onClick={(selected: string) =>
                   setReceiverInfo({ ...receiverInfo, ["phone1"]: selected })
                 }
                 checkItem={receiverInfo.phone1}
-                padding="9px 10px"
-                width="100px"
+                padding="0.9rem 2.5rem 0.9rem 1rem"
+                width="10rem"
+                textAlign="center"
               />
               &nbsp; - &nbsp;
               <S.Input
@@ -350,7 +342,7 @@ function OrderForm() {
           </S.Row>
           <S.Row>
             <S.LabelText>배송 메세지</S.LabelText>
-            <SelectInput
+            <SelectBox
               selectItems={messageSelect}
               onClick={(selected: string) =>
                 setReceiverInfo({ ...receiverInfo, ["message"]: selected })
@@ -383,3 +375,10 @@ function OrderForm() {
 }
 
 export default OrderForm;
+
+const phoneSelect = ["010", "011", "016", "017", "018", "019"];
+const messageSelect = [
+  "배송전 미리 연락 바랍니다.",
+  "부재시 경비실에 맡겨 주세요.",
+  "부재시 전화주시거나 문자 남겨 주세요.",
+];
