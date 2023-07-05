@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { CartItem as Cart, Item } from "../../../features/cartListSlice";
+import { Product } from "../../../features/productSlice";
+import { CartItem as Cart } from "../../../features/cartListSlice";
 import { NormalBtn } from "../../common/Button/Button";
 import { CircleCheckBtn } from "../../common/CheckBtn/CheckBtn";
 import AmountBtn from "../../common/AmountBtn/AmountBtn";
@@ -8,7 +9,7 @@ import * as S from "./cartItemStyle";
 
 interface ItemProps {
   item: Cart;
-  detail: Item;
+  detail: Product;
   OpenDeleteModal: (id: number) => void;
   onCheckInput: (e: React.ChangeEvent<HTMLInputElement>, productId?: number) => void;
 }
@@ -48,7 +49,7 @@ function CartItem({ item, detail, OpenDeleteModal, onCheckInput }: ItemProps) {
         </div>
       </S.LeftWrap>
       <S.RightWrap>
-        <AmountBtn selectAmount={quantity} item={item} stock={item?.item.stock} />
+        <AmountBtn selectAmount={quantity} item={item} stock={item?.item?.stock} />
         <S.OrderBox>
           <S.PriceAllText>
             {detail?.price && (detail?.price * quantity).toLocaleString()}원
