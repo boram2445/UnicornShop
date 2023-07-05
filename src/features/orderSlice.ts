@@ -1,7 +1,7 @@
 import { RootState } from "../app/store";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import axios from "axios";
 import { CartItem } from "./cartListSlice";
+import axios from "axios";
 
 const BASE_URL = "https://openmarket.weniv.co.kr";
 
@@ -156,15 +156,6 @@ export const orderSlice = createSlice({
   },
 });
 
-export const getOrderStatus = (state: RootState) => state.order.status;
-export const getOrderError = (state: RootState) => state.order.error;
-
-export const getTotalPrice = (state: RootState) => state.order.totalPrice;
-export const getDeliveryPrice = (state: RootState) => state.order.shippingfee;
-
-export const selectOrderItems = (state: RootState) => state.order.orderItems;
-export const selectOrderType = (state: RootState) => state.order.order_kind;
-export const selectOrderedInfo = (state: RootState) => state.order.orderedInfo;
-
+export const getOrderState = (state: RootState) => state.order;
 export const { reset, setOrderItem } = orderSlice.actions;
 export default orderSlice.reducer;

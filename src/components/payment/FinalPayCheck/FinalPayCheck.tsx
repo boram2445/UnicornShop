@@ -1,5 +1,5 @@
 import React from "react";
-import { getDeliveryPrice, getTotalPrice } from "../../../features/orderSlice";
+import { getOrderState } from "../../../features/orderSlice";
 import { useAppSelector } from "../../../hooks";
 import { NormalBtn } from "../../common/Button/Button";
 import CheckLabel from "../../common/CheckLabel/CheckLabel";
@@ -11,8 +11,7 @@ interface FinalCheckProps {
 }
 
 function FinalPayCheck({ canOrder, onChange }: FinalCheckProps) {
-  const totalPrice = useAppSelector(getTotalPrice);
-  const deliveryPrice = useAppSelector(getDeliveryPrice);
+  const { totalPrice, shippingfee } = useAppSelector(getOrderState);
 
   return (
     <S.FinalPaySection>
@@ -35,14 +34,14 @@ function FinalPayCheck({ canOrder, onChange }: FinalCheckProps) {
           <S.PayRow>
             <S.PayText>배송비</S.PayText>
             <S.MoneyCount>
-              {deliveryPrice.toLocaleString()}
+              {shippingfee.toLocaleString()}
               <span>원</span>
             </S.MoneyCount>
           </S.PayRow>
           <S.TotalMoneyBox>
             <S.PayText>결제금액</S.PayText>
             <S.TotalMoneyCount>
-              {(totalPrice + deliveryPrice).toLocaleString()}
+              {(totalPrice + shippingfee).toLocaleString()}
               <span>원</span>
             </S.TotalMoneyCount>
           </S.TotalMoneyBox>
@@ -53,8 +52,8 @@ function FinalPayCheck({ canOrder, onChange }: FinalCheckProps) {
           </CheckLabel>
           <NormalBtn
             disabled={!canOrder}
-            width="220px"
-            padding="18px"
+            width="22rem"
+            padding="1.4rem"
             fontSize="2.4rem"
             fontWeight="500"
           >

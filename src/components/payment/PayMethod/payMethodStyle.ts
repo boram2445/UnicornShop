@@ -12,19 +12,19 @@ const Title = styled.h3`
 `;
 
 const PayMentBox = styled.div`
-  margin-top: 18px;
-  padding: 18px 0 18px 12px;
-  border-top: 2px solid var(--color-grey);
-  border-bottom: 2px solid var(--color-grey);
+  margin-top: 1.8rem;
+  padding: 1.8rem 0 1.8rem 1.2rem;
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 1rem;
+  border-top: 0.2rem solid var(--color-grey);
+  border-bottom: 0.2rem solid var(--color-grey);
 `;
 
 const InputWrap = styled.div`
   display: flex;
   align-items: center;
-  gap: 5px;
+  gap: 0.5rem;
 `;
 
 const Label = styled.label`

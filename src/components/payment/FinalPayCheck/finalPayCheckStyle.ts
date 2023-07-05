@@ -1,7 +1,8 @@
 import styled from "styled-components";
 
 const FinalPaySection = styled.section`
-  width: 480px;
+  width: 100%;
+  max-width: 45rem;
 `;
 
 const Title = styled.h3`
@@ -11,17 +12,17 @@ const Title = styled.h3`
 `;
 
 const BoxWrap = styled.div`
-  margin-top: 15px;
-  border: 2px solid var(--color-main);
-  border-radius: 10px;
+  margin-top: 1.5rem;
+  border: 0.2rem solid var(--color-main);
+  border-radius: 1rem;
 `;
 
 const TopWrap = styled.div`
-  padding: 19px 30px 25px;
+  padding: 1.9rem 3rem 2.5rem;
 `;
 
 const PayRow = styled.div`
-  margin-top: 12px;
+  margin-top: 1.2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -33,11 +34,11 @@ const PayText = styled.p`
   text-align: start;
   width: 70px;
   &::before {
-    margin-right: 4px;
+    margin-right: 0.4rem;
     display: inline-block;
     content: "";
-    width: 5px;
-    height: 1px;
+    width: 0.5rem;
+    height: 0.1rem;
     background-color: var(--color-black);
     vertical-align: middle;
   }
@@ -47,10 +48,9 @@ const MoneyCount = styled.p`
   font-size: 1.8rem;
   font-weight: 700;
   line-height: 2.2rem;
-  width: 350px;
   text-align: end;
   span {
-    margin-left: 4px;
+    margin-left: 0.4rem;
     font-size: 1.4rem;
     font-weight: 400;
     color: var(--color-darkGrey);
@@ -58,14 +58,12 @@ const MoneyCount = styled.p`
 `;
 
 const TotalMoneyBox = styled(PayRow)`
-  margin-top: 19px;
-  padding-top: 24px;
-  width: 416px;
-  border-top: 1px solid var(--color-grey);
+  margin-top: 1.9rem;
+  padding-top: 2.4rem;
+  border-top: 0.1rem solid var(--color-grey);
 `;
 
 const TotalMoneyCount = styled.p`
-  width: 350px;
   text-align: end;
   font-size: 2.4rem;
   font-weight: 700;
@@ -74,13 +72,13 @@ const TotalMoneyCount = styled.p`
 `;
 
 const BottomWrap = styled.div`
-  padding: 30px 30px 34px;
-  background-color: var(--color-brightGrey);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 30px;
-  border-radius: 0 0 10px 10px;
+  gap: 3rem;
+  padding: 3rem 3rem 3.4rem;
+  background-color: var(--color-brightGrey);
+  border-radius: 0 0 1rem 1rem;
 `;
 
 const LabelBox = styled.div`
@@ -90,15 +88,15 @@ const LabelBox = styled.div`
 `;
 
 const CheckBox = styled.input`
-  height: 16px;
-  width: 16px;
-  border-radius: 5px;
+  height: 1.6rem;
+  width: 1.6rem;
+  border-radius: 0.5rem;
   cursor: pointer;
   accent-color: var(--color-main);
 `;
 
 const LabelText = styled.label`
-  margin-left: 10px;
+  margin-left: 1rem;
   font-size: 1.6rem;
   line-height: 2rem;
   cursor: pointer;
