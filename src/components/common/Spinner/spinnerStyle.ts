@@ -6,13 +6,12 @@ const Background = styled.div`
   height: 100vh;
   top: 0;
   left: 0;
-  background: var(--color-white);
-  opacity: 0.2;
-  z-index: 999;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  background-color: rgba(255, 255, 255, 0.2);
+  z-index: 999;
 `;
 
 export { Background };
