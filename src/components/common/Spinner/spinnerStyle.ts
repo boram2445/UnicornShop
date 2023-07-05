@@ -6,7 +6,8 @@ const Background = styled.div`
   height: 100vh;
   top: 0;
   left: 0;
-  background: #ffffffb7;
+  background: var(--color-white);
+  opacity: 0.2;
   z-index: 999;
   display: flex;
   flex-direction: column;

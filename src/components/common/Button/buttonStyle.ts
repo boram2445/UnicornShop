@@ -19,10 +19,9 @@ const NormalBtn = styled.button<NormalBtnProps>`
   font-weight: ${({ fontWeight }) => (fontWeight ? fontWeight : "400")};
   background-color: var(--color-main);
   color: var(--color-white);
-  line-height: 2.2rem;
   border-radius: 5px;
   &:hover {
-    opacity: 0.9;
+    filter: brightness(1.1);
   }
   &:disabled {
     background-color: var(--color-grey);

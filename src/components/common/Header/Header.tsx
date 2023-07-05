@@ -2,29 +2,30 @@ import React, { useState, useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
 import { fetchSearchProducts, searchReset } from "../../../features/searchSlice";
-import { getToken } from "../../../features/loginSlice";
+import { getLoginUserType, getToken } from "../../../features/loginSlice";
+import { fetchGetCartList } from "../../../features/cartListSlice";
 import IconNav from "./IconNav";
 
 import logo from "../../../assets/icons/Logo-hodu.svg";
 import searchIcon from "../../../assets/icons/search.svg";
 import * as S from "./headerStyle";
-import { fetchGetCartList } from "../../../features/cartListSlice";
 
 export function Header() {
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  const dispatch = useAppDispatch();
   const TOKEN = useAppSelector(getToken);
+  const userType = useAppSelector(getLoginUserType);
 
   const inputRef = useRef() as React.MutableRefObject<HTMLInputElement>;
   const [searchContent, setSearchContent] = useState("");
 
   useEffect(() => {
-    TOKEN && dispatch(fetchGetCartList(TOKEN));
+    TOKEN && userType === "BUYER" && dispatch(fetchGetCartList(TOKEN));
   }, [TOKEN]);
 
   useEffect(() => {
-    if (!pathname.includes("search")) {
+    if (!pathname.includes("search") && searchContent) {
       inputRef.current.value = "";
       dispatch(searchReset());
       setSearchContent("");

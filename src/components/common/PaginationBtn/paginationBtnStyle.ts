@@ -1,7 +1,7 @@
 import styled, { css } from "styled-components";
 
 const pageList = styled.ul`
-  margin: 80px auto;
+  margin: 8rem auto;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -9,8 +9,8 @@ const pageList = styled.ul`
 
 const pageItem = styled.li<{ on?: string }>`
   margin: 0.4rem 0.5rem;
-  width: 40px;
-  height: 40px;
+  width: 4rem;
+  height: 4rem;
   line-height: 4rem;
   text-align: center;
   font-size: 1.8rem;
@@ -34,9 +34,13 @@ const pageItem = styled.li<{ on?: string }>`
 `;
 
 const ArrowBtn = styled.button`
-  width: 30px;
-  height: 30px;
+  width: 2.3rem;
+  height: 3rem;
   cursor: pointer;
+  svg {
+    width: 100%;
+    height: 100%;
+  }
   &:hover {
     transform: scale(1.1);
   }
