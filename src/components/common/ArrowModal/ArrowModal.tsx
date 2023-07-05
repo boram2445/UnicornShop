@@ -28,7 +28,6 @@ function ArrowModal({ isOpen, onModal, list, btnRef }: ArrowModalProps) {
     };
   }, [isOpen]);
 
-  if (!isOpen) return null;
   return (
     <S.Container ref={modalRef}>
       <S.Arrows type="border" />
