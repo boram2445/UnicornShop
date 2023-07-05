@@ -304,18 +304,8 @@ function OrderForm() {
                 readOnly
               />
               <S.BtnWrapper>
-                <NormalBtn
-                  type="button"
-                  width="110px"
-                  fontSize="1.6rem"
-                  onClick={() => setAddressModal(true)}
-                >
-                  우편번호 찾기
-                </NormalBtn>
+                <PostAddress getAddress={getAddress} />
               </S.BtnWrapper>
-              {addressModal ? (
-                <PostAddress getAddress={getAddress} closeModal={() => setAddressModal(false)} />
-              ) : null}
               <br />
               <S.Input
                 name="address"

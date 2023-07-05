@@ -1,33 +1,14 @@
-import React, { useEffect, useRef } from "react";
-import ReactDOM from "react-dom";
-import DaumPostcode from "react-daum-postcode";
-import * as S from "./postAddressStyle";
-import deleteIcon from "../../../assets/icons/icon-delete.svg";
-import { useAppDispatch } from "../../../hooks";
+import React from "react";
+import { useDaumPostcodePopup } from "react-daum-postcode";
+import { postcodeScriptUrl } from "react-daum-postcode/lib/loadPostcode";
+import { NormalBtn } from "../../common/Button/Button";
 
-type PostAddressProps = {
+interface PostAddressProps {
   getAddress: (zoneCode: string, address: string) => void;
-  closeModal: () => void;
-};
+}
 
-function PostAddress({ getAddress, closeModal }: PostAddressProps) {
-  const dispatch = useAppDispatch();
-  const background = useRef() as React.MutableRefObject<HTMLInputElement>;
-
-  //모달창 떴을때 스크롤 방지 - 모달 컴포넌트와 중복
-  useEffect(() => {
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = "unset";
-    };
-  }, []);
-
-  //배경화면 클릭시 모달창 닫기
-  const onBackgroundClick = (e: React.MouseEvent<HTMLElement>) => {
-    if (background.current === e.target) {
-      closeModal();
-    }
-  };
+function PostAddress({ getAddress }: PostAddressProps) {
+  const open = useDaumPostcodePopup(postcodeScriptUrl);
 
   const onCompletePost = (data: any) => {
     let fullAddr = data.address;
@@ -45,24 +26,13 @@ function PostAddress({ getAddress, closeModal }: PostAddressProps) {
       fullAddr += extraAddr !== "" ? ` (${extraAddr})` : "";
     }
     getAddress(data.zonecode, fullAddr);
-    closeModal();
   };
+  const handleClick = () => open({ onComplete: onCompletePost });
 
-  const customStyles = {
-    width: "100%",
-    height: "100%",
-  };
-
-  return ReactDOM.createPortal(
-    <S.ModalBackGround ref={background} onClick={onBackgroundClick}>
-      <S.ModalWrapper>
-        <S.CloseBtn onClick={closeModal}>
-          <img src={deleteIcon} />
-        </S.CloseBtn>
-        <DaumPostcode autoClose onComplete={onCompletePost} style={customStyles} />
-      </S.ModalWrapper>
-    </S.ModalBackGround>,
-    document.getElementById("portal")!
+  return (
+    <NormalBtn type="button" onClick={handleClick} width="9rem" fontSize="1.5rem">
+      주소 찾기
+    </NormalBtn>
   );
 }
 
