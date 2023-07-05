@@ -13,6 +13,7 @@ import UploadPage from "./pages/UploadPage/UploadPage";
 import MyPage from "./pages/MyPage/MyPage";
 import SearchPage from "./pages/SearchPage/SearchPage";
 import ErrorPage from "./pages/ErrorPage/ErrorPage";
+import OrderDonePage from "./pages/OrderDonePage/OrderDone";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
           <Route path="/cart" element={<CartPage />} />
           <Route path="/products/:productId" element={<DetailPage />} />
           <Route path="/payment" element={<PaymentPage />} />
+          <Route path="/orderDone" element={<OrderDonePage />} />
           <Route path="/mypage" element={<MyPage />} />
           <Route path={"/search/:keyword"} element={<SearchPage />} />
         </Route>
