@@ -85,6 +85,7 @@ export const loginSlice = createSlice({
     builder.addCase(logout.fulfilled, (state) => {
       state.status = "idle";
       state.error = "";
+      state.userName = "";
       state.TOKEN = null;
       state.userType = "BUYER";
     });

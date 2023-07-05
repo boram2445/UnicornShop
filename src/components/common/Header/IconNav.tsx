@@ -17,12 +17,13 @@ function IconNav() {
   const navigate = useNavigate();
   const modal = useAppSelector(selectOpenState);
   const { TOKEN, userName, userType } = useAppSelector(getAuthState);
-  const userBtnRef = useRef() as React.MutableRefObject<HTMLButtonElement>;
-  const [onArrowModal, setArrowModal] = useState(false);
 
-  const clickUserIcon = TOKEN ? () => setArrowModal((prev) => !prev) : () => navigate("/login");
+  const [onArrowModal, setArrowModal] = useState(false);
+  const userBtnRef = useRef() as React.MutableRefObject<HTMLButtonElement>;
+
   const clickCartIcon = TOKEN ? () => navigate("/cart") : () => dispatch(openModal("예"));
-  const cartQuantity = userType === "BUYER" ? useAppSelector(getCartQuantity) : undefined;
+  const cartQuantity = TOKEN && userType === "BUYER" ? useAppSelector(getCartQuantity) : undefined;
+  const clickUserIcon = TOKEN ? () => setArrowModal((prev) => !prev) : () => navigate("/login");
   const onArrowIcon = !TOKEN ? undefined : onArrowModal ? "open" : "close"; //헤더 화살표 아이콘
 
   //arrowModal
@@ -41,9 +42,9 @@ function IconNav() {
 
   //로그아웃
   const onLogout = () => {
-    handleArrowModal(false);
     dispatch(logout());
-    dispatch(reset());
+    handleArrowModal(false);
+    userType === "BUYER" && dispatch(reset());
     navigate("/");
   };
 
@@ -54,12 +55,14 @@ function IconNav() {
           <UserIcon stroke="black" />
           <small className="txt-ellipsis">{TOKEN ? userName : "로그인"}</small>
         </S.WideNavBtn>
-        <ArrowModal
-          isOpen={onArrowModal}
-          list={arrowList}
-          onModal={handleArrowModal}
-          btnRef={userBtnRef}
-        />
+        {onArrowModal && (
+          <ArrowModal
+            isOpen={onArrowModal}
+            list={arrowList}
+            onModal={handleArrowModal}
+            btnRef={userBtnRef}
+          />
+        )}
       </S.UerModalWrap>
     </>
   );
