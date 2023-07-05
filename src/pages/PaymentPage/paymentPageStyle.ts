@@ -1,15 +1,15 @@
 import styled from "styled-components";
 import { CartInfoBox as InfoBox } from "../../components/cart/CartInfo/cartInfoStyle";
 
-const PaymentSection = styled.section`
-  margin: 30px auto;
+const PaymentLayout = styled.main`
+  margin: 3rem auto;
   padding: 0 30px;
   width: 100%;
-  max-width: 1280px;
+  max-width: 1200px;
 `;
 
 const Title = styled.h2`
-  margin: 54px auto 52px;
+  margin: 5.4rem auto 5.2rem;
   text-align: center;
   font-weight: 700;
   font-size: 3.6rem;
@@ -17,25 +17,32 @@ const Title = styled.h2`
 `;
 
 const CartBox = styled.div`
-  margin-bottom: 60px;
+  margin-bottom: 6rem;
 `;
 
 const CartInfoBox = styled(InfoBox)`
   margin-bottom: 0;
-  padding-left: 8px;
-  padding-right: 8px;
+  padding-left: 0.8rem;
+  padding-right: 0.8rem;
   grid-template-columns: 3fr 1fr 1fr 1fr;
   gap: 0;
+
+  @media screen and (max-width: 768px) {
+    grid-template-columns: 1fr;
+    strong:nth-child(n + 2) {
+      display: none;
+    }
+  }
 `;
 
 const TotalPayText = styled.p`
-  margin-top: 30px;
+  margin-top: 3rem;
   text-align: end;
   font-weight: 500;
   font-size: 1.8rem;
   line-height: 2.2rem;
   strong {
-    margin-left: 10px;
+    margin-left: 1rem;
     font-weight: 700;
     font-size: 2.4rem;
     line-height: 3rem;
@@ -43,4 +50,4 @@ const TotalPayText = styled.p`
   }
 `;
 
-export { PaymentSection, CartBox, TotalPayText, Title, CartInfoBox };
+export { PaymentLayout, CartBox, TotalPayText, Title, CartInfoBox };

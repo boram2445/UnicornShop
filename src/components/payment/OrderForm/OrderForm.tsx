@@ -19,7 +19,6 @@ import SelectBox from "../../common/SelectBox/SelectBox";
 import FinalPayCheck from "../FinalPayCheck/FinalPayCheck";
 import PayMethod from "../PayMethod/PayMethod";
 import PostAddress from "../PostAddress/PostAddress";
-import Modal from "../../common/Modal/Modal";
 import * as S from "./orderFormStyle";
 
 function OrderForm() {
@@ -34,36 +33,16 @@ function OrderForm() {
   const deliveryPrice = useAppSelector(getDeliveryPrice);
   const orderType = useAppSelector(selectOrderType);
 
-  const [addressModal, setAddressModal] = useState(false);
-
   useEffect(() => {
     return () => {
       dispatch(reset());
     };
   }, []);
 
-  //우편 번호 찾기 모달
-  const modal = useAppSelector(selectOpenState);
-
   //주문자 정보 - 이름, phone 넘버는 미리 받아오기
-  const [ordererInfo, setOrdererInfo] = useState({
-    name: "",
-    phone1: phoneSelect[0],
-    phone2: "",
-    phone3: "",
-    email: "",
-  });
+  const [ordererInfo, setOrdererInfo] = useState(orderInitialState);
   //배송지 정보
-  const [receiverInfo, setReceiverInfo] = useState({
-    name: "",
-    phone1: phoneSelect[0],
-    phone2: "",
-    phone3: "",
-    zoneCode: "",
-    address: "",
-    addressDetail: "",
-    message: messageSelect[0],
-  });
+  const [receiverInfo, setReceiverInfo] = useState(receiverInitialState);
 
   const [checkBox, setCheckBox] = useState({
     payMethod: "",
@@ -154,15 +133,15 @@ function OrderForm() {
     dispatch(openModal("예"));
   };
 
-  const modalContent = (
-    <Modal onClickYes={() => navigate("/myPage")}>
-      주문이 완료되었습니다. <br /> 마이페이지로 이동하시겠습니까?
-    </Modal>
-  );
+  // const modalContent = (
+  //   <Modal onClickYes={() => navigate("/myPage")}>
+  //     주문이 완료되었습니다. <br /> 마이페이지로 이동하시겠습니까?
+  //   </Modal>
+  // );
 
   return (
     <>
-      {orderStatus === "succeeded" && modal ? modalContent : null}
+      {/* {orderStatus === "succeeded" && modal ? modalContent : null} */}
       <form onSubmit={handleSubmit}>
         <S.Title>
           배송정보 <S.ErrorText>* 모든 항목 입력 필수</S.ErrorText>
@@ -180,7 +159,7 @@ function OrderForm() {
                 value={ordererInfo.name}
                 autoComplete="off"
               />
-              <S.ErrorText>* 정확한 이름을 입력해 주세요.</S.ErrorText>
+              <S.ErrorText>*정확한 이름을 입력해 주세요.</S.ErrorText>
             </div>
           </S.Row>
           <S.Row>
@@ -208,7 +187,7 @@ function OrderForm() {
               &nbsp; - &nbsp;
               <S.Input
                 type="text"
-                width="100px"
+                width="10rem"
                 name="phone3"
                 onChange={onChangeOrdererInfo}
                 value={ordererInfo.phone3}
@@ -227,7 +206,7 @@ function OrderForm() {
                 pattern={emailRegExp}
                 autoComplete="off"
               />
-              <S.ErrorText>* 이메일 형식을 확인해주세요</S.ErrorText>
+              <S.ErrorText>*이메일 형식을 확인해주세요</S.ErrorText>
             </div>
           </S.Row>
         </section>
@@ -237,9 +216,9 @@ function OrderForm() {
             <NormalBtn
               type="button"
               color="white"
-              width="150px"
-              padding="6px 0"
-              fontSize="1.6rem"
+              width="13rem"
+              padding="0.5rem 0"
+              fontSize="1.4rem"
               onClick={handleSameInfoBtn}
             >
               주문자 정보와 동일
@@ -276,7 +255,7 @@ function OrderForm() {
               <S.Input
                 name="phone2"
                 type="text"
-                width="100px"
+                width="10rem"
                 onChange={onChangeReceiverInfo}
                 value={receiverInfo.phone2}
                 autoComplete="off"
@@ -285,7 +264,7 @@ function OrderForm() {
               <S.Input
                 name="phone3"
                 type="text"
-                width="100px"
+                width="10rem"
                 onChange={onChangeReceiverInfo}
                 value={receiverInfo.phone3}
                 autoComplete="off"
@@ -298,7 +277,7 @@ function OrderForm() {
               <S.Input
                 name="zondCode"
                 type="text"
-                width="150px"
+                width="15rem"
                 placeholder="우편번호"
                 defaultValue={receiverInfo.zoneCode}
                 readOnly
@@ -310,9 +289,8 @@ function OrderForm() {
               <S.Input
                 name="address"
                 type="text"
-                width="80%"
-                maxWidth="600px"
-                minWidth="400px"
+                width="100%"
+                maxWidth="60rem"
                 placeholder="주소"
                 defaultValue={receiverInfo.address}
                 readOnly
@@ -321,7 +299,8 @@ function OrderForm() {
               <S.Input
                 name="addressDetail"
                 type="text"
-                width="400px"
+                width="100%"
+                maxWidth="40rem"
                 placeholder="상세주소"
                 autoComplete="off"
                 onChange={onChangeReceiverInfo}
@@ -338,10 +317,9 @@ function OrderForm() {
                 setReceiverInfo({ ...receiverInfo, ["message"]: selected })
               }
               checkItem={receiverInfo.message}
-              width="80%"
-              maxWidth="600px"
-              minWidth="400px"
-              padding="9px 10px"
+              width="100%"
+              maxWidth="50rem"
+              padding="0.9rem 1rem"
               textAlign="start"
             />
           </S.Row>
@@ -372,3 +350,21 @@ const messageSelect = [
   "부재시 경비실에 맡겨 주세요.",
   "부재시 전화주시거나 문자 남겨 주세요.",
 ];
+
+const orderInitialState = {
+  name: "",
+  phone1: phoneSelect[0],
+  phone2: "",
+  phone3: "",
+  email: "",
+};
+const receiverInitialState = {
+  name: "",
+  phone1: phoneSelect[0],
+  phone2: "",
+  phone3: "",
+  zoneCode: "",
+  address: "",
+  addressDetail: "",
+  message: messageSelect[0],
+};

@@ -53,8 +53,8 @@ function FinalPayCheck({ canOrder, onChange }: FinalCheckProps) {
           </CheckLabel>
           <NormalBtn
             disabled={!canOrder}
-            width="220px"
-            padding="18px"
+            width="22rem"
+            padding="1.4rem"
             fontSize="2.4rem"
             fontWeight="500"
           >

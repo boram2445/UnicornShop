@@ -1,30 +1,30 @@
 import styled from "styled-components";
 
 const Title = styled.h3`
-  padding-bottom: 8px;
+  padding-bottom: 0.8rem;
   font-weight: 500;
   font-size: 2.4rem;
   line-height: 3rem;
-  border-bottom: 2px solid var(--color-grey);
+  border-bottom: 0.2rem solid var(--color-grey);
 `;
 
 const ErrorText = styled.small`
-  margin-left: 10px;
+  margin-left: 1rem;
   font-size: 1.6rem;
   line-height: 2rem;
   color: var(--color-red);
 `;
 
 const SectionTitle = styled.h4`
-  margin-top: 40px;
-  padding-bottom: 8px;
+  margin-top: 4rem;
+  padding-bottom: 0.8rem;
   text-align: start;
   font-weight: 500;
   font-size: 1.8rem;
   line-height: 2.3rem;
-  border-bottom: 2px solid var(--color-grey);
+  border-bottom: 0.2rem solid var(--color-grey);
   button {
-    margin-left: 20px;
+    margin-left: 2rem;
   }
 `;
 
@@ -35,22 +35,25 @@ const LabelText = styled.strong`
 `;
 
 const Row = styled.div`
-  padding: 4px 0 4px;
+  padding: 0.4rem 0.5rem 0.4rem;
   display: grid;
-  grid-template-columns: 170px auto;
-  border-bottom: 1px solid var(--color-grey);
+  grid-template-columns: 17rem auto;
+  align-items: center;
+  border-bottom: 0.1rem solid var(--color-grey);
+
+  @media screen and (max-width: 768px) {
+    grid-template-columns: 10rem auto;
+  }
 `;
 
-const Input = styled.input<{ width?: string; maxWidth?: string; minWidth?: string }>`
-  margin: 4px auto;
-  padding: 0 8px;
-  height: 40px;
-  width: ${({ width }) => width || "334px"};
+const Input = styled.input<{ width?: string; maxWidth?: string }>`
+  margin: 0.4rem auto;
+  padding: 0 0.8rem;
+  height: 4rem;
+  width: ${({ width }) => width || "33.4rem"};
   max-width: ${({ maxWidth }) => maxWidth};
-  min-width: ${({ minWidth }) => minWidth};
   font-size: 1.6rem;
   border: 1px solid var(--color-grey);
-  outline-color: var(--color-brightPink);
   ~ small {
     display: none;
   }
@@ -64,14 +67,18 @@ const Input = styled.input<{ width?: string; maxWidth?: string; minWidth?: strin
 
 const BtnWrapper = styled.div`
   display: inline-block;
-  margin-left: 10px;
+  margin-left: 1rem;
 `;
 
 const BottomWrap = styled.div`
-  margin-top: 70px;
+  margin-top: 7rem;
   display: flex;
   justify-content: space-between;
-  gap: 20px;
+  gap: 4rem;
+
+  @media screen and (max-width: 768px) {
+    flex-wrap: wrap;
+  }
 `;
 
 export { Title, ErrorText, SectionTitle, LabelText, Row, Input, BtnWrapper, BottomWrap };
