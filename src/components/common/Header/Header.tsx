@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
 import { fetchSearchProducts, searchReset } from "../../../features/searchSlice";
 import { getLoginUserType, getToken } from "../../../features/loginSlice";
-import { fetchGetCartList } from "../../../features/cartListSlice";
+import { fetchGetCartList, getCartQuantity } from "../../../features/cartListSlice";
 import IconNav from "./IconNav";
 
 import logo from "../../../assets/icons/Logo-hodu.svg";
@@ -16,6 +16,7 @@ export function Header() {
   const { pathname } = useLocation();
   const TOKEN = useAppSelector(getToken);
   const userType = useAppSelector(getLoginUserType);
+  const cartQuantity = useAppSelector(getCartQuantity);
 
   const inputRef = useRef() as React.MutableRefObject<HTMLInputElement>;
   const [searchContent, setSearchContent] = useState("");
@@ -59,7 +60,7 @@ export function Header() {
             </S.SearchForm>
           </S.LeftWrap>
           <S.RightWrap>
-            <IconNav />
+            <IconNav cartQuantity={cartQuantity} />
           </S.RightWrap>
         </S.HeaderContents>
       </S.HeaderContainer>

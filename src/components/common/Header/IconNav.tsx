@@ -12,7 +12,7 @@ import { ReactComponent as UserIcon } from "../../../assets/icons/icon-user.svg"
 import { ReactComponent as BagIcon } from "../../../assets/icons/icon-shopping-bag.svg";
 import * as S from "./iconNavStyle";
 
-function IconNav() {
+function IconNav({ cartQuantity }: { cartQuantity: number }) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const modal = useAppSelector(selectOpenState);
@@ -22,7 +22,6 @@ function IconNav() {
   const userBtnRef = useRef() as React.MutableRefObject<HTMLButtonElement>;
 
   const clickCartIcon = TOKEN ? () => navigate("/cart") : () => dispatch(openModal("예"));
-  const cartQuantity = TOKEN && userType === "BUYER" ? useAppSelector(getCartQuantity) : undefined;
   const clickUserIcon = TOKEN ? () => setArrowModal((prev) => !prev) : () => navigate("/login");
   const onArrowIcon = !TOKEN ? undefined : onArrowModal ? "open" : "close"; //헤더 화살표 아이콘
 
