@@ -35,7 +35,7 @@ const NormalBtn = styled.button<NormalBtnProps>`
       return css`
         display: flex;
         align-items: center;
-        gap: 8px;
+        gap: 6px;
       `;
     }
   }}

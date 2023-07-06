@@ -18,7 +18,7 @@ function MyPage() {
   const userType = useAppSelector(getLoginUserType);
   const { status, orderedInfo, orderedDetail } = useAppSelector(getOrderState);
 
-  const [tabType, setTabType] = useState(userType === "BUYER" ? "order" : "myInfo");
+  const [selectedTab, setSelectedTab] = useState(userType === "BUYER" ? "order" : "myInfo");
 
   useEffect(() => {
     if (TOKEN && userType === "BUYER") {
@@ -32,10 +32,10 @@ function MyPage() {
     }
   }, [orderedInfo]);
 
-  const handleTabNav = (type: string) => setTabType(type);
+  const handleTabNav = (type: string) => setSelectedTab(type);
 
   let content;
-  if (userType === "BUYER" && tabType === "order") content = <Chart />;
+  if (userType === "BUYER" && selectedTab === "order") content = <Chart />;
   else content = dummyContent;
 
   if (status === "loading") return <Spinner />;
@@ -43,7 +43,12 @@ function MyPage() {
     <S.Container>
       <S.TitleText>마이페이지</S.TitleText>
       <S.ContentWrap>
-        <TabNav onTabNav={handleTabNav} tabType={tabType} orderedQuantity={orderedDetail?.length} />
+        <TabNav
+          onTabNav={handleTabNav}
+          tabList={userType === "BUYER" ? buyerTabList : sellerTabList}
+          selectedTab={selectedTab}
+          quantity={orderedDetail?.length}
+        />
         {content}
       </S.ContentWrap>
     </S.Container>
@@ -51,6 +56,14 @@ function MyPage() {
 }
 
 export default MyPage;
+
+const buyerTabList = [
+  { name: "order", label: " 주문 상품 조회" },
+  { name: "review", label: "문의/리뷰", num: 1 },
+  { name: "myInfo", label: "개인정보 설정" },
+];
+
+const sellerTabList = [{ name: "myInfo", label: "개인정보 설정" }];
 
 const dummyContent = (
   <NoItemBox>

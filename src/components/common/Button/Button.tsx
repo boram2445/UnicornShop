@@ -28,7 +28,7 @@ interface TabMenuBtnProps {
 export function NormalBtn({ children, ...props }: NormalBtnProps) {
   return (
     <S.NormalBtn {...props}>
-      {props.icon && <img src={props.icon} />}
+      {props.icon && <img src={props.icon} width="23px" />}
       {children}
     </S.NormalBtn>
   );
