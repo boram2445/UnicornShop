@@ -1,8 +1,15 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAppSelector } from "../../hooks";
+import {
+  fetchGetSellerProduct,
+  getSellerStatus,
+  selectSellerProducts,
+} from "../../features/sellerSlice";
 import { NormalBtn } from "../../components/common/Button/Button";
 import Chart from "../../components/common/Chart/Chart";
 import TabNav from "../../components/common/TabNav/TabNav";
+import Spinner from "../../components/common/Spinner/Spinner";
 import plusIcon from "../../assets/icons/icon-circle-plus.svg";
 import { dummyContent } from "../MyPage/MyPage";
 import * as S from "./centerPageStyle";
@@ -10,15 +17,20 @@ import * as S from "./centerPageStyle";
 function CenterPage() {
   const navigate = useNavigate();
 
+  const status = useAppSelector(getSellerStatus);
+  const products = useAppSelector(selectSellerProducts);
+
   const [selectedTab, setSelectedTab] = useState("products");
 
   const handleTabNav = (type: string) => setSelectedTab(type);
+
+  if (status === "loading") return <Spinner />;
   return (
     <>
       <S.Container>
         <S.TitleWrap>
           <S.TitleText>
-            대시보드<span>백엔드글로벌</span>
+            대시보드<span>{products[0]?.store_name || ""}</span>
           </S.TitleText>
           <NormalBtn
             icon={plusIcon}

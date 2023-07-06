@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useAppDispatch, useAppSelector } from "../../../hooks";
 import { getLoginUserType, getToken } from "../../../features/loginSlice";
 import {
   fetchDeleteSellerItem,
@@ -6,12 +7,11 @@ import {
   getSellerStatus,
   selectSellerProducts,
 } from "../../../features/sellerSlice";
-import { useAppDispatch, useAppSelector } from "../../../hooks";
+import { getOrderState } from "../../../features/orderSlice";
+import { closeModal, openModal, selectOpenState } from "../../../features/modalSlice";
 import ChartItem from "../ChartItem/ChartItem";
 import Modal from "../Modal/Modal";
-import { closeModal, openModal, selectOpenState } from "../../../features/modalSlice";
 import * as S from "./chartStyle";
-import { getOrderState } from "../../../features/orderSlice";
 
 function Chart() {
   const dispatch = useAppDispatch();
@@ -21,7 +21,6 @@ function Chart() {
   const sellerStatus = userType === "SELLER" && useAppSelector(getSellerStatus);
   const sellProducts = userType === "SELLER" ? useAppSelector(selectSellerProducts) : [];
   const modal = useAppSelector(selectOpenState);
-
   const { orderedDetail } = useAppSelector(getOrderState);
 
   const [selectedItemId, setSelectedItemId] = useState(0);
@@ -30,7 +29,7 @@ function Chart() {
     if (TOKEN && userType === "SELLER" && sellerStatus === "idle") {
       dispatch(fetchGetSellerProduct(TOKEN));
     }
-  }, []);
+  }, [TOKEN, userType, sellerStatus]);
 
   //상품 지우기 확인 모달 열기
   function OpenDeleteModal(product_id: number) {

@@ -15,10 +15,14 @@ export interface ItemPostType {
   product_info?: string;
   token?: string;
 }
+
+interface SellerProduct extends Product {
+  store_name: string;
+}
 interface SellerType {
   status: string;
   error: string;
-  products: Product[];
+  products: SellerProduct[];
   modifyItemId: number;
 }
 
@@ -39,7 +43,6 @@ export const fetchGetSellerProduct = createAsyncThunk(
       },
     };
     const result = await axios.get(`${BASE_URL}/seller/`, config);
-    console.log(result.data);
     return result.data;
   }
 );
@@ -71,7 +74,6 @@ export const fetchPostItem = createAsyncThunk(
       };
       const data = { ...formValues, token: TOKEN };
       const result = await axios.post(`${BASE_URL}/products/`, data, config);
-      console.log(result.data);
       return result.data;
     } catch (error: any) {
       //서버 에러 메세지 받아오기 -개선 필요
@@ -101,7 +103,7 @@ export const fetchPutSellerItem = createAsyncThunk(
         },
       };
       const result = await axios.put(`${BASE_URL}/products/${product_id}/`, formValues, config);
-      console.log(result.data);
+
       return result.data;
     } catch (error: any) {
       //서버 에러 메세지 받아오기 -개선 필요
@@ -184,6 +186,7 @@ const sellerSlice = createSlice({
   },
 });
 
+export const getSellerState = (state: RootState) => state.seller;
 export const getSellerStatus = (state: RootState) => state.seller.status;
 export const selectSellerProducts = (state: RootState) => state.seller.products;
 

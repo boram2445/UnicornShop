@@ -10,7 +10,7 @@ import logo from "../../../assets/icons/Logo-hodu.svg";
 import searchIcon from "../../../assets/icons/search.svg";
 import * as S from "./headerStyle";
 
-export function Header() {
+function Header() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { pathname } = useLocation();
@@ -43,21 +43,29 @@ export function Header() {
     navigate(`/search/${searchContent}`);
   };
 
+  let content;
+  if (pathname.includes("center"))
+    content = <S.TitleText style={{ margin: 0 }}>판매자 센터</S.TitleText>;
+  else
+    content = (
+      <S.SearchForm onSubmit={handleSubmit}>
+        <S.Input
+          type="search"
+          placeholder="상품을 검색해보세요!"
+          onChange={handleChange}
+          ref={inputRef}
+        />
+        <S.InputBtn type="submit" icon={searchIcon} />
+      </S.SearchForm>
+    );
+
   return (
     <>
       <S.HeaderContainer>
         <S.HeaderContents>
           <S.LeftWrap>
             <S.Logo logoUrl={logo} onClick={() => navigate("/")} />
-            <S.SearchForm onSubmit={handleSubmit}>
-              <S.Input
-                type="search"
-                placeholder="상품을 검색해보세요!"
-                onChange={handleChange}
-                ref={inputRef}
-              />
-              <S.InputBtn type="submit" icon={searchIcon} />
-            </S.SearchForm>
+            {content}
           </S.LeftWrap>
           <S.RightWrap>
             <IconNav cartQuantity={cartQuantity} />
@@ -68,16 +76,4 @@ export function Header() {
   );
 }
 
-// 판매자 센터 헤더
-export function CenterHeader() {
-  const navigate = useNavigate();
-
-  return (
-    <S.HeaderContainer>
-      <S.CenterContents>
-        <S.SmallLogo logoUrl={logo} onClick={() => navigate("/")} />
-        <S.TitleText>판매자 센터</S.TitleText>
-      </S.CenterContents>
-    </S.HeaderContainer>
-  );
-}
+export default Header;

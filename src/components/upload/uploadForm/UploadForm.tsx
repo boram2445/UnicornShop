@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { getToken } from "../../../features/loginSlice";
 import {
+  fetchGetSellerProduct,
   fetchPostItem,
   fetchPutSellerItem,
   ItemPostType,
@@ -72,13 +73,15 @@ function UploadForm({ itemInfo }: { itemInfo?: Product }) {
   if (modifyId) {
     modalContent = (
       <Modal onClickYes={() => navigate("/center")}>
-        상품이 수정되었습니다. 대시보드로 돌아가시겠습니까?
+        상품이 수정되었습니다. <br />
+        대시보드로 돌아가시겠습니까?
       </Modal>
     );
   } else {
     modalContent = (
       <Modal onClickYes={() => navigate("/center")}>
-        상품이 등록되었습니다. 대시보드로 돌아가시겠습니까?
+        상품이 등록되었습니다. <br />
+        대시보드로 돌아가시겠습니까?
       </Modal>
     );
   }

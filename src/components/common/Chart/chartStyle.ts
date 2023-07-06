@@ -28,7 +28,7 @@ const TopWrap = styled.div`
 
 const ListWrap = styled.div`
   height: 100%;
-  overflow-y: auto;
+  overflow-y: scroll;
 `;
 
 export { ChartContainer, TopWrap, ListWrap, NoItemBox };

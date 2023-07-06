@@ -1,8 +1,8 @@
 import React, { useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLoaderData, useLocation, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
 import { getAuthState, logout } from "../../../features/loginSlice";
-import { getCartQuantity, reset } from "../../../features/cartListSlice";
+import { reset } from "../../../features/cartListSlice";
 import { openModal, selectOpenState } from "../../../features/modalSlice";
 import ArrowModal from "../ArrowModal/ArrowModal";
 import Modal from "../Modal/Modal";
@@ -15,6 +15,7 @@ import * as S from "./iconNavStyle";
 function IconNav({ cartQuantity }: { cartQuantity: number }) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { pathname } = useLocation();
   const modal = useAppSelector(selectOpenState);
   const { TOKEN, userName, userType } = useAppSelector(getAuthState);
 
@@ -69,10 +70,12 @@ function IconNav({ cartQuantity }: { cartQuantity: number }) {
   if (userType === "SELLER")
     return (
       <>
-        <S.WideNavBtn onClick={() => navigate("/center")}>
-          <BagIcon stroke="black" />
-          <small>판매자 센터</small>
-        </S.WideNavBtn>
+        {!pathname.includes("center") && (
+          <S.WideNavBtn onClick={() => navigate("/center")}>
+            <BagIcon stroke="black" />
+            <small>판매자 센터</small>
+          </S.WideNavBtn>
+        )}
         {userNav}
       </>
     );
