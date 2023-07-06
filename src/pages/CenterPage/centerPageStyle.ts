@@ -11,9 +11,8 @@ const TitleWrap = styled.div`
 `;
 
 const TitleText = styled.h3`
-  font-size: 3.6rem;
+  font-size: 3.2rem;
   font-weight: 700;
-  line-height: 4.4rem;
   span {
     margin-left: 16px;
     font-weight: 500;

@@ -29,7 +29,7 @@ const CartList = styled.ul`
 `;
 
 const NoItemBox = styled.div`
-  margin-top: 20rem;
+  margin-top: 18rem;
   display: flex;
   flex-direction: column;
   align-items: center;
