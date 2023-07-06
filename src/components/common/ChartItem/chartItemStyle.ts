@@ -2,10 +2,10 @@ import styled from "styled-components";
 
 const ItemContainer = styled.div`
   display: grid;
-  grid-template-columns: 5fr 2fr 80px 80px;
-  gap: 20px;
+  grid-template-columns: 5fr 2fr 8rem 8rem;
+  gap: 2rem;
   align-items: center;
-  padding: 10px 30px 11px;
+  padding: 1rem 3rem 1.1rem 3rem;
   background-color: var(--color-white);
   border-bottom: 1px solid var(--color-grey);
 `;
@@ -13,12 +13,12 @@ const ItemContainer = styled.div`
 const InfoWrap = styled.div`
   display: flex;
   align-items: center;
-  gap: 30px;
+  gap: 3rem;
 `;
 
 const ImageBox = styled.div`
-  width: 70px;
-  height: 70px;
+  width: 7rem;
+  height: 7rem;
   border-radius: 50%;
   overflow: hidden;
   border: 1px solid var(--color-grey);
@@ -38,19 +38,27 @@ const InfoBox = styled.div`
 const ProductText = styled.p`
   font-size: 1.6rem;
   line-height: 2rem;
+  cursor: pointer;
+  &:hover {
+    text-decoration: underline;
+  }
 `;
 
-const StockText = styled.p`
-  font-size: 1.6rem;
+const LightText = styled.p<{ textAlign?: string }>`
+  font-size: 1.4rem;
   line-height: 2rem;
-  color: var(--color-grey);
+  color: var(--color-darkGrey);
+  text-align: ${({ textAlign }) => (textAlign ? textAlign : "start")};
+  strong {
+    font-weight: 500;
+  }
 `;
 
 const PriceText = styled.p`
   text-align: center;
-  font-size: 1.8rem;
+  font-size: 1.6rem;
   line-height: 2.2rem;
   font-weight: 500;
 `;
 
-export { ItemContainer, InfoWrap, ImageBox, InfoBox, ProductText, StockText, PriceText };
+export { ItemContainer, InfoWrap, ImageBox, InfoBox, ProductText, LightText, PriceText };

@@ -21,25 +21,25 @@ interface TabMenuBtnProps {
   children: React.ReactNode;
   fixed?: boolean;
   num?: number;
+  onClick?: () => void;
 }
 
 //기본 버튼
 export function NormalBtn({ children, ...props }: NormalBtnProps) {
   return (
     <S.NormalBtn {...props}>
-      {props.icon && <img src={props.icon} />}
+      {props.icon && <img src={props.icon} width="23px" />}
       {children}
     </S.NormalBtn>
   );
 }
 
 //탭 메뉴 버튼
-export function TabMenuBtn({ children, fixed, num }: TabMenuBtnProps) {
+export function TabMenuBtn({ children, fixed, num, onClick }: TabMenuBtnProps) {
   return (
-    <S.TabMenuBtn fixed={fixed?.toString()}>
+    <S.TabMenuBtn fixed={fixed?.toString()} onClick={onClick}>
       {children}
-      {fixed && <span>({num})</span>}
-      {!fixed && num && <S.NumCircle>{num}</S.NumCircle>}
+      {num && <S.NumCircle>{num}</S.NumCircle>}
     </S.TabMenuBtn>
   );
 }

@@ -1,60 +1,72 @@
-import React, { useEffect } from "react";
-import { TabMenuBtn } from "../../components/common/Button/Button";
-import Chart from "../../components/common/Chart/Chart";
-import { getToken, getLoginUserType } from "../../features/loginSlice";
-import { fetchPostOrderList, getOrderState } from "../../features/orderSlice";
+import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks";
-import * as S from "./myPageStyle";
+import { getToken, getLoginUserType } from "../../features/loginSlice";
+import {
+  fetchAllOrderedDetail,
+  fetchPostOrderList,
+  getOrderState,
+} from "../../features/orderSlice";
+import TabNav from "../../components/common/TabNav/TabNav";
+import Spinner from "../../components/common/Spinner/Spinner";
+import Chart from "../../components/common/Chart/Chart";
+import { NoItemBox } from "../CartPage/cartPageStyle";
+import * as S from "../../pages/CenterPage/centerPageStyle";
 
 function MyPage() {
   const dispatch = useAppDispatch();
   const TOKEN = useAppSelector(getToken);
-  const USER_TYPE = useAppSelector(getLoginUserType);
-  const { orderInfo } = useAppSelector(getOrderState);
+  const userType = useAppSelector(getLoginUserType);
+  const { status, orderedInfo, orderedDetail } = useAppSelector(getOrderState);
+
+  const [selectedTab, setSelectedTab] = useState(userType === "BUYER" ? "order" : "myInfo");
 
   useEffect(() => {
-    if (TOKEN && USER_TYPE === "BUYER") {
+    if (TOKEN && userType === "BUYER") {
       dispatch(fetchPostOrderList(TOKEN));
     }
   }, []);
 
-  //구매정보에 넘버밖에 없어서 또 디테일 정보를 서버에서 받아와야 한다.
-  //구매 완료 후에는 구매 내역을 보여주는 페이지에서 보여주어야 한다.
-  console.log(orderInfo);
+  useEffect(() => {
+    if (userType === "BUYER" && orderedInfo) {
+      dispatch(fetchAllOrderedDetail(orderedInfo));
+    }
+  }, [orderedInfo]);
+
+  const handleTabNav = (type: string) => setSelectedTab(type);
 
   let content;
-  if (USER_TYPE === "BUYER") {
-    content = (
-      <>
-        <S.BtnWrap>
-          {/* <TabMenuBtn fixed={true} num={orderInfo?.count}>
-            주문 상품 조회
-          </TabMenuBtn> */}
-          <TabMenuBtn num={1}>문의/리뷰</TabMenuBtn>
-          <TabMenuBtn>개인정보 설정</TabMenuBtn>
-        </S.BtnWrap>
-        <Chart />
-      </>
-    );
-  } else if (USER_TYPE) {
-    content = (
-      <>
-        <S.BtnWrap>
-          <TabMenuBtn>개인정보 설정</TabMenuBtn>
-        </S.BtnWrap>
-        <div>SELLER</div>
-      </>
-    );
-  } else {
-    <p>사용자 정보가 없습니다.</p>;
-  }
+  if (userType === "BUYER" && selectedTab === "order") content = <Chart />;
+  else content = dummyContent;
 
+  if (status === "loading") return <Spinner />;
   return (
     <S.Container>
       <S.TitleText>마이페이지</S.TitleText>
-      <S.ContentWrap>{content}</S.ContentWrap>
+      <S.ContentWrap>
+        <TabNav
+          onTabNav={handleTabNav}
+          tabList={userType === "BUYER" ? buyerTabList : sellerTabList}
+          selectedTab={selectedTab}
+          quantity={orderedDetail?.length}
+        />
+        {content}
+      </S.ContentWrap>
     </S.Container>
   );
 }
 
 export default MyPage;
+
+const buyerTabList = [
+  { name: "order", label: " 주문 상품 조회" },
+  { name: "review", label: "문의/리뷰", num: 1 },
+  { name: "myInfo", label: "개인정보 설정" },
+];
+
+const sellerTabList = [{ name: "myInfo", label: "개인정보 설정" }];
+
+export const dummyContent = (
+  <NoItemBox>
+    <p>콘텐츠를 준비중 입니다.</p> <small> 조금만 기다려 주세요 :)</small>
+  </NoItemBox>
+);

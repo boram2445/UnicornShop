@@ -1,7 +1,7 @@
 import React from "react";
 import GlobalStyle from "./assets/globalStyle";
 import { Routes, Route } from "react-router-dom";
-import { MainLayout, CenterLayout } from "./components/layout/Layout";
+import Layout from "./components/layout/Layout";
 import HomePage from "./pages/HomePage/HomePage";
 import DetailPage from "./pages/DetailPage/DetailPage";
 import CartPage from "./pages/CartPage/CartPage";
@@ -20,7 +20,7 @@ function App() {
     <>
       <GlobalStyle />
       <Routes>
-        <Route element={<MainLayout />}>
+        <Route element={<Layout />}>
           <Route path="/" element={<HomePage />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/products/:productId" element={<DetailPage />} />
@@ -28,8 +28,6 @@ function App() {
           <Route path="/orderDone" element={<OrderDonePage />} />
           <Route path="/mypage" element={<MyPage />} />
           <Route path={"/search/:keyword"} element={<SearchPage />} />
-        </Route>
-        <Route element={<CenterLayout />}>
           <Route path="/center" element={<CenterPage />} />
           <Route path="/center/upload" element={<UploadPage />} />
         </Route>

@@ -1,9 +1,9 @@
 import React from "react";
-import { Item } from "../../../features/cartListSlice";
+import { Product } from "../../../features/productSlice";
 import * as S from "./orderItemStyle";
 
 interface OrderProps {
-  item: Item;
+  item: Product;
   quantity: number;
 }
 

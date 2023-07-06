@@ -1,21 +1,9 @@
 import { RootState } from "../app/store";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { Product } from "./productSlice";
 import axios from "axios";
 
 const BASE_URL = "https://openmarket.weniv.co.kr";
-
-export interface Item {
-  image: string;
-  price: number;
-  product_id: number;
-  product_info: string;
-  product_name: string;
-  seller: number;
-  store_name: string;
-  shipping_fee: number;
-  shipping_method: string;
-  stock: number;
-}
 
 export interface CartItem {
   my_cart: number;
@@ -24,7 +12,7 @@ export interface CartItem {
   product_id: number;
   quantity: number;
   isChecked: boolean;
-  item: Item;
+  item: Product;
 }
 
 interface CountPutData {
