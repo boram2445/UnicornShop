@@ -1,5 +1,5 @@
 import React from "react";
-import { TabMenuBtn } from "../../common/Button/Button";
+import { TabMenuBtn } from "../Button/Button";
 import * as S from "../../../pages/CenterPage/centerPageStyle";
 
 interface TabNavProps {

@@ -6,7 +6,7 @@ import {
   fetchPostOrderList,
   getOrderState,
 } from "../../features/orderSlice";
-import TabNav from "../../components/myPage/TabNav/TabNav";
+import TabNav from "../../components/common/TabNav/TabNav";
 import Spinner from "../../components/common/Spinner/Spinner";
 import Chart from "../../components/common/Chart/Chart";
 import { NoItemBox } from "../CartPage/cartPageStyle";
@@ -65,7 +65,7 @@ const buyerTabList = [
 
 const sellerTabList = [{ name: "myInfo", label: "개인정보 설정" }];
 
-const dummyContent = (
+export const dummyContent = (
   <NoItemBox>
     <p>콘텐츠를 준비중 입니다.</p> <small> 조금만 기다려 주세요 :)</small>
   </NoItemBox>
