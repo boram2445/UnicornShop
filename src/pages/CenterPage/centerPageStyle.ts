@@ -25,6 +25,14 @@ const ContentWrap = styled.div`
   display: grid;
   grid-template-columns: 25rem 1fr;
   gap: 3rem;
+
+  @media screen and (max-width: 900) {
+    grid-template-columns: 18rem 1fr;
+  }
+
+  @media screen and (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
 `;
 
 const BtnWrap = styled.div`

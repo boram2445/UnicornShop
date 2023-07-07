@@ -3,7 +3,7 @@ import * as S from "./wranBoxStyle";
 
 function WranBox() {
   return (
-    <article>
+    <S.WranArticle>
       <S.Title>* 상품 등록 주의사항</S.Title>
       <S.Content>
         <p>
@@ -11,7 +11,7 @@ function WranBox() {
           있습니다.
         </p>
       </S.Content>
-    </article>
+    </S.WranArticle>
   );
 }
 

@@ -3,13 +3,17 @@ import { Container, TitleWrap, TitleText, ContentWrap } from "../CenterPage/cent
 
 const ContentWrapper = styled(ContentWrap)`
   margin-top: 0;
-  grid-template-columns: 280px 1fr;
+  grid-template-columns: 0.3fr 1fr;
+
+  @media screen and (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
 `;
 
 const LeftWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 40px;
+  gap: 4rem;
 `;
 
 export { Container, LeftWrapper, TitleWrap, TitleText, ContentWrapper };

@@ -8,10 +8,15 @@ const ItemContainer = styled.div`
   padding: 1rem 3rem 1.1rem 3rem;
   background-color: var(--color-white);
   border-bottom: 1px solid var(--color-grey);
+
+  @media screen and (max-width: 900px) {
+    grid-template-columns: 1fr 8rem 8rem;
+  }
 `;
 
 const InfoWrap = styled.div`
-  display: flex;
+  display: grid;
+  grid-template-columns: 7rem 1fr;
   align-items: center;
   gap: 3rem;
 `;
@@ -32,7 +37,7 @@ const ImageBox = styled.div`
 const InfoBox = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 1rem;
 `;
 
 const ProductText = styled.p`
@@ -59,6 +64,10 @@ const PriceText = styled.p`
   font-size: 1.6rem;
   line-height: 2.2rem;
   font-weight: 500;
+
+  @media screen and (max-width: 900px) {
+    display: none;
+  }
 `;
 
 export { ItemContainer, InfoWrap, ImageBox, InfoBox, ProductText, LightText, PriceText };

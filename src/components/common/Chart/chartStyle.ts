@@ -14,15 +14,22 @@ const ChartContainer = styled.div`
 const TopWrap = styled.div`
   padding: 1.1rem 5rem 1.1rem 3rem;
   display: grid;
-  grid-template-columns: 5fr 2fr 80px 80px;
+  grid-template-columns: 5fr 2fr 8rem 8rem;
   gap: 20px;
-  border-radius: 10px 10px 0 0;
+  border-radius: 1rem 1rem 0 0;
   background-color: var(--color-white);
   border-bottom: 1px solid var(--color-grey);
   strong {
     font-size: 1.6rem;
     line-height: 2.2rem;
     text-align: center;
+  }
+
+  @media screen and (max-width: 900px) {
+    strong:nth-child(2) {
+      display: none;
+    }
+    grid-template-columns: 1fr 8rem 8rem;
   }
 `;
 
