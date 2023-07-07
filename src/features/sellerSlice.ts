@@ -84,8 +84,8 @@ export const fetchPostItem = createAsyncThunk(
 );
 
 //판매자 상품 수정
-export const fetchPutSellerItem = createAsyncThunk(
-  "seller/fetchPutSellerItem",
+export const fetchPatchSellerItem = createAsyncThunk(
+  "seller/fetchPatchSellerItem",
   async ({
     TOKEN,
     product_id,
@@ -102,8 +102,8 @@ export const fetchPutSellerItem = createAsyncThunk(
           "Content-Type": "multipart/form-data",
         },
       };
-      const result = await axios.put(`${BASE_URL}/products/${product_id}/`, formValues, config);
-
+      const result = await axios.patch(`${BASE_URL}/products/${product_id}/`, formValues, config);
+      console.log(result);
       return result.data;
     } catch (error: any) {
       //서버 에러 메세지 받아오기 -개선 필요
@@ -169,17 +169,17 @@ const sellerSlice = createSlice({
       state.error = action.error.message || "Something is wrong";
     });
     //판매자 상품 수정
-    builder.addCase(fetchPutSellerItem.pending, (state) => {
+    builder.addCase(fetchPatchSellerItem.pending, (state) => {
       state.status = "loading";
     });
-    builder.addCase(fetchPutSellerItem.fulfilled, (state, action) => {
+    builder.addCase(fetchPatchSellerItem.fulfilled, (state, action) => {
       state.status = "succeeded";
       state.error = "";
       state.products = state.products
         .filter((item) => item.product_id !== action.payload)
         .splice(0, 0, action.payload);
     });
-    builder.addCase(fetchPutSellerItem.rejected, (state, action) => {
+    builder.addCase(fetchPatchSellerItem.rejected, (state, action) => {
       state.status = "failed";
       state.error = action.error.message || "Something is wrong";
     });

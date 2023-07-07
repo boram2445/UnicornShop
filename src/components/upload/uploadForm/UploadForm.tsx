@@ -2,9 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { getToken } from "../../../features/loginSlice";
 import {
-  fetchGetSellerProduct,
   fetchPostItem,
-  fetchPutSellerItem,
+  fetchPatchSellerItem,
   ItemPostType,
   reset,
   selectModifyId,
@@ -14,9 +13,9 @@ import { NormalBtn } from "../../common/Button/Button";
 import { NumInput, TextInput } from "../InputBox/InputBox";
 import { Product } from "../../../features/productSlice";
 import UploadImgBox from "../uploadImg/UploadImg";
-import * as S from "./uploadFormStyle";
 import Modal from "../../common/Modal/Modal";
 import { openModal, selectOpenState } from "../../../features/modalSlice";
+import * as S from "./uploadFormStyle";
 
 function UploadForm({ itemInfo }: { itemInfo?: Product }) {
   const navigate = useNavigate();
@@ -37,8 +36,6 @@ function UploadForm({ itemInfo }: { itemInfo?: Product }) {
   const [deliveryBtn, setDeliveryBtn] = useState(itemInfo?.shipping_method);
   const [formValues, setFormValues] = useState(initialValues);
 
-  console.log(formValues);
-
   useEffect(() => {
     return () => {
       dispatch(reset());
@@ -58,10 +55,12 @@ function UploadForm({ itemInfo }: { itemInfo?: Product }) {
     setFormValues({ ...formValues, [name]: value });
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (modifyId) {
-      dispatch(fetchPutSellerItem({ TOKEN, product_id: modifyId, formValues }));
+      const formData = { ...formValues };
+      if (itemInfo?.image === formValues.image) delete formData.image;
+      dispatch(fetchPatchSellerItem({ TOKEN, product_id: modifyId, formValues: formData }));
     } else {
       dispatch(fetchPostItem({ TOKEN, formValues }));
     }
@@ -99,21 +98,25 @@ function UploadForm({ itemInfo }: { itemInfo?: Product }) {
         <S.TitleBtnWrap>
           <NormalBtn
             type="button"
-            width="120px"
+            width="10rem"
+            padding="0.5rem 0"
             color="white"
-            fontSize="1.6rem"
+            fontSize="1.5rem"
             onClick={() => navigate("/center")}
           >
             취소
           </NormalBtn>
-          {/* 폼 제출 버튼 */}
-          <NormalBtn type="submit" width="120px" fontSize="1.6rem" disabled={!canUpload}>
+          <NormalBtn
+            type="submit"
+            width="10rem"
+            padding="0.5rem 0"
+            fontSize="1.5rem"
+            disabled={!canUpload}
+          >
             저장하기
           </NormalBtn>
         </S.TitleBtnWrap>
-        {/* 이미지 업로드 */}
         <UploadImgBox handleImgFile={handleImgFile} image={itemInfo?.image} />
-        {/* 상품 정보 업로드 */}
         <S.InputsWrap>
           <TextInput
             label="상품명"
@@ -132,9 +135,10 @@ function UploadForm({ itemInfo }: { itemInfo?: Product }) {
             <S.Label>배송방법</S.Label>
             <NormalBtn
               type="button"
-              width="220px"
+              width="16rem"
               color="white"
-              padding="16px 0"
+              padding="1.2rem 0"
+              fontSize="1.5rem"
               onClick={() => handleDeiveryBtn("PARCEL")}
               on={deliveryBtn === "PARCEL" ? "true" : "false"}
             >
@@ -142,9 +146,10 @@ function UploadForm({ itemInfo }: { itemInfo?: Product }) {
             </NormalBtn>
             <NormalBtn
               type="button"
-              width="220px"
+              width="16rem"
               color="white"
-              padding="16px 0"
+              padding="1.2rem 0"
+              fontSize="1.5rem"
               onClick={() => handleDeiveryBtn("DELIVERY")}
               on={deliveryBtn === "DELIVERY" ? "true" : "false"}
             >
@@ -166,7 +171,6 @@ function UploadForm({ itemInfo }: { itemInfo?: Product }) {
             value={formValues.stock}
           />
         </S.InputsWrap>
-        {/* 상품 상세 정보 */}
         <S.DetailWrap>
           <S.Label>상품 상세 정보</S.Label>
           <S.TextArea

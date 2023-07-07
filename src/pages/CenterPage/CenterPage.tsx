@@ -1,11 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../../hooks";
-import {
-  fetchGetSellerProduct,
-  getSellerStatus,
-  selectSellerProducts,
-} from "../../features/sellerSlice";
+import { getSellerStatus, selectSellerProducts } from "../../features/sellerSlice";
 import { NormalBtn } from "../../components/common/Button/Button";
 import Chart from "../../components/common/Chart/Chart";
 import TabNav from "../../components/common/TabNav/TabNav";

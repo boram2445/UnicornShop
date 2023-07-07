@@ -24,7 +24,6 @@ function UploadImgBox({ handleImgFile, image }: UploadImgProps) {
     const preview = URL.createObjectURL(file);
     setPreviewUrl(preview);
     handleImgFile(file);
-    // URL.revokeObjectURL(preview);
   };
 
   return (
