@@ -25,6 +25,7 @@ interface CountPutData {
 
 interface CartListState {
   status: string;
+  postStatus: string;
   detailStatus: string;
   cartItems: CartItem[];
   totalPrice: number;
@@ -34,12 +35,35 @@ interface CartListState {
 
 const initialState: CartListState = {
   status: "idle",
+  postStatus: "idle",
   detailStatus: "idle",
   cartItems: [],
   totalPrice: 0,
   deliveryPrice: 0,
   error: "",
 };
+
+interface postCartType {
+  TOKEN?: string;
+  product_id?: number;
+  quantity?: number;
+  check?: boolean;
+}
+
+//카트 담기
+export const fetchPostCart = createAsyncThunk(
+  "cart/axiosPostCart",
+  async ({ TOKEN, product_id, quantity, check }: postCartType) => {
+    const config = {
+      headers: {
+        Authorization: `JWT ${TOKEN}`,
+      },
+    };
+    const data = { product_id, quantity, check };
+    const result = await axios.post(`${BASE_URL}/cart/`, data, config);
+    return result.data;
+  }
+);
 
 //카트 상품 가져오기
 export const fetchGetCartList = createAsyncThunk(
@@ -71,7 +95,7 @@ export const fetchDeleteCartItem = createAsyncThunk(
 
 //상품 디테일
 export const fetchGetAllDetail = createAsyncThunk(
-  "detail/fetchGetDetail",
+  "cartList/fetchGetAllDetail",
   async (cartItems: CartItem[]) => {
     const promiseArr = [
       ...cartItems.map((item) => axios.get(`${BASE_URL}/products/${item.product_id}/`)),
@@ -133,10 +157,19 @@ export const cartListSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
+    builder.addCase(fetchPostCart.fulfilled, (state) => {
+      state.postStatus = "succeeded";
+      state.error = "";
+    });
+    builder.addCase(fetchPostCart.rejected, (state, action) => {
+      state.postStatus = "failed";
+      state.error = action.error.message || "Something is wrong";
+    });
     builder.addCase(fetchGetCartList.pending, (state) => {
       state.status = "loading";
       state.error = "";
     });
+    //상품 가져오기
     builder.addCase(fetchGetCartList.fulfilled, (state, action) => {
       state.status = "succeeded";
       state.cartItems = action.payload.results;
