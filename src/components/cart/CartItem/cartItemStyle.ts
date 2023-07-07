@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import DeleteIcon from "../../../assets/icons/icon-delete.svg";
 
 const CartItemArticle = styled.article`
@@ -50,13 +50,35 @@ const RightWrap = styled.div`
   }
 `;
 
-const ImageBox = styled.div<{ imgUrl?: string }>`
+const ImageBox = styled.div<{ imgUrl?: string; stock?: number }>`
+  position: relative;
   margin-right: 3.6rem;
   width: 16rem;
   height: 16rem;
   border-radius: 1rem;
   background: url(${({ imgUrl }) => imgUrl}) no-repeat center;
   background-size: cover;
+
+  ${({ stock }) => {
+    if (stock === 0) {
+      return css`
+        ::after {
+          content: "";
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background-color: rgba(0, 0, 0, 0.3);
+          display: block;
+          width: 100%;
+          height: 100%;
+          color: black;
+          border-radius: 10px;
+        }
+      `;
+    }
+  }}
 `;
 
 const ShopText = styled.p`
@@ -84,6 +106,15 @@ const PriceText = styled.p`
 `;
 
 const ShipText = styled(ShopText)``;
+
+const StockText = styled(ShopText)`
+  margin-top: 0.5rem;
+  text-align: end;
+
+  @media screen and (max-width: 768px) {
+    display: none;
+  }
+`;
 
 const OrderBox = styled.div`
   display: flex;
@@ -123,6 +154,7 @@ export {
   ProductText,
   PriceText,
   ShipText,
+  StockText,
   PriceAllText,
   OrderBox,
   DeleteBtn,

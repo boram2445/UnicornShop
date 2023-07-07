@@ -36,17 +36,20 @@ function CartPage() {
   const modal = useAppSelector(selectOpenState);
   const [cartItemId, setCartItemId] = useState(0);
   const [deleteType, setDeleteType] = useState("");
+  const [onReset, setOnReset] = useState(false);
 
   useEffect(() => {
     dispatch(reset());
+    setOnReset(true);
     dispatch(fetchGetCartList(TOKEN));
   }, []);
 
   useEffect(() => {
-    if (cartStatus === "succeeded" && detailStatus !== "succeeded") {
+    if (onReset && cartStatus === "succeeded" && detailStatus !== "succeeded") {
+      console.log(onReset, cartStatus);
       dispatch(fetchGetAllDetail(cartItems));
     }
-  }, [cartStatus]);
+  }, [onReset, cartStatus, detailStatus]);
 
   //개별 상품 지우기 재확인 모달 열기
   function OpenDeleteModal(cart_item_id: number) {

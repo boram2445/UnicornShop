@@ -5,6 +5,7 @@ import { CartItem as Cart } from "../../../features/cartListSlice";
 import { NormalBtn } from "../../common/Button/Button";
 import { CircleCheckBtn } from "../../common/CheckBtn/CheckBtn";
 import AmountBtn from "../../common/AmountBtn/AmountBtn";
+import { Badge } from "../../common/Badge/badgeStyle";
 import * as S from "./cartItemStyle";
 
 interface ItemProps {
@@ -35,7 +36,9 @@ function CartItem({ item, detail, OpenDeleteModal, onCheckInput }: ItemProps) {
         isChecked={isChecked}
       />
       <S.LeftWrap>
-        <S.ImageBox imgUrl={detail?.image} />
+        <S.ImageBox imgUrl={detail?.image} stock={detail?.stock}>
+          {detail?.stock === 0 && <Badge />}
+        </S.ImageBox>
         <div>
           <S.ShopText>{detail?.store_name}</S.ShopText>
           <S.ProductText onClick={() => navigate(`/products/${product_id}`)}>
@@ -49,12 +52,21 @@ function CartItem({ item, detail, OpenDeleteModal, onCheckInput }: ItemProps) {
         </div>
       </S.LeftWrap>
       <S.RightWrap>
-        <AmountBtn selectAmount={quantity} item={item} stock={item?.item?.stock} />
+        <div>
+          <AmountBtn selectAmount={quantity} item={item} stock={item?.item?.stock} />
+          <S.StockText>* 재고 : {detail?.stock}</S.StockText>
+        </div>
         <S.OrderBox>
           <S.PriceAllText>
             {detail?.price && (detail?.price * quantity).toLocaleString()}원
           </S.PriceAllText>
-          <NormalBtn width="11rem" padding="0.7rem" fontSize="1.5rem" onClick={orderOneItem}>
+          <NormalBtn
+            width="11rem"
+            padding="0.7rem"
+            fontSize="1.5rem"
+            onClick={orderOneItem}
+            disabled={detail?.stock === 0}
+          >
             주문하기
           </NormalBtn>
         </S.OrderBox>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../hooks";
-import { fetchPostCart } from "../../features/postCartSlice";
+import { fetchGetCartList, fetchPostCart, getCartState } from "../../features/cartListSlice";
 import { getToken, getLoginUserType } from "../../features/loginSlice";
 import { fetchProductDetail, getDetailState } from "../../features/detailSlice";
 import { openModal, selectOpenState } from "../../features/modalSlice";
@@ -21,6 +21,7 @@ function DetailPage() {
 
   const TOKEN = useAppSelector(getToken) || "";
   const USER_TYPE = useAppSelector(getLoginUserType);
+  const { postStatus } = useAppSelector(getCartState);
 
   const { status, detail } = useAppSelector(getDetailState);
   const modal = useAppSelector(selectOpenState);
@@ -30,6 +31,12 @@ function DetailPage() {
   useEffect(() => {
     dispatch(fetchProductDetail(Number(productId)));
   }, []);
+
+  useEffect(() => {
+    if (postStatus === "succeeded") {
+      dispatch(fetchGetCartList(TOKEN));
+    }
+  }, [postStatus]);
 
   const getProductCount = (res: number) => setSelectedCount(res);
   const disableBtn = USER_TYPE === "SELLER" || detail?.stock === 0;
@@ -50,6 +57,7 @@ function DetailPage() {
     dispatch(
       fetchPostCart({ TOKEN, product_id: detail?.product_id, quantity: selectedCount, check: true })
     );
+
     dispatch(openModal("예"));
   };
 

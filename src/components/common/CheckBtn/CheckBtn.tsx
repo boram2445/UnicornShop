@@ -1,6 +1,4 @@
-import React, { useEffect } from "react";
-import { useAppDispatch } from "../../../hooks";
-import { checkItem } from "../../../features/cartListSlice";
+import React from "react";
 import * as S from "./CheckBtnStyle";
 
 interface CheckBtnProps {
@@ -11,13 +9,6 @@ interface CheckBtnProps {
 }
 
 export function CircleCheckBtn({ name, productId, onCheckInput, isChecked = true }: CheckBtnProps) {
-  const dispatch = useAppDispatch();
-  useEffect(() => {
-    if (name !== "allSelect") {
-      dispatch(checkItem({ productId, isChecked: true }));
-    }
-  }, []);
-
   return (
     <>
       <S.CircleCheckBtn
