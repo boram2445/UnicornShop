@@ -112,7 +112,7 @@ const NormalBtn = styled.button<NormalBtnProps>`
 
 const TabMenuBtn = styled.button<{ fixed?: string }>`
   position: relative;
-  width: 250px;
+  width: 100%;
   padding: 15px 20px 15px;
   text-align: start;
   color: var(--color-black);
@@ -138,8 +138,7 @@ const TabMenuBtn = styled.button<{ fixed?: string }>`
 `;
 
 const NumCircle = styled.div`
-  position: absolute;
-  right: 20px;
+  margin-left: 1rem;
   display: inline-block;
   text-align: center;
   width: 20px;
