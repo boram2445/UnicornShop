@@ -4,7 +4,7 @@ import { useAppSelector } from "../../hooks";
 import { getAuthState } from "../../features/loginSlice";
 import LoginForm from "../../components/login/LoginForm/LoginForm";
 import Spinner from "../../components/common/Spinner/Spinner";
-import Logo from "../../assets/icons/Logo-hodu.svg";
+import Logo from "../../assets/icons/logo-unicorn.svg";
 import * as S from "./loginPageStyle";
 
 function LoginPage() {
@@ -23,11 +23,11 @@ function LoginPage() {
         <>
           <LoginForm />
           <S.LinkBox>
+            <Link to="/">
+              <span>홈으로</span>
+            </Link>
             <Link to="/join">
               <span>회원가입</span>
-            </Link>
-            <Link to="/">
-              <span>비밀번호 찾기</span>
             </Link>
           </S.LinkBox>
         </>

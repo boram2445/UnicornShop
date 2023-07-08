@@ -6,7 +6,7 @@ import { getLoginUserType, getToken } from "../../../features/loginSlice";
 import { fetchGetCartList, getCartQuantity } from "../../../features/cartListSlice";
 import IconNav from "./IconNav";
 
-import logo from "../../../assets/icons/Logo-hodu.svg";
+import logo from "../../../assets/icons/logo-unicorn.svg";
 import searchIcon from "../../../assets/icons/search.svg";
 import * as S from "./headerStyle";
 

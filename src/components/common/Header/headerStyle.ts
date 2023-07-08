@@ -16,7 +16,7 @@ const HeaderContents = styled.div`
 const LeftWrap = styled.div`
   display: flex;
   align-items: center;
-  gap: 3rem;
+  gap: 1.5rem;
 `;
 
 const RightWrap = styled.div`
@@ -26,8 +26,8 @@ const RightWrap = styled.div`
 `;
 
 const Logo = styled.h1<{ logoUrl: string }>`
-  width: 12.4rem;
-  height: 3.8rem;
+  width: 19rem;
+  height: 3rem;
   background: url(${({ logoUrl }) => logoUrl}) no-repeat center;
   background-size: cover;
   cursor: pointer;
