@@ -7,17 +7,11 @@ import {
   fetchPostUserName,
   fetchPostCompanyNumber,
   fetchPostRegister,
-  getNameStatus,
-  getCompanyStatus,
-  getRegisterStatus,
-  getRegisterError,
-  getNameMessage,
-  getCompanyMessage,
-  getJoinUserType,
   resetAll,
   resetName,
   resetCompany,
   RegisterPostData,
+  getJoinState,
 } from "../../../features/registerSlice";
 import ToggleBtn from "../../common/ToggleBtn/ToggleBtn";
 import CheckLabel from "../../common/CheckLabel/CheckLabel";
@@ -31,7 +25,6 @@ import {
   idRegExp,
   nameRegExp,
   passwordRegExp,
-  phone1RegExp,
   phone2RegExp,
   phone3RegExp,
 } from "../../../utils/regExp";
@@ -41,15 +34,15 @@ function JoinForm() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  const userType = useAppSelector(getJoinUserType);
-
-  const nameStatus = useAppSelector(getNameStatus);
-  const companyStatus = useAppSelector(getCompanyStatus);
-  const registerStatus = useAppSelector(getRegisterStatus);
-  const registerError = useAppSelector(getRegisterError);
-
-  const nameMessage = useAppSelector(getNameMessage);
-  const companyMessage = useAppSelector(getCompanyMessage);
+  const {
+    userType,
+    nameStatus,
+    nameMessage,
+    companyNumberStatus,
+    companyMessage,
+    registerStatus,
+    error,
+  } = useAppSelector(getJoinState);
 
   const initialValues = {
     username: "",
@@ -98,7 +91,7 @@ function JoinForm() {
       dispatch(resetAll());
       navigate("/login");
     } else if (registerStatus === "failed") {
-      alert(registerError);
+      alert(error);
       formValues.checkBox = false;
     }
   }, [registerStatus]);
@@ -194,7 +187,7 @@ function JoinForm() {
 
   //사업자 등록번호
   const onChangeRegistrationNumber = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (companyStatus === "succeeded") dispatch(resetCompany());
+    if (companyNumberStatus === "succeeded") dispatch(resetCompany());
     else {
       const { name, value } = e.target;
       const newValue = limitLength(value, 10).replace(/[^0-9]/g, "");
@@ -225,7 +218,7 @@ function JoinForm() {
       alert("아이디 인증을 완료해 주세요.");
       return;
     }
-    if (userType === "SELLER" && companyStatus !== "succeeded") {
+    if (userType === "SELLER" && companyNumberStatus !== "succeeded") {
       alert("사업자 등록 번호 인증을 완료해 주세요.");
       return;
     }
@@ -263,7 +256,7 @@ function JoinForm() {
             label="아이디"
             type="text"
             name="username"
-            width="346px"
+            width="34.6rem"
             onChange={onChangeUsername}
             onClick={checkUserNameVaild}
             onButton={onNameVaildBtn}

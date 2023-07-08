@@ -67,7 +67,7 @@ function IconNav({ cartQuantity }: { cartQuantity: number }) {
     </>
   );
 
-  if (userType === "SELLER")
+  if (TOKEN && userType === "SELLER")
     return (
       <>
         {!pathname.includes("center") && (
