@@ -20,9 +20,7 @@ function AmountBtn({ selectAmount = 0, getCount, item, stock }: AmountBtnProps) 
   const TOKEN = useAppSelector(getToken) || "";
 
   const [amount, setAmount] = useState(selectAmount || 1);
-  const [onIncreaseBtn, setOnIncreaseBtn] = useState(
-    selectAmount ? !(selectAmount === stock) : stock > 0
-  );
+  const [onIncreaseBtn, setOnIncreaseBtn] = useState(stock > 0 && selectAmount <= stock);
 
   const onIncrease = () => {
     if (!onIncreaseBtn) return;
@@ -56,7 +54,7 @@ function AmountBtn({ selectAmount = 0, getCount, item, stock }: AmountBtnProps) 
       <S.MinusBtn onClick={onDecrease} disabled={amount <= 1}>
         <MinusIcon stroke={amount > 1 ? "#767676" : "#F2F2F2"} />
       </S.MinusBtn>
-      <S.AmountText>{stock === 0 ? 0 : amount}</S.AmountText>
+      <S.AmountText>{!stock ? 0 : amount}</S.AmountText>
       <S.PlusBtn onClick={onIncrease} disabled={!onIncreaseBtn}>
         <PlusIcon stroke={onIncreaseBtn ? "#767676" : "#F2F2F2"} />
       </S.PlusBtn>

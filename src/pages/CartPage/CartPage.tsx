@@ -46,7 +46,6 @@ function CartPage() {
 
   useEffect(() => {
     if (onReset && cartStatus === "succeeded" && detailStatus !== "succeeded") {
-      console.log(onReset, cartStatus);
       dispatch(fetchGetAllDetail(cartItems));
     }
   }, [onReset, cartStatus, detailStatus]);
@@ -92,7 +91,7 @@ function CartPage() {
   };
 
   //결제 페이지로 넘어가기
-  const toOrderPage = () => {
+  const handleOrderBtn = () => {
     const orderType = !isAllChecked ? "cart_one_order" : "cart_order";
     sessionStorage.setItem(
       "order",
@@ -130,7 +129,7 @@ function CartPage() {
             fontSize="2.4rem"
             fontWeight="500"
             disabled={!selectedItemNum}
-            onClick={toOrderPage}
+            onClick={handleOrderBtn}
           >
             주문하기
           </NormalBtn>

@@ -19,6 +19,11 @@ function CartItem({ item, detail, OpenDeleteModal, onCheckInput }: ItemProps) {
   const navigate = useNavigate();
   const { cart_item_id, product_id, quantity, isChecked } = item;
 
+  const handleCheckInput = (e: React.ChangeEvent<HTMLInputElement>, productId?: number) => {
+    if (!detail?.stock) return;
+    onCheckInput(e, productId);
+  };
+
   const orderOneItem = () => {
     sessionStorage.setItem(
       "order",
@@ -32,8 +37,8 @@ function CartItem({ item, detail, OpenDeleteModal, onCheckInput }: ItemProps) {
       <CircleCheckBtn
         name="item"
         productId={product_id}
-        onCheckInput={onCheckInput}
-        isChecked={isChecked}
+        onCheckInput={handleCheckInput}
+        isChecked={detail?.stock ? isChecked : false}
       />
       <S.LeftWrap>
         <S.ImageBox imgUrl={detail?.image} stock={detail?.stock}>
