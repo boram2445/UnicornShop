@@ -59,7 +59,6 @@ const searchSlice = createSlice({
     }),
       builder.addCase(fetchSearchProducts.fulfilled, (state, action) => {
         const { results, count } = action.payload;
-        console.log(action.payload.results);
         state.status = "succeeded";
         state.quantity = count;
         state.products = results;

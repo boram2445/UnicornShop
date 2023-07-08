@@ -43,7 +43,6 @@ export const fetchPostUserName = createAsyncThunk(
     try {
       const data = { username };
       const result = await axios.post(`${BASE_URL}/accounts/signup/valid/username/`, data);
-      console.log(result.data);
       return result.data;
     } catch (error: any) {
       return rejectWithValue(error.response.data.FAIL_Message);
@@ -82,7 +81,6 @@ export const fetchPostRegister = createAsyncThunk(
     try {
       const data = userData;
       const result = await axios.post(url, data);
-      console.log(result.data);
       return result.data;
     } catch (error: any) {
       console.log(error.response.data);

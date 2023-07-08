@@ -103,7 +103,6 @@ export const fetchPatchSellerItem = createAsyncThunk(
         },
       };
       const result = await axios.patch(`${BASE_URL}/products/${product_id}/`, formValues, config);
-      console.log(result);
       return result.data;
     } catch (error: any) {
       //서버 에러 메세지 받아오기 -개선 필요

@@ -238,7 +238,6 @@ function JoinForm() {
         ...userData,
       };
     }
-    console.log(userData);
     dispatch(fetchPostRegister({ userType, userData }));
   };
 
