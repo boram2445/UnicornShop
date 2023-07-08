@@ -26,9 +26,7 @@ const NormalBtn = styled.button<NormalBtnProps>`
   &:disabled {
     background-color: var(--color-grey);
     cursor: default;
-    &:hover {
-      opacity: 1;
-    }
+    filter: brightness(1);
   }
   ${({ icon }) => {
     if (icon) {
