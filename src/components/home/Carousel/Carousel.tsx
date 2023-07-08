@@ -11,7 +11,7 @@ function Carousel() {
   useEffect(() => {
     const timer = setInterval(() => {
       moveNextImg();
-    }, 5000);
+    }, 7000);
 
     return () => {
       clearInterval(timer);
@@ -44,7 +44,7 @@ function Carousel() {
         return (
           <Link to="#" key={item.id}>
             <S.ImgBox opacity={carouselIndex === index + 1 ? "active" : "none"}>
-              <img src={process.env.PUBLIC_URL + `/Imgs/CarouselSample/image${index + 1}.jpg`} />
+              <img src={process.env.PUBLIC_URL + `/Imgs/CarouselSample/image${index + 1}.png`} />
             </S.ImgBox>
           </Link>
         );
