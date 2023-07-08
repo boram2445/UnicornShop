@@ -5,7 +5,7 @@ import { CartItem as Cart } from "../../../features/cartListSlice";
 import { NormalBtn } from "../../common/Button/Button";
 import { CircleCheckBtn } from "../../common/CheckBtn/CheckBtn";
 import AmountBtn from "../../common/AmountBtn/AmountBtn";
-import { Badge } from "../../common/Badge/badgeStyle";
+import Badge from "../../common/Badge/Badge";
 import * as S from "./cartItemStyle";
 
 interface ItemProps {
