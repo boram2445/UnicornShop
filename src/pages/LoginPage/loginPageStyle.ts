@@ -11,8 +11,8 @@ const LoginSection = styled.section`
 const Logo = styled.h1`
   margin-bottom: 30px;
   img {
-    width: 238px;
-    height: 74px;
+    width: 33rem;
+    height: 6rem;
   }
 `;
 

@@ -1,5 +1,5 @@
-import { RootState } from "../app/store";
 import { createSlice } from "@reduxjs/toolkit";
+import { RootState } from "./index";
 
 interface ModalProps {
   open: boolean;

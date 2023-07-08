@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
-import { getLoginUserType, getToken } from "../../../features/loginSlice";
+import { getLoginUserType, getToken } from "../../../reducer/loginSlice";
 import {
   fetchDeleteSellerItem,
   fetchGetSellerProduct,
   getSellerStatus,
   selectSellerProducts,
-} from "../../../features/sellerSlice";
-import { getOrderState } from "../../../features/orderSlice";
-import { closeModal, openModal, selectOpenState } from "../../../features/modalSlice";
+} from "../../../reducer/sellerSlice";
+import { getOrderState } from "../../../reducer/orderSlice";
+import { closeModal, openModal, selectOpenState } from "../../../reducer/modalSlice";
 import ChartItem from "../ChartItem/ChartItem";
 import Modal from "../Modal/Modal";
 import * as S from "./chartStyle";

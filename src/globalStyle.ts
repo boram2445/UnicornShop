@@ -1,6 +1,6 @@
 import { createGlobalStyle } from "styled-components";
 import reset from "styled-reset";
-import "./fonts/fonts.css";
+import "./assets/fonts/fonts.css";
 
 const GlobalStyle = createGlobalStyle`
   ${reset}
@@ -31,6 +31,11 @@ const GlobalStyle = createGlobalStyle`
   html,body, #root{
     width:100%;
     height:100%;
+  }
+
+  #root{
+    display: flex;
+    flex-direction: column;
   }
 
   html, button, input, textArea{

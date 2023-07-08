@@ -1,5 +1,5 @@
-import { RootState } from "../app/store";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { RootState } from "./index";
 import { Product } from "./productSlice";
 import axios from "axios";
 
@@ -139,7 +139,9 @@ export const cartListSlice = createSlice({
     checkAllItem: (state, { payload }) => {
       const { isChecked } = payload;
       state.cartItems.map((item) => {
-        isChecked ? (item.isChecked = true) : (item.isChecked = false);
+        if (item.item.stock) {
+          isChecked ? (item.isChecked = true) : (item.isChecked = false);
+        }
       });
     },
     // 전체 가격 계산
@@ -189,7 +191,7 @@ export const cartListSlice = createSlice({
       const res = cartItems.map((item, index) => ({
         ...item,
         item: cartDetails[index],
-        isChecked: true,
+        isChecked: cartDetails[index].stock ? true : false,
       }));
       state.cartItems = res;
     });

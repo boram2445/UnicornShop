@@ -1,6 +1,6 @@
 import React from "react";
 import { useAppSelector } from "../../../hooks";
-import { selectCheckAllState } from "../../../features/cartListSlice";
+import { selectCheckAllState } from "../../../reducer/cartListSlice";
 import { CircleCheckBtn } from "../../common/CheckBtn/CheckBtn";
 import * as S from "./cartInfoStyle";
 

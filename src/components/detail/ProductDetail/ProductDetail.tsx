@@ -1,6 +1,6 @@
 import React from "react";
 import { useAppSelector } from "../../../hooks";
-import { getDetailState } from "../../../features/detailSlice";
+import { getDetailState } from "../../../reducer/detailSlice";
 import Badge from "../../common/Badge/Badge";
 import * as S from "./productDetailStyle";
 

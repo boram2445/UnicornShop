@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { RootState } from "./index";
 import axios from "axios";
-import { RootState } from "../app/store";
 import { Product } from "./productSlice";
 
 interface SearchSliceState {
@@ -59,7 +59,6 @@ const searchSlice = createSlice({
     }),
       builder.addCase(fetchSearchProducts.fulfilled, (state, action) => {
         const { results, count } = action.payload;
-        console.log(action.payload.results);
         state.status = "succeeded";
         state.quantity = count;
         state.products = results;

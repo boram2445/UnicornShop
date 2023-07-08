@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
-import { fetchSearchProducts, searchReset } from "../../../features/searchSlice";
-import { getLoginUserType, getToken } from "../../../features/loginSlice";
-import { fetchGetCartList, getCartQuantity } from "../../../features/cartListSlice";
+import { fetchSearchProducts, searchReset } from "../../../reducer/searchSlice";
+import { getLoginUserType, getToken } from "../../../reducer/loginSlice";
+import { fetchGetCartList, getCartQuantity } from "../../../reducer/cartListSlice";
 import IconNav from "./IconNav";
 
-import logo from "../../../assets/icons/Logo-hodu.svg";
+import logo from "../../../assets/icons/logo-unicorn.svg";
 import searchIcon from "../../../assets/icons/search.svg";
 import * as S from "./headerStyle";
 

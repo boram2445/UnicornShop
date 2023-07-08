@@ -1,9 +1,9 @@
 import React, { useRef, useState } from "react";
 import { useLoaderData, useLocation, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
-import { getAuthState, logout } from "../../../features/loginSlice";
-import { reset } from "../../../features/cartListSlice";
-import { openModal, selectOpenState } from "../../../features/modalSlice";
+import { getAuthState, logout } from "../../../reducer/loginSlice";
+import { reset } from "../../../reducer/cartListSlice";
+import { openModal, selectOpenState } from "../../../reducer/modalSlice";
 import ArrowModal from "../ArrowModal/ArrowModal";
 import Modal from "../Modal/Modal";
 
@@ -67,7 +67,7 @@ function IconNav({ cartQuantity }: { cartQuantity: number }) {
     </>
   );
 
-  if (userType === "SELLER")
+  if (TOKEN && userType === "SELLER")
     return (
       <>
         {!pathname.includes("center") && (

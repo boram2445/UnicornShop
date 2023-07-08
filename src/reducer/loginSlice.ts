@@ -1,10 +1,10 @@
-import { RootState } from "../app/store";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { RootState } from "./index";
 import axios from "axios";
 
 const BASE_URL = "https://openmarket.weniv.co.kr";
 
-const item = sessionStorage.getItem("token");
+const item = sessionStorage.getItem("userData");
 const TOKEN = item === null ? null : JSON.parse(item).token;
 const USER_TYPE = item === null ? null : JSON.parse(item).user_type;
 const USER_NAME = item === null ? null : JSON.parse(item).username;
@@ -39,10 +39,8 @@ export const fetchPostLogin = createAsyncThunk(
       const result = await axios.post(`${BASE_URL}/accounts/login/`, data);
 
       if (result.data) {
-        sessionStorage.setItem("token", JSON.stringify({ username, ...result.data }));
+        sessionStorage.setItem("userData", JSON.stringify({ username, ...result.data }));
       }
-
-      console.log();
       return { username, ...result.data };
     } catch (error: any) {
       return rejectWithValue(error.response.data.FAIL_Message);
@@ -59,8 +57,11 @@ export const loginSlice = createSlice({
   name: "login",
   initialState,
   reducers: {
+    reset: () => initialState,
     setLoginUserType: (state, action) => {
       state.userType = action.payload;
+      state.status = "idle";
+      state.error = "";
     },
   },
   extraReducers: (builder) => {
@@ -70,6 +71,7 @@ export const loginSlice = createSlice({
     });
     builder.addCase(fetchPostLogin.fulfilled, (state, action) => {
       state.status = "succeeded";
+      state.error = "";
       state.userName = action.payload.username;
       state.TOKEN = action.payload.token || "";
     });
@@ -96,6 +98,6 @@ export const getAuthState = (state: RootState) => state.login;
 export const getToken = (state: RootState) => state.login.TOKEN;
 export const getLoginUserType = (state: RootState) => state.login.userType;
 
-export const { setLoginUserType } = loginSlice.actions;
+export const { reset, setLoginUserType } = loginSlice.actions;
 
 export default loginSlice.reducer;

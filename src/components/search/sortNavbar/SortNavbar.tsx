@@ -6,7 +6,7 @@ import {
   sortLowerPrice,
   sortUpperPrice,
   switchPostType,
-} from "../../../features/searchSlice";
+} from "../../../reducer/searchSlice";
 import { ReactComponent as PostAlbumIcon } from "../../../assets/icons/icon-post-album.svg";
 import { ReactComponent as PostListIcon } from "../../../assets/icons/icon-post-list.svg";
 import * as S from "./sortNavbarStyle";

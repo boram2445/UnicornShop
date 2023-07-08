@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
-import { CartItem } from "../../features/cartListSlice";
+import { CartItem } from "../../reducer/cartListSlice";
 import { useAppDispatch, useAppSelector } from "../../hooks";
-import { setOrderItem, getOrderState } from "../../features/orderSlice";
+import { setOrderItem, getOrderState } from "../../reducer/orderSlice";
 import OrderForm from "../../components/payment/OrderForm/OrderForm";
 import OrderItem from "../../components/payment/OrderItem/OrderItem";
 import * as S from "./paymentPageStyle";

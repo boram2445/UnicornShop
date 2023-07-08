@@ -1,6 +1,6 @@
-import { Product } from "./productSlice";
-import { RootState } from "../app/store";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { RootState } from "./index";
+import { Product } from "./productSlice";
 import axios from "axios";
 
 const BASE_URL = "https://openmarket.weniv.co.kr";
@@ -103,7 +103,6 @@ export const fetchPatchSellerItem = createAsyncThunk(
         },
       };
       const result = await axios.patch(`${BASE_URL}/products/${product_id}/`, formValues, config);
-      console.log(result);
       return result.data;
     } catch (error: any) {
       //서버 에러 메세지 받아오기 -개선 필요

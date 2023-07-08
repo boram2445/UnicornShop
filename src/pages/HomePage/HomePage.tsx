@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks";
-import { fetchGetProducts, getProductState } from "../../features/productSlice";
+import { fetchGetProducts, getProductState } from "../../reducer/productSlice";
 import ProductCard from "../../components/home/ProductCard/ProductCard";
 import Carousel from "../../components/home/Carousel/Carousel";
 import PaginationBtn from "../../components/common/PaginationBtn/PaginationBtn";

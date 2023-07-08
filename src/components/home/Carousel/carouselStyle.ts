@@ -2,7 +2,8 @@ import styled from "styled-components";
 
 const CarouselLayout = styled.div`
   position: relative;
-  height: 500px;
+  margin: 0 auto;
+  height: 50rem;
   background-color: #f2f2f2;
   overflow: hidden;
 `;

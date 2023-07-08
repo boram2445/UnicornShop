@@ -1,5 +1,5 @@
 import React from "react";
-import { Product } from "../../../features/productSlice";
+import { Product } from "../../../reducer/productSlice";
 import * as S from "./orderItemStyle";
 
 interface OrderProps {

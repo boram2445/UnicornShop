@@ -1,5 +1,5 @@
-import { RootState } from "../app/store";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { RootState } from "./index";
 import axios from "axios";
 
 const BASE_URL = "https://openmarket.weniv.co.kr";
@@ -43,7 +43,6 @@ export const fetchPostUserName = createAsyncThunk(
     try {
       const data = { username };
       const result = await axios.post(`${BASE_URL}/accounts/signup/valid/username/`, data);
-      console.log(result.data);
       return result.data;
     } catch (error: any) {
       return rejectWithValue(error.response.data.FAIL_Message);
@@ -82,7 +81,6 @@ export const fetchPostRegister = createAsyncThunk(
     try {
       const data = userData;
       const result = await axios.post(url, data);
-      console.log(result.data);
       return result.data;
     } catch (error: any) {
       console.log(error.response.data);
@@ -110,6 +108,11 @@ export const registerSlice = createSlice({
     },
     setJoinUserType: (state, action) => {
       state.userType = action.payload;
+      state.nameStatus = "idle";
+      state.nameMessage = "";
+      state.companyNumberStatus = "idle";
+      state.companyMessage = "";
+      state.error = "";
     },
   },
   extraReducers: (builder) => {
@@ -167,16 +170,9 @@ export const registerSlice = createSlice({
   },
 });
 
-export const getNameStatus = (state: RootState) => state.register.nameStatus;
-export const getNameMessage = (state: RootState) => state.register.nameMessage;
-
-export const getCompanyStatus = (state: RootState) => state.register.companyNumberStatus;
-export const getRegisterStatus = (state: RootState) => state.register.registerStatus;
-export const getRegisterError = (state: RootState) => state.register.error;
-
-export const getCompanyMessage = (state: RootState) => state.register.companyMessage;
+export const getJoinState = (state: RootState) => state.register;
 export const getJoinUserType = (state: RootState) => state.register.userType;
 
-export const { resetName, resetCompany, resetRegister, resetAll, setJoinUserType } =
+export const { resetAll, resetName, resetCompany, resetRegister, setJoinUserType } =
   registerSlice.actions;
 export default registerSlice.reducer;

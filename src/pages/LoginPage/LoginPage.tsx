@@ -1,10 +1,15 @@
 import React from "react";
-import LoginForm from "../../components/login/LoginForm/LoginForm";
-import Logo from "../../assets/icons/Logo-hodu.svg";
 import { Link } from "react-router-dom";
+import { useAppSelector } from "../../hooks";
+import { getAuthState } from "../../reducer/loginSlice";
+import LoginForm from "../../components/login/LoginForm/LoginForm";
+import Spinner from "../../components/common/Spinner/Spinner";
+import Logo from "../../assets/icons/logo-unicorn.svg";
 import * as S from "./loginPageStyle";
 
 function LoginPage() {
+  const { status } = useAppSelector(getAuthState);
+
   return (
     <S.LoginSection>
       <Link to="/">
@@ -12,15 +17,21 @@ function LoginPage() {
           <img src={Logo} alt="유니콘 마켓" />
         </S.Logo>
       </Link>
-      <LoginForm />
-      <S.LinkBox>
-        <Link to="/join">
-          <span>회원가입</span>
-        </Link>
-        <Link to="/">
-          <span>비밀번호 찾기</span>
-        </Link>
-      </S.LinkBox>
+      {status === "loading" ? (
+        <Spinner />
+      ) : (
+        <>
+          <LoginForm />
+          <S.LinkBox>
+            <Link to="/">
+              <span>홈으로</span>
+            </Link>
+            <Link to="/join">
+              <span>회원가입</span>
+            </Link>
+          </S.LinkBox>
+        </>
+      )}
     </S.LoginSection>
   );
 }

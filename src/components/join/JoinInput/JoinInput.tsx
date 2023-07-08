@@ -45,7 +45,7 @@ function InputBox({ onClick, onChange, onButton, error, value, ...props }: Input
         required
       />
       {onButton?.toString() && (
-        <NormalBtn onClick={handleBtnClick} disabled={!onButton} width="122px" padding="16px 0">
+        <NormalBtn onClick={handleBtnClick} disabled={!onButton} width="12rem" padding="1.4rem 0">
           {props.name === "username" ? "중복확인" : "인증"}
         </NormalBtn>
       )}

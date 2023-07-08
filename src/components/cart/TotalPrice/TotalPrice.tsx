@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
-import { setTotalPrice, getCartState } from "../../../features/cartListSlice";
+import { setTotalPrice, getCartState } from "../../../reducer/cartListSlice";
 import { ReactComponent as PlusIcon } from "../../../assets/icons/icon-plus-line.svg";
 import { ReactComponent as MinusIcon } from "../../../assets/icons/icon-minus-line.svg";
 import * as S from "./totalPriceStyle";
