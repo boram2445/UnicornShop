@@ -5,20 +5,20 @@ const LoginSection = styled.section`
 `;
 
 const LoginForm = styled.form`
-  margin-top: 60px;
-  padding: 35px 34px;
+  margin-top: 6rem;
+  padding: 2.5rem 3.4rem 3.5rem;
   display: flex;
   flex-direction: column;
   background-color: var(--color-white);
   border: 1px solid var(--color-grey);
-  border-radius: 0 0 10px 10px;
+  border-radius: 0 0 1rem 1rem;
 `;
 
 const LoginInput = styled.input`
-  margin: 3px auto;
-  height: 60px;
-  padding: 0 8px;
-  width: 480px;
+  margin: 0.3rem auto;
+  height: 6rem;
+  padding: 0 0.8rem;
+  width: 48rem;
   font-size: 1.6rem;
   font-weight: 500;
   line-height: 2rem;
@@ -33,14 +33,13 @@ const LoginInput = styled.input`
     outline: none;
   }
   &:nth-child(2) {
-    margin-bottom: 26px;
+    margin-bottom: 2.6rem;
   }
 `;
 
 const ErrorText = styled.small`
-  margin-bottom: 26px;
+  margin-bottom: 2.6rem;
   font-size: 1.6rem;
-  line-height: 2rem;
   color: var(--color-red);
 `;
 

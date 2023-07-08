@@ -4,7 +4,6 @@ import { fetchPostLogin, getAuthState } from "../../../features/loginSlice";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
 import { NormalBtn } from "../../common/Button/Button";
 import ToggleBtn from "../../common/ToggleBtn/ToggleBtn";
-import Spinner from "../../common/Spinner/Spinner";
 import * as S from "./loginFormStyle";
 
 function LoginForm() {
@@ -53,10 +52,6 @@ function LoginForm() {
     dispatch(fetchPostLogin(userData));
   };
 
-  if (status === "loading") {
-    return <Spinner />;
-  }
-
   return (
     <S.LoginSection>
       <ToggleBtn />
@@ -78,7 +73,7 @@ function LoginForm() {
           value={formValues.password}
           required
         />
-        {message ? <S.ErrorText>{message}</S.ErrorText> : null}
+        {error ? <S.ErrorText>{message}</S.ErrorText> : null}
         <NormalBtn type="submit" padding="19px 0">
           로그인
         </NormalBtn>
