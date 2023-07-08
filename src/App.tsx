@@ -1,5 +1,5 @@
 import React from "react";
-import GlobalStyle from "./assets/globalStyle";
+import GlobalStyle from "./globalStyle";
 import { Routes, Route } from "react-router-dom";
 import Layout from "./components/layout/Layout";
 import HomePage from "./pages/HomePage/HomePage";
