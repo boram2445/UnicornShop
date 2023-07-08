@@ -1,7 +1,7 @@
 import React from "react";
 import GlobalStyle from "./globalStyle";
 import { Routes, Route } from "react-router-dom";
-import Layout from "./components/layout/Layout";
+import Layout from "./pages/layout/Layout";
 import HomePage from "./pages/HomePage/HomePage";
 import DetailPage from "./pages/DetailPage/DetailPage";
 import CartPage from "./pages/CartPage/CartPage";
@@ -14,6 +14,7 @@ import MyPage from "./pages/MyPage/MyPage";
 import SearchPage from "./pages/SearchPage/SearchPage";
 import ErrorPage from "./pages/ErrorPage/ErrorPage";
 import OrderDonePage from "./pages/OrderDonePage/OrderDone";
+import ProtectedRoute from "./pages/ProtectedRoute";
 
 function App() {
   return (
@@ -22,14 +23,16 @@ function App() {
       <Routes>
         <Route element={<Layout />}>
           <Route path="/" element={<HomePage />} />
-          <Route path="/cart" element={<CartPage />} />
           <Route path="/products/:productId" element={<DetailPage />} />
-          <Route path="/payment" element={<PaymentPage />} />
-          <Route path="/orderDone" element={<OrderDonePage />} />
-          <Route path="/mypage" element={<MyPage />} />
           <Route path={"/search/:keyword"} element={<SearchPage />} />
-          <Route path="/center" element={<CenterPage />} />
-          <Route path="/center/upload" element={<UploadPage />} />
+          <Route element={<ProtectedRoute />}>
+            <Route path="/cart" element={<CartPage />} />
+            <Route path="/payment" element={<PaymentPage />} />
+            <Route path="/orderDone" element={<OrderDonePage />} />
+            <Route path="/mypage" element={<MyPage />} />
+            <Route path="/center" element={<CenterPage />} />
+            <Route path="/center/upload" element={<UploadPage />} />
+          </Route>
         </Route>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/join" element={<JoinPage />} />
