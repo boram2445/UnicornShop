@@ -61,6 +61,8 @@ export const loginSlice = createSlice({
   reducers: {
     setLoginUserType: (state, action) => {
       state.userType = action.payload;
+      state.status = "idle";
+      state.error = "";
     },
   },
   extraReducers: (builder) => {
@@ -70,6 +72,7 @@ export const loginSlice = createSlice({
     });
     builder.addCase(fetchPostLogin.fulfilled, (state, action) => {
       state.status = "succeeded";
+      state.error = "";
       state.userName = action.payload.username;
       state.TOKEN = action.payload.token || "";
     });
