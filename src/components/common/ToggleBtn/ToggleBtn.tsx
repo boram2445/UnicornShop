@@ -1,7 +1,7 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
-import { getLoginUserType, setLoginUserType } from "../../../features/loginSlice";
-import { getJoinUserType, setJoinUserType } from "../../../features/registerSlice";
+import { getLoginUserType, setLoginUserType } from "../../../reducer/loginSlice";
+import { getJoinUserType, setJoinUserType } from "../../../reducer/joinSlice";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
 import * as S from "./toggleBtnStyle";
 

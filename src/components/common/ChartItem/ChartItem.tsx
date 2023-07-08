@@ -1,9 +1,9 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
-import { getModifyId } from "../../../features/sellerSlice";
-import { Product } from "../../../features/productSlice";
-import { getLoginUserType } from "../../../features/loginSlice";
+import { getModifyId } from "../../../reducer/sellerSlice";
+import { Product } from "../../../reducer/productSlice";
+import { getLoginUserType } from "../../../reducer/loginSlice";
 import { convertDate } from "../../../utils/convertDate";
 import { NormalBtn } from "../Button/Button";
 import * as S from "./chartItemStyle";

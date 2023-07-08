@@ -1,20 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { getToken } from "../../../features/loginSlice";
+import { getToken } from "../../../reducer/loginSlice";
 import {
   fetchPostItem,
   fetchPatchSellerItem,
   ItemPostType,
   reset,
   selectModifyId,
-} from "../../../features/sellerSlice";
+} from "../../../reducer/sellerSlice";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
 import { NormalBtn } from "../../common/Button/Button";
 import { NumInput, TextInput } from "../InputBox/InputBox";
-import { Product } from "../../../features/productSlice";
+import { Product } from "../../../reducer/productSlice";
 import UploadImgBox from "../uploadImg/UploadImg";
 import Modal from "../../common/Modal/Modal";
-import { openModal, selectOpenState } from "../../../features/modalSlice";
+import { openModal, selectOpenState } from "../../../reducer/modalSlice";
 import * as S from "./uploadFormStyle";
 
 function UploadForm({ itemInfo }: { itemInfo?: Product }) {

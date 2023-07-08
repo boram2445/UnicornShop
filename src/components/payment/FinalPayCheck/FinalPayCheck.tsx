@@ -1,5 +1,5 @@
 import React from "react";
-import { getOrderState } from "../../../features/orderSlice";
+import { getOrderState } from "../../../reducer/orderSlice";
 import { useAppSelector } from "../../../hooks";
 import { NormalBtn } from "../../common/Button/Button";
 import CheckLabel from "../../common/CheckLabel/CheckLabel";

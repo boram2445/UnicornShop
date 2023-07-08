@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { getToken } from "../../../features/loginSlice";
-import { fetchPutCartQuantity, CartItem } from "../../../features/cartListSlice";
+import { getToken } from "../../../reducer/loginSlice";
+import { fetchPutCartQuantity, CartItem } from "../../../reducer/cartListSlice";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
 import { ReactComponent as PlusIcon } from "../../../assets/icons/icon-plus-line.svg";
 import { ReactComponent as MinusIcon } from "../../../assets/icons/icon-minus-line.svg";

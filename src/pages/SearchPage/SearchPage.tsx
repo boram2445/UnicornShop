@@ -1,7 +1,7 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import { useAppSelector } from "../../hooks";
-import { getSearchState } from "../../features/searchSlice";
+import { getSearchState } from "../../reducer/searchSlice";
 import SortNavbar from "../../components/search/sortNavbar/SortNavbar";
 import ProductCard from "../../components/home/ProductCard/ProductCard";
 import ProductListCard from "../../components/search/productListCard/ProductListCard";

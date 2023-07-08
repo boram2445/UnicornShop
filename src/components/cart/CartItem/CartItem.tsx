@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { Product } from "../../../features/productSlice";
-import { CartItem as Cart } from "../../../features/cartListSlice";
+import { Product } from "../../../reducer/productSlice";
+import { CartItem as Cart } from "../../../reducer/cartListSlice";
 import { NormalBtn } from "../../common/Button/Button";
 import { CircleCheckBtn } from "../../common/CheckBtn/CheckBtn";
 import AmountBtn from "../../common/AmountBtn/AmountBtn";

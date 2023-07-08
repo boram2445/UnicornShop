@@ -1,5 +1,5 @@
-import { RootState } from "../app/store";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { RootState } from "./index";
 import { Product } from "./productSlice";
 import axios from "axios";
 

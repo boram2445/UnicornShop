@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { fetchPostLogin, getAuthState } from "../../../features/loginSlice";
+import { fetchPostLogin, getAuthState } from "../../../reducer/loginSlice";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
 import { NormalBtn } from "../../common/Button/Button";
 import ToggleBtn from "../../common/ToggleBtn/ToggleBtn";

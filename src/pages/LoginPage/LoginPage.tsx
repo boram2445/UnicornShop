@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useAppSelector } from "../../hooks";
-import { getAuthState } from "../../features/loginSlice";
+import { getAuthState } from "../../reducer/loginSlice";
 import LoginForm from "../../components/login/LoginForm/LoginForm";
 import Spinner from "../../components/common/Spinner/Spinner";
 import Logo from "../../assets/icons/logo-unicorn.svg";

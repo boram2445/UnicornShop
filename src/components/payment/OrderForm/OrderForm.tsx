@@ -1,9 +1,9 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
-import { getToken } from "../../../features/loginSlice";
-import { fetchPostOrder, getOrderState, reset } from "../../../features/orderSlice";
-import { fetchGetCartList } from "../../../features/cartListSlice";
+import { getToken } from "../../../reducer/loginSlice";
+import { fetchPostOrder, getOrderState, reset } from "../../../reducer/orderSlice";
+import { fetchGetCartList } from "../../../reducer/cartListSlice";
 import { emailRegExp, nameRegExp } from "../../../utils/regExp";
 import limitLength from "../../../utils/limitLength";
 

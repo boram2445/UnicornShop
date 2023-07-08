@@ -1,11 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks";
-import { getToken, getLoginUserType } from "../../features/loginSlice";
-import {
-  fetchAllOrderedDetail,
-  fetchPostOrderList,
-  getOrderState,
-} from "../../features/orderSlice";
+import { getToken, getLoginUserType } from "../../reducer/loginSlice";
+import { fetchAllOrderedDetail, fetchPostOrderList, getOrderState } from "../../reducer/orderSlice";
 import TabNav from "../../components/common/TabNav/TabNav";
 import Spinner from "../../components/common/Spinner/Spinner";
 import Chart from "../../components/common/Chart/Chart";

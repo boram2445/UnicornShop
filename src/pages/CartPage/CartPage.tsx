@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { useNavigate } from "react-router-dom";
-import { getToken } from "../../features/loginSlice";
-import { closeModal, openModal, selectOpenState } from "../../features/modalSlice";
+import { getToken } from "../../reducer/loginSlice";
+import { closeModal, openModal, selectOpenState } from "../../reducer/modalSlice";
 import { NormalBtn } from "../../components/common/Button/Button";
 import CartInfo from "../../components/cart/CartInfo/CartInfo";
 import CartItem from "../../components/cart/CartItem/CartItem";
@@ -18,7 +18,7 @@ import {
   selectCheckedItems,
   getCartState,
   fetchGetAllDetail,
-} from "../../features/cartListSlice";
+} from "../../reducer/cartListSlice";
 import Modal from "../../components/common/Modal/Modal";
 import Spinner from "../../components/common/Spinner/Spinner";
 import * as S from "./cartPageStyle";

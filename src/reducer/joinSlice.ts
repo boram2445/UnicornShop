@@ -1,5 +1,5 @@
-import { RootState } from "../app/store";
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { RootState } from "./index";
 import axios from "axios";
 
 const BASE_URL = "https://openmarket.weniv.co.kr";

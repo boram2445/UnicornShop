@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import ReactDOM from "react-dom";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
-import { closeModal, selectBtnText } from "../../../features/modalSlice";
+import { closeModal, selectBtnText } from "../../../reducer/modalSlice";
 import { NormalBtn } from "../Button/Button";
 import deleteIcon from "../../../assets/icons/icon-delete.svg";
 import * as S from "./modalStyle";

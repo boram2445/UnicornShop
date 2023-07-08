@@ -1,13 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
-import productReducer from "../features/productSlice";
-import cartListReducer from "../features/cartListSlice";
-import modalReducer from "../features/modalSlice";
-import orderReducer from "../features/orderSlice";
-import sellerReducer from "../features/sellerSlice";
-import loginReducer from "../features/loginSlice";
-import registerReducer from "../features/registerSlice";
-import searchReducer from "../features/searchSlice";
-import detailReducer from "../features/detailSlice";
+import productReducer from "./productSlice";
+import cartListReducer from "./cartListSlice";
+import modalReducer from "./modalSlice";
+import orderReducer from "./orderSlice";
+import sellerReducer from "./sellerSlice";
+import loginReducer from "./loginSlice";
+import registerReducer from "./joinSlice";
+import searchReducer from "./searchSlice";
+import detailReducer from "./detailSlice";
 
 //state 저장소
 const store = configureStore({

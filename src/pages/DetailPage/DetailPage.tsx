@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../hooks";
-import { fetchGetCartList, fetchPostCart, getCartState } from "../../features/cartListSlice";
-import { getToken, getLoginUserType } from "../../features/loginSlice";
-import { fetchProductDetail, getDetailState } from "../../features/detailSlice";
-import { openModal, selectOpenState } from "../../features/modalSlice";
+import { fetchGetCartList, fetchPostCart, getCartState } from "../../reducer/cartListSlice";
+import { getToken, getLoginUserType } from "../../reducer/loginSlice";
+import { fetchProductDetail, getDetailState } from "../../reducer/detailSlice";
+import { openModal, selectOpenState } from "../../reducer/modalSlice";
 
 import ProductDetail from "../../components/detail/ProductDetail/ProductDetail";
 import ProductCount from "../../components/detail/ProductCount/ProductCount";

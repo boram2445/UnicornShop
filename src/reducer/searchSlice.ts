@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { RootState } from "./index";
 import axios from "axios";
-import { RootState } from "../app/store";
 import { Product } from "./productSlice";
 
 interface SearchSliceState {

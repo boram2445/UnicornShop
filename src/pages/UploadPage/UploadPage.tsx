@@ -1,7 +1,7 @@
 import React from "react";
 import UploadForm from "../../components/upload/uploadForm/UploadForm";
 import WranBox from "../../components/upload/WranBox/WranBox";
-import { selectModifyItem } from "../../features/sellerSlice";
+import { selectModifyItem } from "../../reducer/sellerSlice";
 import { useAppSelector } from "../../hooks";
 import * as S from "./uploadPageStyle";
 

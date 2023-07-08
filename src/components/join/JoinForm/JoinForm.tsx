@@ -12,7 +12,7 @@ import {
   resetCompany,
   RegisterPostData,
   getJoinState,
-} from "../../../features/registerSlice";
+} from "../../../reducer/joinSlice";
 import ToggleBtn from "../../common/ToggleBtn/ToggleBtn";
 import CheckLabel from "../../common/CheckLabel/CheckLabel";
 import checkOnIcon from "../../../assets/icons/icon-check-on.svg";
