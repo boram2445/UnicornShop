@@ -33,6 +33,11 @@ const GlobalStyle = createGlobalStyle`
     height:100%;
   }
 
+  #root{
+    display: flex;
+    flex-direction: column;
+  }
+
   html, button, input, textArea{
     font-size: 10px;
     font-family: SpoqaHanSansNeo, sans-serif;
