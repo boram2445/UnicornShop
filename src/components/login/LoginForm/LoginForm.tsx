@@ -62,6 +62,7 @@ function LoginForm() {
           placeholder="아이디"
           onChange={onChange}
           value={formValues.username}
+          autoComplete="off"
           required
         />
         <S.LoginInput
