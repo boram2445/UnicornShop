@@ -2,6 +2,8 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { RootState } from "./index";
 import { Slice } from "../types/slice";
 import { login } from "../api/auth";
+import { LoginPost } from "../types/auth";
+import axios from "axios";
 
 const item = sessionStorage.getItem("userData");
 const TOKEN = item === null ? null : JSON.parse(item).token;
@@ -22,7 +24,20 @@ const initialState: LoginSlice = {
   error: "",
 };
 
-export const fetchPostLogin = createAsyncThunk("login/fetchPostLogin", login);
+export const fetchPostLogin = createAsyncThunk(
+  "login/fetchPostLogin",
+  async (data: LoginPost, { rejectWithValue }) => {
+    try {
+      return await login(data);
+    } catch (err) {
+      if (axios.isAxiosError(err) && err.response) {
+        return rejectWithValue(err.response.data);
+      } else {
+        throw new Error("연결 문제 발생");
+      }
+    }
+  }
+);
 export const logout = createAsyncThunk("login/logout", async () => {
   sessionStorage.clear();
 });

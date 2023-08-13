@@ -1,13 +1,8 @@
 import { ProductPost } from "../types/product";
-import { baseAPI } from "./baseInstance";
+import { authConfig, baseAPI } from "./baseInstance";
 
 export const getSellerProducts = async (TOKEN: string) => {
-  const config = {
-    headers: {
-      Authorization: `JWT ${TOKEN}`,
-    },
-  };
-  const result = await baseAPI.get(`/seller/`, config);
+  const result = await baseAPI.get(`/seller/`, authConfig(TOKEN));
   return result.data;
 };
 
@@ -18,12 +13,7 @@ export const deleteSellerProduct = async ({
   TOKEN: string;
   product_id: number;
 }) => {
-  const config = {
-    headers: {
-      Authorization: `JWT ${TOKEN}`,
-    },
-  };
-  await baseAPI.delete(`/products/${product_id}`, config);
+  await baseAPI.delete(`/products/${product_id}`, authConfig(TOKEN));
   return product_id;
 };
 
@@ -34,21 +24,9 @@ export const postSellerProduct = async ({
   TOKEN: string;
   formValues: ProductPost;
 }) => {
-  try {
-    const config = {
-      headers: {
-        Authorization: `JWT ${TOKEN}`,
-        "Content-Type": "multipart/form-data",
-      },
-    };
-    const data = { ...formValues, token: TOKEN };
-    const result = await baseAPI.post(`/products/`, data, config);
-    return result.data;
-  } catch (error: any) {
-    //서버 에러 메세지 받아오기 -개선 필요
-    console.log(error.response.data);
-    return error.response.data;
-  }
+  const data = { ...formValues, token: TOKEN };
+  const result = await baseAPI.post("/products/", data, authConfig(TOKEN, "multipart/form-data"));
+  return result.data;
 };
 
 export const patchSellerProduct = async ({
@@ -60,18 +38,10 @@ export const patchSellerProduct = async ({
   product_id: number;
   formValues: ProductPost;
 }) => {
-  try {
-    const config = {
-      headers: {
-        Authorization: `JWT ${TOKEN}`,
-        "Content-Type": "multipart/form-data",
-      },
-    };
-    const result = await baseAPI.patch(`/products/${product_id}/`, formValues, config);
-    return result.data;
-  } catch (error: any) {
-    //서버 에러 메세지 받아오기 -개선 필요
-    console.log(error.response.data);
-    return error.response.data;
-  }
+  const result = await baseAPI.patch(
+    `/products/${product_id}/`,
+    formValues,
+    authConfig(TOKEN, "multipart/form-data")
+  );
+  return result.data;
 };

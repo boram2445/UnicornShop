@@ -1,47 +1,24 @@
 import axios from "axios";
 import { OrderList, OrderPost } from "../types/order";
-import { baseAPI } from "./baseInstance";
+import { authConfig, baseAPI } from "./baseInstance";
 
 export const postOrder = async ({ TOKEN, info }: { TOKEN: string; info: OrderPost }) => {
-  try {
-    const config = {
-      headers: {
-        Authorization: `JWT ${TOKEN}`,
-      },
-    };
-    const data = info;
-    const selectData =
-      info.order_kind === "cart_order"
-        ? data
-        : { ...data, product_id: info.product_id, quantity: info.quantity };
+  const data = info;
+  const selectData =
+    info.order_kind === "cart_order"
+      ? data
+      : { ...data, product_id: info.product_id, quantity: info.quantity };
 
-    const result = await baseAPI.post(`/order/`, selectData, config);
-    return result.data;
-  } catch (error: any) {
-    //서버 에러 메세지 받아오기 -개선 필요
-    console.log(error.response.data);
-    return error.response.data;
-  }
-};
-
-export const getOrderList = async (TOKEN: string) => {
-  const config = {
-    headers: {
-      Authorization: `JWT ${TOKEN}`,
-    },
-  };
-  const result = await baseAPI.get(`/order/`, config);
+  const result = await baseAPI.post(`/order/`, selectData, authConfig(TOKEN));
   return result.data;
 };
 
-export const getOrderedProductsDetail = async ({
-  results,
-}: {
-  count: number;
-  next: string | null;
-  previous: string | null;
-  results: OrderList[];
-}) => {
+export const getOrderList = async (TOKEN: string) => {
+  const result = await baseAPI.get(`/order/`, authConfig(TOKEN));
+  return result.data;
+};
+
+export const getOrderedProductsDetail = async ({ results }: { results: OrderList[] }) => {
   const productArr = results
     .map((item) => [
       ...item.order_items.map((data, index) => ({
