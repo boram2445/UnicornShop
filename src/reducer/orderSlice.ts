@@ -3,9 +3,7 @@ import { RootState } from "./index";
 import { CartProduct } from "../types/cart";
 import { OrderList, OrderPost, OrderProductDetail } from "../types/order";
 import { Slice } from "../types/slice";
-import axios from "axios";
-
-const BASE_URL = "https://openmarket.weniv.co.kr";
+import { getOrderList, getOrderedProductsDetail, postOrder } from "../api/order";
 
 type OrderSlice = Slice & {
   detailStatus: string;
@@ -31,76 +29,11 @@ const initialState: OrderSlice = {
   orderedDetail: [],
 };
 
-//주문하기
-export const fetchPostOrder = createAsyncThunk(
-  "order/fetchPostOrder",
-  async ({ TOKEN, info }: { TOKEN: string; info: OrderPost }) => {
-    try {
-      const config = {
-        headers: {
-          Authorization: `JWT ${TOKEN}`,
-        },
-      };
-      const data = info;
-      const selectData =
-        info.order_kind === "cart_order"
-          ? data
-          : { ...data, product_id: info.product_id, quantity: info.quantity };
-
-      const result = await axios.post(`${BASE_URL}/order/`, selectData, config);
-      return result.data;
-    } catch (error: any) {
-      //서버 에러 메세지 받아오기 -개선 필요
-      console.log(error.response.data);
-      return error.response.data;
-    }
-  }
-);
-
-//주문 목록 불러오기
-export const fetchPostOrderList = createAsyncThunk(
-  "order/fetchPostOrderList",
-  async (TOKEN: string) => {
-    const config = {
-      headers: {
-        Authorization: `JWT ${TOKEN}`,
-      },
-    };
-    const result = await axios.get(`${BASE_URL}/order/`, config);
-    return result.data;
-  }
-);
-
-//상품 디테일
+export const fetchPostOrder = createAsyncThunk("order/fetchPostOrder", postOrder);
+export const fetchPostOrderList = createAsyncThunk("order/fetchPostOrderList", getOrderList);
 export const fetchAllOrderedDetail = createAsyncThunk(
   "order/fetchAllOrderedDetail",
-  async ({
-    results,
-  }: {
-    count: number;
-    next: string | null;
-    previous: string | null;
-    results: OrderList[];
-  }) => {
-    const productArr = results
-      .map((item) => [
-        ...item.order_items.map((data, index) => ({
-          product_id: data,
-          created_at: item.created_at,
-          detail: null,
-          quantity: item.order_quantity[index],
-        })),
-      ])
-      .flat();
-
-    const promiseArr = [
-      ...productArr.map((item) => axios.get(`${BASE_URL}/products/${item.product_id}/`)),
-    ];
-    const orderedDetails = await axios
-      .all(promiseArr)
-      .then(axios.spread((...responses) => responses.map((res) => res.data)));
-    return { productArr, orderedDetails };
-  }
+  getOrderedProductsDetail
 );
 
 export const orderSlice = createSlice({

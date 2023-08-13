@@ -1,10 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { RootState } from "./index";
-import { LoginPost } from "../types/auth";
 import { Slice } from "../types/slice";
-import axios from "axios";
-
-const BASE_URL = "https://openmarket.weniv.co.kr";
+import { login } from "../api/auth";
 
 const item = sessionStorage.getItem("userData");
 const TOKEN = item === null ? null : JSON.parse(item).token;
@@ -25,25 +22,7 @@ const initialState: LoginSlice = {
   error: "",
 };
 
-//로그인
-export const fetchPostLogin = createAsyncThunk(
-  "login/fetchPostLogin",
-  async (data: LoginPost, { rejectWithValue }) => {
-    try {
-      const { username } = data;
-      const result = await axios.post(`${BASE_URL}/accounts/login/`, data);
-
-      if (result.data) {
-        sessionStorage.setItem("userData", JSON.stringify({ username, ...result.data }));
-      }
-      return { username, ...result.data };
-    } catch (error: any) {
-      return rejectWithValue(error.response.data.FAIL_Message);
-    }
-  }
-);
-
-//로그아웃
+export const fetchPostLogin = createAsyncThunk("login/fetchPostLogin", login);
 export const logout = createAsyncThunk("login/logout", async () => {
   sessionStorage.clear();
 });

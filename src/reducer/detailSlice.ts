@@ -2,9 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "./index";
 import { Product } from "../types/product";
 import { Slice } from "../types/slice";
-import axios from "axios";
-
-const BASE_URL = "https://openmarket.weniv.co.kr";
+import { getProductDetail } from "../api/product";
 
 type DetailSlice = Slice & {
   detail: Product | null;
@@ -18,10 +16,7 @@ const initialState: DetailSlice = {
 
 export const fetchProductDetail = createAsyncThunk(
   "products/fetchGetProductDetail",
-  async (productId: number | undefined) => {
-    const result = await axios.get(`${BASE_URL}/products/${productId}`);
-    return result.data;
-  }
+  getProductDetail
 );
 
 const detailSlice = createSlice({

@@ -2,9 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { RootState } from "./index";
 import { Product } from "../types/product";
 import { Slice } from "../types/slice";
-import axios from "axios";
-
-const BASE_URL = "https://openmarket.weniv.co.kr";
+import { getProductsPage } from "../api/product";
 
 type ProductSlice = Slice & {
   totalPage: number;
@@ -18,16 +16,8 @@ const initialState: ProductSlice = {
   products: [],
 };
 
-//페이지별 상품 가져오기
-export const fetchGetProducts = createAsyncThunk(
-  "products/fetchPostProducts",
-  async (pageParam: number) => {
-    const result = await axios.get(`${BASE_URL}/products/?page=${pageParam}`);
-    return result.data;
-  }
-);
+export const fetchGetProducts = createAsyncThunk("products/fetchPostProducts", getProductsPage);
 
-//state 저장
 export const productSlice = createSlice({
   name: "products",
   initialState,

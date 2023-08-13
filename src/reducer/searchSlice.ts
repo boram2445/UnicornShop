@@ -2,8 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "./index";
 import { Product } from "../types/product";
 import { Slice } from "../types/slice";
-
-import axios from "axios";
+import { getSearchProducts } from "../api/product";
 
 type SearchSliceState = Slice & {
   quantity: number;
@@ -21,13 +20,9 @@ const initialState: SearchSliceState = {
   products: [],
 };
 
-//검색 상품 가져오기
 export const fetchSearchProducts = createAsyncThunk(
   "search/fetchSearchProducts",
-  async (keyword: string) => {
-    const result = await axios.get(`https://openmarket.weniv.co.kr/products/?search=${keyword}`);
-    return result.data;
-  }
+  getSearchProducts
 );
 
 const searchSlice = createSlice({

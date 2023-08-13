@@ -1,13 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { RootState } from "./index";
-import { JoinPost } from "../types/auth";
 import { Slice } from "../types/slice";
+import { checkCompanyNumber, checkUserName, join } from "../api/auth";
 
-import axios from "axios";
-
-const BASE_URL = "https://openmarket.weniv.co.kr";
-
-//회원가입 타입
 type JoinSlice = Slice & {
   userType: string;
 
@@ -29,55 +24,12 @@ const initialState: JoinSlice = {
   companyMessage: "",
 };
 
-//아이디 유효성 검증
-export const fetchPostUserName = createAsyncThunk(
-  "register/fetchPostUserName",
-  async (username: string, { rejectWithValue }) => {
-    try {
-      const data = { username };
-      const result = await axios.post(`${BASE_URL}/accounts/signup/valid/username/`, data);
-      return result.data;
-    } catch (error: any) {
-      return rejectWithValue(error.response.data.FAIL_Message);
-    }
-  }
-);
-
-//사업자 등록번호 검증
+export const fetchPostUserName = createAsyncThunk("register/fetchPostUserName", checkUserName);
 export const fetchPostCompanyNumber = createAsyncThunk(
   "register/fetchPostCompanyNumber",
-  async (number: string, { rejectWithValue }) => {
-    try {
-      const data = { company_registration_number: number };
-      const result = await axios.post(
-        `${BASE_URL}/accounts/signup/valid/company_registration_number/`,
-        data
-      );
-      console.log(result.data);
-      return result.data;
-    } catch (error: any) {
-      return rejectWithValue(error.response.data.FAIL_Message);
-    }
-  }
+  checkCompanyNumber
 );
-
-//회원가입
-export const fetchPostRegister = createAsyncThunk(
-  "register/fetchPostJoinBuyer",
-  async ({ userType, userData }: { userType: string; userData: JoinPost }, { rejectWithValue }) => {
-    const url =
-      userType === "BUYER" ? `${BASE_URL}/accounts/signup/` : `${BASE_URL}/accounts/signup_seller/`;
-
-    try {
-      const data = userData;
-      const result = await axios.post(url, data);
-      return result.data;
-    } catch (error: any) {
-      console.log(error.response.data);
-      return rejectWithValue(error.response.data);
-    }
-  }
-);
+export const fetchPostRegister = createAsyncThunk("register/fetchPostJoinBuyer", join);
 
 export const registerSlice = createSlice({
   name: "registerSlice",

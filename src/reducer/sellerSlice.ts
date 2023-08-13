@@ -1,10 +1,13 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { RootState } from "./index";
-import { Product, ProductPost } from "../types/product";
+import { Product } from "../types/product";
 import { Slice } from "../types/slice";
-import axios from "axios";
-
-const BASE_URL = "https://openmarket.weniv.co.kr";
+import {
+  deleteSellerProduct,
+  getSellerProducts,
+  patchSellerProduct,
+  postSellerProduct,
+} from "../api/seller";
 
 type SellerProduct = Product & {
   store_name: string;
@@ -22,83 +25,18 @@ const initialState: SellerSlice = {
   modifyItemId: 0,
 };
 
-//판매자 상품 가져오기
 export const fetchGetSellerProduct = createAsyncThunk(
   "seller/fetchGetSellerProduct",
-  async (TOKEN: string) => {
-    const config = {
-      headers: {
-        Authorization: `JWT ${TOKEN}`,
-      },
-    };
-    const result = await axios.get(`${BASE_URL}/seller/`, config);
-    return result.data;
-  }
+  getSellerProducts
 );
-
-//판매자 상품 삭제
 export const fetchDeleteSellerItem = createAsyncThunk(
   "seller/fetchDeleteSellerItem",
-  async ({ TOKEN, product_id }: { TOKEN: string; product_id: number }) => {
-    const config = {
-      headers: {
-        Authorization: `JWT ${TOKEN}`,
-      },
-    };
-    await axios.delete(`${BASE_URL}/products/${product_id}`, config);
-    return product_id;
-  }
+  deleteSellerProduct
 );
-
-//판매자 상품 등록하기
-export const fetchPostItem = createAsyncThunk(
-  "seller/fetchPostItem",
-  async ({ TOKEN, formValues }: { TOKEN: string; formValues: ProductPost }) => {
-    try {
-      const config = {
-        headers: {
-          Authorization: `JWT ${TOKEN}`,
-          "Content-Type": "multipart/form-data",
-        },
-      };
-      const data = { ...formValues, token: TOKEN };
-      const result = await axios.post(`${BASE_URL}/products/`, data, config);
-      return result.data;
-    } catch (error: any) {
-      //서버 에러 메세지 받아오기 -개선 필요
-      console.log(error.response.data);
-      return error.response.data;
-    }
-  }
-);
-
-//판매자 상품 수정
+export const fetchPostItem = createAsyncThunk("seller/fetchPostItem", postSellerProduct);
 export const fetchPatchSellerItem = createAsyncThunk(
   "seller/fetchPatchSellerItem",
-  async ({
-    TOKEN,
-    product_id,
-    formValues,
-  }: {
-    TOKEN: string;
-    product_id: number;
-    formValues: ProductPost;
-  }) => {
-    try {
-      const config = {
-        headers: {
-          Authorization: `JWT ${TOKEN}`,
-          "Content-Type": "multipart/form-data",
-        },
-      };
-      const result = await axios.patch(`${BASE_URL}/products/${product_id}/`, formValues, config);
-      return result.data;
-    } catch (error: any) {
-      //서버 에러 메세지 받아오기 -개선 필요
-      console.log(error.response.data);
-      return error.response.data;
-    }
-  }
+  patchSellerProduct
 );
 
 const sellerSlice = createSlice({

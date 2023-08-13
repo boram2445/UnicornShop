@@ -1,39 +1,16 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { RootState } from "./index";
-import { Product } from "./productSlice";
-import axios from "axios";
+// import { successBuilder } from "../utils/builder";
+import { CartList } from "../types/cart";
+import {
+  changeCartProductCount,
+  deleteCartItem,
+  getCartDetail,
+  getCartList,
+  postCart,
+} from "../api/cart";
 
-const BASE_URL = "https://openmarket.weniv.co.kr";
-
-export interface CartItem {
-  my_cart: number;
-  is_active: boolean;
-  cart_item_id: number;
-  product_id: number;
-  quantity: number;
-  isChecked: boolean;
-  item: Product;
-}
-
-interface CountPutData {
-  TOKEN: string;
-  cart_item_id: number;
-  product_id: number;
-  quantity: number;
-  is_active: boolean;
-}
-
-interface CartListState {
-  status: string;
-  postStatus: string;
-  detailStatus: string;
-  cartItems: CartItem[];
-  totalPrice: number;
-  deliveryPrice: number;
-  error: string;
-}
-
-const initialState: CartListState = {
+const initialState: CartList = {
   status: "idle",
   postStatus: "idle",
   detailStatus: "idle",
@@ -43,83 +20,13 @@ const initialState: CartListState = {
   error: "",
 };
 
-interface postCartType {
-  TOKEN?: string;
-  product_id?: number;
-  quantity?: number;
-  check?: boolean;
-}
-
-//카트 담기
-export const fetchPostCart = createAsyncThunk(
-  "cart/axiosPostCart",
-  async ({ TOKEN, product_id, quantity, check }: postCartType) => {
-    const config = {
-      headers: {
-        Authorization: `JWT ${TOKEN}`,
-      },
-    };
-    const data = { product_id, quantity, check };
-    const result = await axios.post(`${BASE_URL}/cart/`, data, config);
-    return result.data;
-  }
-);
-
-//카트 상품 가져오기
-export const fetchGetCartList = createAsyncThunk(
-  "cartList/fetchGetCartList",
-  async (TOKEN: string) => {
-    const config = {
-      headers: {
-        Authorization: `JWT ${TOKEN}`,
-      },
-    };
-    const result = await axios.get(`${BASE_URL}/cart/`, config);
-    return result.data;
-  }
-);
-
-//카트 상품 삭제
-export const fetchDeleteCartItem = createAsyncThunk(
-  "cartList/fetchDeleteCartItem",
-  async ({ TOKEN, cart_item_id }: { TOKEN: string; cart_item_id: number }) => {
-    const config = {
-      headers: {
-        Authorization: `JWT ${TOKEN}`,
-      },
-    };
-    await axios.delete(`${BASE_URL}/cart/${cart_item_id}`, config);
-    return cart_item_id;
-  }
-);
-
-//상품 디테일
-export const fetchGetAllDetail = createAsyncThunk(
-  "cartList/fetchGetAllDetail",
-  async (cartItems: CartItem[]) => {
-    const promiseArr = [
-      ...cartItems.map((item) => axios.get(`${BASE_URL}/products/${item.product_id}/`)),
-    ];
-    const cartDetails = await axios
-      .all(promiseArr)
-      .then(axios.spread((...responses) => responses.map((res) => res.data)));
-    return { cartItems, cartDetails };
-  }
-);
-
-//장바구니 수량 수정
+export const fetchPostCart = createAsyncThunk("cart/axiosPostCart", postCart);
+export const fetchGetCartList = createAsyncThunk("cartList/fetchGetCartList", getCartList);
+export const fetchDeleteCartItem = createAsyncThunk("cartList/fetchDeleteCartItem", deleteCartItem);
+export const fetchGetAllDetail = createAsyncThunk("cartList/fetchGetAllDetail", getCartDetail);
 export const fetchPutCartQuantity = createAsyncThunk(
   "cartList/fetchPutCartQuantity",
-  async ({ TOKEN, product_id, quantity, cart_item_id, is_active }: CountPutData) => {
-    const config = {
-      headers: {
-        Authorization: `JWT ${TOKEN}`,
-      },
-    };
-    const data = { product_id, quantity, is_active };
-    const result = await axios.put(`${BASE_URL}/cart/${cart_item_id}/`, data, config);
-    return result.data;
-  }
+  changeCartProductCount
 );
 
 export const cartListSlice = createSlice({
@@ -163,10 +70,11 @@ export const cartListSlice = createSlice({
       state.postStatus = "succeeded";
       state.error = "";
     });
-    builder.addCase(fetchPostCart.rejected, (state, action) => {
-      state.postStatus = "failed";
-      state.error = action.error.message || "Something is wrong";
-    });
+    // successBuilder<CartList, CartPost>(builder, fetchPostCart.fulfilled, "postStatus");
+    // builder.addCase(fetchPostCart.rejected, (state, action) => {
+    //   state.postStatus = "failed";
+    //   state.error = action.error.message || "Something is wrong";
+    // });
     builder.addCase(fetchGetCartList.pending, (state) => {
       state.status = "loading";
       state.error = "";
@@ -176,6 +84,14 @@ export const cartListSlice = createSlice({
       state.status = "succeeded";
       state.cartItems = action.payload.results;
     });
+    // successBuilder<CartList, string>(
+    //   builder,
+    //   fetchGetCartList.fulfilled,
+    //   "status",
+    //   (state, action) => {
+    //     state.cartItems = action.payload.results;
+    //   }
+    // );
     builder.addCase(fetchGetCartList.rejected, (state, action) => {
       state.status = "failed";
       state.error = action.error.message || "Something was wrong";
