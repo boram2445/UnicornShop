@@ -1,12 +1,12 @@
 import React from "react";
 import * as S from "./CheckBtnStyle";
 
-interface CheckBtnProps {
+type CheckBtnProps = {
   name: "item" | "allSelect";
   productId?: number;
   onCheckInput: (e: React.ChangeEvent<HTMLInputElement>, productId?: number) => void;
   isChecked: boolean;
-}
+};
 
 export function CircleCheckBtn({ name, productId, onCheckInput, isChecked = true }: CheckBtnProps) {
   return (

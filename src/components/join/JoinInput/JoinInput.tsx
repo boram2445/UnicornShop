@@ -3,7 +3,7 @@ import { NormalBtn } from "../../common/Button/Button";
 import SelectBox from "../../common/SelectBox/SelectBox";
 import * as S from "./joinInputStyle";
 
-interface InputProps {
+type InputProps = {
   label: string;
   type: string;
   name: string;
@@ -14,7 +14,7 @@ interface InputProps {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   error?: string;
   onButton?: boolean;
-}
+};
 
 //일반, 버튼, 아이콘 입력 폼
 function InputBox({ onClick, onChange, onButton, error, value, ...props }: InputProps) {

@@ -5,10 +5,11 @@ import { closeModal, selectBtnText } from "../../../reducer/modalSlice";
 import { NormalBtn } from "../Button/Button";
 import deleteIcon from "../../../assets/icons/icon-delete.svg";
 import * as S from "./modalStyle";
-interface ModalProps {
+
+type ModalProps = {
   children: React.ReactNode;
   onClickYes: () => void;
-}
+};
 
 function Modal({ children, onClickYes }: ModalProps) {
   const dispatch = useAppDispatch();

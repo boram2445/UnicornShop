@@ -1,17 +1,18 @@
 import React, { useEffect } from "react";
-import { CartItem } from "../../reducer/cartListSlice";
+
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { setOrderItem, getOrderState } from "../../reducer/orderSlice";
 import OrderForm from "../../components/payment/OrderForm/OrderForm";
 import OrderItem from "../../components/payment/OrderItem/OrderItem";
 import * as S from "./paymentPageStyle";
+import { CartProduct } from "../../types/cart";
 
 function PaymentPage() {
   const dispatch = useAppDispatch();
   const { orderItems, totalPrice } = useAppSelector(getOrderState);
 
   useEffect(() => {
-    const orderInfo: { type: string; items: CartItem[] } = JSON.parse(
+    const orderInfo: { type: string; items: CartProduct[] } = JSON.parse(
       sessionStorage.getItem("order") || "{}"
     );
     dispatch(setOrderItem(orderInfo));

@@ -4,18 +4,17 @@ import { getToken } from "../../../reducer/loginSlice";
 import {
   fetchPostItem,
   fetchPatchSellerItem,
-  ItemPostType,
   reset,
   selectModifyId,
 } from "../../../reducer/sellerSlice";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
 import { NormalBtn } from "../../common/Button/Button";
 import { NumInput, TextInput } from "../InputBox/InputBox";
-import { Product } from "../../../reducer/productSlice";
 import UploadImgBox from "../uploadImg/UploadImg";
 import Modal from "../../common/Modal/Modal";
 import { openModal, selectOpenState } from "../../../reducer/modalSlice";
 import * as S from "./uploadFormStyle";
+import { Product, ProductPost } from "../../../types/product";
 
 function UploadForm({ itemInfo }: { itemInfo?: Product }) {
   const navigate = useNavigate();
@@ -24,7 +23,7 @@ function UploadForm({ itemInfo }: { itemInfo?: Product }) {
   const modifyId = useAppSelector(selectModifyId);
   const modal = useAppSelector(selectOpenState);
 
-  const initialValues: ItemPostType = {
+  const initialValues: ProductPost = {
     product_name: itemInfo?.product_name,
     image: itemInfo?.image,
     price: itemInfo?.price,

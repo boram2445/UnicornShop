@@ -1,19 +1,19 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { Product } from "../../../reducer/productSlice";
-import { CartItem as Cart } from "../../../reducer/cartListSlice";
+import { Product } from "../../../types/product";
 import { NormalBtn } from "../../common/Button/Button";
 import { CircleCheckBtn } from "../../common/CheckBtn/CheckBtn";
 import AmountBtn from "../../common/AmountBtn/AmountBtn";
 import Badge from "../../common/Badge/Badge";
 import * as S from "./cartItemStyle";
+import { CartProduct } from "../../../types/cart";
 
-interface ItemProps {
-  item: Cart;
+type ItemProps = {
+  item: CartProduct;
   detail: Product;
   OpenDeleteModal: (id: number) => void;
   onCheckInput: (e: React.ChangeEvent<HTMLInputElement>, productId?: number) => void;
-}
+};
 
 function CartItem({ item, detail, OpenDeleteModal, onCheckInput }: ItemProps) {
   const navigate = useNavigate();

@@ -5,10 +5,10 @@ import { NormalBtn } from "../../common/Button/Button";
 import CheckLabel from "../../common/CheckLabel/CheckLabel";
 import * as S from "./finalPayCheckStyle";
 
-interface FinalCheckProps {
+type FinalCheckProps = {
   canOrder: boolean;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}
+};
 
 function FinalPayCheck({ canOrder, onChange }: FinalCheckProps) {
   const { totalPrice, shippingfee } = useAppSelector(getOrderState);

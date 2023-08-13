@@ -10,7 +10,6 @@ import {
   resetAll,
   resetName,
   resetCompany,
-  RegisterPostData,
   getJoinState,
 } from "../../../reducer/joinSlice";
 import ToggleBtn from "../../common/ToggleBtn/ToggleBtn";
@@ -29,20 +28,14 @@ import {
   phone3RegExp,
 } from "../../../utils/regExp";
 import * as S from "./joinFormStyle";
+import { JoinPost } from "../../../types/auth";
 
 function JoinForm() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  const {
-    userType,
-    nameStatus,
-    nameMessage,
-    companyNumberStatus,
-    companyMessage,
-    registerStatus,
-    error,
-  } = useAppSelector(getJoinState);
+  const { userType, nameStatus, nameMessage, companyNumberStatus, companyMessage, status, error } =
+    useAppSelector(getJoinState);
 
   const initialValues = {
     username: "",
@@ -86,15 +79,15 @@ function JoinForm() {
 
   useEffect(() => {
     //가입 하기 버튼 클릭후 성공 or 실패 경우
-    if (registerStatus === "succeeded") {
+    if (status === "succeeded") {
       alert("가입이 완료되었습니다 :)");
       dispatch(resetAll());
       navigate("/login");
-    } else if (registerStatus === "failed") {
+    } else if (status === "failed") {
       alert(error);
       formValues.checkBox = false;
     }
-  }, [registerStatus]);
+  }, [status]);
 
   //아이디 중복 확인 버튼 클릭 이벤트
   const checkUserNameVaild = (username: string) => {
@@ -224,7 +217,7 @@ function JoinForm() {
     }
 
     const { username, password, confirmPassword, name, phone1, phone2, phone3 } = formValues;
-    let userData: RegisterPostData = {
+    let userData: JoinPost = {
       username,
       password,
       password2: confirmPassword,
@@ -242,7 +235,7 @@ function JoinForm() {
   };
 
   //가입하기 버튼 클릭시 로딩 화면 보여주기
-  if (registerStatus === "loading") {
+  if (status === "loading") {
     return <Spinner />;
   }
 

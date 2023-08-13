@@ -1,32 +1,21 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { RootState } from "./index";
-import { Product } from "./productSlice";
+import { Product, ProductPost } from "../types/product";
+import { Slice } from "../types/slice";
 import axios from "axios";
 
 const BASE_URL = "https://openmarket.weniv.co.kr";
 
-export interface ItemPostType {
-  product_name?: string;
-  image?: File | string | null;
-  price?: number;
-  shipping_method?: string;
-  shipping_fee?: number;
-  stock?: number;
-  product_info?: string;
-  token?: string;
-}
-
-interface SellerProduct extends Product {
+type SellerProduct = Product & {
   store_name: string;
-}
-interface SellerType {
-  status: string;
-  error: string;
+};
+
+type SellerSlice = Slice & {
   products: SellerProduct[];
   modifyItemId: number;
-}
+};
 
-const initialState: SellerType = {
+const initialState: SellerSlice = {
   status: "idle",
   error: "",
   products: [],
@@ -64,7 +53,7 @@ export const fetchDeleteSellerItem = createAsyncThunk(
 //판매자 상품 등록하기
 export const fetchPostItem = createAsyncThunk(
   "seller/fetchPostItem",
-  async ({ TOKEN, formValues }: { TOKEN: string; formValues: ItemPostType }) => {
+  async ({ TOKEN, formValues }: { TOKEN: string; formValues: ProductPost }) => {
     try {
       const config = {
         headers: {
@@ -93,7 +82,7 @@ export const fetchPatchSellerItem = createAsyncThunk(
   }: {
     TOKEN: string;
     product_id: number;
-    formValues: ItemPostType;
+    formValues: ProductPost;
   }) => {
     try {
       const config = {

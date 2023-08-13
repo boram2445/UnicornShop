@@ -2,18 +2,19 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
 import { getModifyId } from "../../../reducer/sellerSlice";
-import { Product } from "../../../reducer/productSlice";
+
 import { getLoginUserType } from "../../../reducer/loginSlice";
 import { convertDate } from "../../../utils/convertDate";
 import { NormalBtn } from "../Button/Button";
 import * as S from "./chartItemStyle";
+import { Product } from "../../../types/product";
 
-interface ChartItemProps {
+type ChartItemProps = {
   item: Product;
   quantity?: number;
   orderDate?: string;
   deleteModal: (id: number) => void;
-}
+};
 
 function ChartItem({ item, quantity, orderDate, deleteModal }: ChartItemProps) {
   const dispatch = useAppDispatch();

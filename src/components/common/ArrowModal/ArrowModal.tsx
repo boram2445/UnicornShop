@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from "react";
 import * as S from "./ArrowModalStyle";
 
-interface ArrowModalProps {
+type ArrowModalProps = {
   isOpen: boolean;
   onModal: (value: boolean) => void;
   list: {
@@ -9,7 +9,7 @@ interface ArrowModalProps {
     onClick: () => void;
   }[];
   btnRef: React.MutableRefObject<HTMLButtonElement>;
-}
+};
 
 function ArrowModal({ isOpen, onModal, list, btnRef }: ArrowModalProps) {
   const modalRef = useRef() as React.MutableRefObject<HTMLInputElement>;

@@ -12,7 +12,8 @@ function OrderDonePage() {
       <S.InfoBox>
         <p>주문 완료!</p>
         <small>
-          예쁘게 포장해서 보내드릴게요! <br /> 조금만 기다려주세요 :)
+          예쁘게 포장해서 보내드릴게요! <br />
+          {` 조금만 기다려주세요 :)`}
         </small>
       </S.InfoBox>
       <S.BtnBox>

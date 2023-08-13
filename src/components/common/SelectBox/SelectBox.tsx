@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import * as S from "./selectBoxStyle";
 
-interface SelectBoxProps {
+type SelectBoxProps = {
   selectItems: string[];
   onClick: (selected: string) => void;
   checkItem?: string;
@@ -11,7 +11,7 @@ interface SelectBoxProps {
   radius?: string;
   padding: string;
   textAlign?: string;
-}
+};
 
 function SelectBox({
   selectItems,

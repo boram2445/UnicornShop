@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { Product } from "../../../reducer/productSlice";
+import { Product } from "../../../types/product";
 import { convertDate } from "../../../utils/convertDate";
 import Badge from "../../common/Badge/Badge";
 import * as S from "./productListCardStyle";

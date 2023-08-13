@@ -1,34 +1,27 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { RootState } from "./index";
+import { JoinPost } from "../types/auth";
+import { Slice } from "../types/slice";
+
 import axios from "axios";
 
 const BASE_URL = "https://openmarket.weniv.co.kr";
 
 //회원가입 타입
-export interface RegisterPostData {
-  username: string;
-  password: string;
-  password2: string;
-  phone_number: string;
-  name: string;
-  email?: string;
-  company_registration_number?: string;
-  store_name?: string;
-}
-
-interface RegisterSatate {
-  registerStatus: string;
-  error: string;
+type JoinSlice = Slice & {
   userType: string;
+
   nameStatus: string;
   nameMessage: string;
+
   companyNumberStatus: string;
   companyMessage: string;
-}
+};
 
-const initialState: RegisterSatate = {
-  registerStatus: "idle",
+const initialState: JoinSlice = {
+  status: "idle",
   error: "",
+
   userType: "BUYER",
   nameStatus: "idle",
   nameMessage: "",
@@ -71,10 +64,7 @@ export const fetchPostCompanyNumber = createAsyncThunk(
 //회원가입
 export const fetchPostRegister = createAsyncThunk(
   "register/fetchPostJoinBuyer",
-  async (
-    { userType, userData }: { userType: string; userData: RegisterPostData },
-    { rejectWithValue }
-  ) => {
+  async ({ userType, userData }: { userType: string; userData: JoinPost }, { rejectWithValue }) => {
     const url =
       userType === "BUYER" ? `${BASE_URL}/accounts/signup/` : `${BASE_URL}/accounts/signup_seller/`;
 
@@ -103,7 +93,7 @@ export const registerSlice = createSlice({
       state.companyMessage = "";
     },
     resetRegister: (state) => {
-      state.registerStatus = "idle";
+      state.status = "idle";
       state.error = "";
     },
     setJoinUserType: (state, action) => {
@@ -152,13 +142,13 @@ export const registerSlice = createSlice({
     });
     //회원가입 - 구매자
     builder.addCase(fetchPostRegister.pending, (state) => {
-      state.registerStatus = "loading";
+      state.status = "loading";
     });
     builder.addCase(fetchPostRegister.fulfilled, (state) => {
-      state.registerStatus = "succeeded";
+      state.status = "succeeded";
     });
     builder.addCase(fetchPostRegister.rejected, (state, action) => {
-      state.registerStatus = "failed";
+      state.status = "failed";
       if (action.payload) {
         state.error = Object.values(action.payload as any)
           .map((message: any) => message.join().toString())

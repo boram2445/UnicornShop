@@ -1,17 +1,16 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "./index";
-import { Product } from "./productSlice";
+import { Product } from "../types/product";
+import { Slice } from "../types/slice";
 import axios from "axios";
 
 const BASE_URL = "https://openmarket.weniv.co.kr";
 
-interface DetailSliceState {
-  status: string;
-  error: string;
+type DetailSlice = Slice & {
   detail: Product | null;
-}
+};
 
-const initialState: DetailSliceState = {
+const initialState: DetailSlice = {
   status: "idle",
   error: "",
   detail: null,

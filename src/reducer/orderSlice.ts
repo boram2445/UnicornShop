@@ -1,60 +1,24 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { RootState } from "./index";
-import { CartItem } from "./cartListSlice";
-import { Product } from "./productSlice";
+import { CartProduct } from "../types/cart";
+import { OrderList, OrderPost, OrderProductDetail } from "../types/order";
+import { Slice } from "../types/slice";
 import axios from "axios";
 
 const BASE_URL = "https://openmarket.weniv.co.kr";
 
-//상품 주문
-interface OrderInfoType {
-  product_id?: number;
-  quantity?: number;
-  order_kind: string;
-  receiver: string;
-  receiver_phone_number: string;
-  address: string;
-  address_message: string;
-  payment_method: string;
-  total_price: number;
-}
-
-//주문 내역
-interface OrderedListType {
-  buyer: string;
-  order_number: number;
-  order_items: number[];
-  order_quantity: number[];
-  receiver: string;
-  receiver_phone_number: string;
-  address: string;
-  address_message: string;
-  payment_method: string;
-  total_price: number;
-  created_at: string;
-}
-
-interface OrderProductDetailType {
-  product_id: number;
-  created_at: string;
-  detail: Product;
-  quantity: number;
-}
-
-interface OrderType {
-  status: string;
+type OrderSlice = Slice & {
   detailStatus: string;
-  error: string;
-  orderItems: CartItem[];
+  orderItems: CartProduct[];
   shippingfee: number;
   totalPrice: number;
   order_kind: string;
-  orderInfo: OrderInfoType | null;
-  orderedInfo: { count: number; next: string; previous: string; results: OrderedListType[] } | null;
-  orderedDetail: OrderProductDetailType[];
-}
+  orderInfo: OrderPost | null;
+  orderedInfo: { count: number; next: string; previous: string; results: OrderList[] } | null;
+  orderedDetail: OrderProductDetail[];
+};
 
-const initialState: OrderType = {
+const initialState: OrderSlice = {
   status: "idle",
   detailStatus: "idle",
   error: "",
@@ -70,7 +34,7 @@ const initialState: OrderType = {
 //주문하기
 export const fetchPostOrder = createAsyncThunk(
   "order/fetchPostOrder",
-  async ({ TOKEN, info }: { TOKEN: string; info: OrderInfoType }) => {
+  async ({ TOKEN, info }: { TOKEN: string; info: OrderPost }) => {
     try {
       const config = {
         headers: {
@@ -116,7 +80,7 @@ export const fetchAllOrderedDetail = createAsyncThunk(
     count: number;
     next: string | null;
     previous: string | null;
-    results: OrderedListType[];
+    results: OrderList[];
   }) => {
     const productArr = results
       .map((item) => [
@@ -145,7 +109,7 @@ export const orderSlice = createSlice({
   reducers: {
     reset: () => initialState,
     setOrderItem: (state, action) => {
-      const orderInfo: { type: string; items: CartItem[] } = action.payload;
+      const orderInfo: { type: string; items: CartProduct[] } = action.payload;
       state.order_kind = orderInfo.type;
       state.orderItems = orderInfo.items;
       state.shippingfee = state.orderItems.reduce((prev, curr) => prev + curr.item.shipping_fee, 0);

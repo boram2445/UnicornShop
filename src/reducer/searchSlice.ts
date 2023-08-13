@@ -1,16 +1,16 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "./index";
-import axios from "axios";
-import { Product } from "./productSlice";
+import { Product } from "../types/product";
+import { Slice } from "../types/slice";
 
-interface SearchSliceState {
-  status: string;
-  error: string;
+import axios from "axios";
+
+type SearchSliceState = Slice & {
   quantity: number;
   sortType: string;
   postType: string;
   products: Product[];
-}
+};
 
 const initialState: SearchSliceState = {
   status: "idle",

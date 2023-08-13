@@ -1,33 +1,17 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { RootState } from "./index";
+import { Product } from "../types/product";
+import { Slice } from "../types/slice";
 import axios from "axios";
 
 const BASE_URL = "https://openmarket.weniv.co.kr";
-//state product 타입
-export interface Product {
-  image: string;
-  price: number;
-  product_id: number;
-  product_info: string;
-  product_name: string;
-  seller: number;
-  store_name: string;
-  shipping_fee: number;
-  shipping_method: string;
-  stock: number;
-  created_at: string;
-}
 
-//state 초기값 타입
-interface ProductSliceState {
-  status: string; //idle | loading | succeeded | failed
-  error: string;
+type ProductSlice = Slice & {
   totalPage: number;
   products: Product[];
-}
+};
 
-//state 초기값
-const initialState: ProductSliceState = {
+const initialState: ProductSlice = {
   status: "idle",
   error: "",
   totalPage: 1,
