@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../hooks";
-import { closeModal, openModal } from "../reducer/modalSlice";
 import { useNavigate } from "react-router-dom";
 import {
   checkAllItem,
@@ -17,15 +16,16 @@ import { useModal } from "./useModal";
 
 export const useCart = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const { open, close } = useModal();
+
   const [cartItemId, setCartItemId] = useState(0);
   const [deleteType, setDeleteType] = useState("");
-  const navigate = useNavigate();
+  const [onReset, setOnReset] = useState(false);
+
   const isAllChecked = useAppSelector(selectCheckAllState);
   const checkedItems = useAppSelector(selectCheckedItems);
   const TOKEN = useAppSelector(getToken) || "";
-  const [onReset, setOnReset] = useState(false);
-
-  const { open, close } = useModal();
 
   useEffect(() => {
     dispatch(reset());
@@ -35,8 +35,7 @@ export const useCart = () => {
 
   //개별 상품 지우기 재확인 모달 열기
   function OpenDeleteModal(cart_item_id: number) {
-    // dispatch(openModal("확인"));
-    open();
+    open("확인");
     setCartItemId(cart_item_id);
     setDeleteType("one");
   }
@@ -50,7 +49,7 @@ export const useCart = () => {
 
   //선택상품 모두 지우기 재확인 모달 열기
   function OpenDeleteAllModal() {
-    dispatch(openModal("확인"));
+    open("확인");
     setDeleteType("selected");
   }
 
@@ -59,7 +58,7 @@ export const useCart = () => {
     checkedItems.forEach((item) => {
       dispatch(fetchDeleteCartItem({ TOKEN, cart_item_id: item.cart_item_id }));
     });
-    dispatch(closeModal());
+    close();
     setDeleteType("");
   }
 

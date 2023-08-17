@@ -8,11 +8,11 @@ import {
   selectModifyId,
 } from "../../../reducer/sellerSlice";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
+import { useModal } from "../../../hooks/useModal";
 import { NormalBtn } from "../../common/Button/Button";
 import { NumInput, TextInput } from "../InputBox/InputBox";
 import UploadImgBox from "../uploadImg/UploadImg";
 import Modal from "../../common/Modal/Modal";
-import { openModal, selectOpenState } from "../../../reducer/modalSlice";
 import * as S from "./uploadFormStyle";
 import { Product, ProductPost } from "../../../types/product";
 
@@ -21,7 +21,7 @@ function UploadForm({ itemInfo }: { itemInfo?: Product }) {
   const dispatch = useAppDispatch();
   const TOKEN = useAppSelector(getToken) || "";
   const modifyId = useAppSelector(selectModifyId);
-  const modal = useAppSelector(selectOpenState);
+  const { isOpen, open } = useModal();
 
   const initialValues: ProductPost = {
     product_name: itemInfo?.product_name,
@@ -63,8 +63,7 @@ function UploadForm({ itemInfo }: { itemInfo?: Product }) {
     } else {
       dispatch(fetchPostItem({ TOKEN, formValues }));
     }
-
-    dispatch(openModal("네"));
+    open("예");
   };
 
   let modalContent;
@@ -92,7 +91,7 @@ function UploadForm({ itemInfo }: { itemInfo?: Product }) {
 
   return (
     <>
-      {modal ? modalContent : null}
+      {isOpen ? modalContent : null}
       <S.UploadForm onSubmit={handleSubmit}>
         <S.TitleBtnWrap>
           <NormalBtn

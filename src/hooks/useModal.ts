@@ -2,9 +2,9 @@ import { useAppDispatch, useAppSelector } from "../hooks";
 import { closeModal, openModal, selectOpenState } from "../reducer/modalSlice";
 
 export const useModal = () => {
-  const isOpen = useAppSelector(selectOpenState);
   const dispatch = useAppDispatch();
-  const open = () => dispatch(openModal("확인"));
+  const isOpen = useAppSelector(selectOpenState);
+  const open = (type: "예" | "확인") => dispatch(openModal(type));
   const close = () => dispatch(closeModal());
 
   return { open, close, isOpen };

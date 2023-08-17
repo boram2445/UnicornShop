@@ -33,7 +33,6 @@ export const cartListSlice = createSlice({
   initialState,
   reducers: {
     reset: () => initialState,
-    //상품 체크 버튼
     checkItem: (state, { payload }) => {
       const { productId, isChecked } = payload;
       state.cartItems.forEach((item) => {
@@ -41,7 +40,6 @@ export const cartListSlice = createSlice({
           isChecked ? (item.isChecked = true) : (item.isChecked = false);
       });
     },
-    //전체 상품 체크
     checkAllItem: (state, { payload }) => {
       const { isChecked } = payload;
       state.cartItems.map((item) => {
@@ -50,7 +48,6 @@ export const cartListSlice = createSlice({
         }
       });
     },
-    // 전체 가격 계산
     setTotalPrice: (state) => {
       let totalPrice = 0;
       let deliveryPrice = 0;
