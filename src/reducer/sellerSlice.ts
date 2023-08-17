@@ -54,61 +54,62 @@ const sellerSlice = createSlice({
   },
   extraReducers: (builder) => {
     //상품 불러오기
-    builder.addCase(fetchGetSellerProduct.pending, (state) => {
-      state.status = "loading";
-    });
-    builder.addCase(fetchGetSellerProduct.fulfilled, (state, action) => {
-      state.status = "succeeded";
-      state.error = "";
-      state.products = action.payload.results;
-    });
-    builder.addCase(fetchGetSellerProduct.rejected, (state, action) => {
-      state.status = "failed";
-      state.error = action.error.message || "Something is wrong";
-      state.products = [];
-    });
-    // 판매자 상품 삭제
-    builder.addCase(fetchDeleteSellerItem.pending, (state) => {
-      state.status = "loading";
-    });
-    builder.addCase(fetchDeleteSellerItem.fulfilled, (state, action) => {
-      state.status = "succeeded";
-      state.error = "";
-      state.products = state.products.filter((item) => item.product_id !== action.payload);
-    });
-    builder.addCase(fetchDeleteSellerItem.rejected, (state, action) => {
-      state.status = "failed";
-      state.error = action.error.message || "Something is wrong";
-      state.products = [];
-    });
-    //판매자 상품 등록
-    builder.addCase(fetchPostItem.pending, (state) => {
-      state.status = "loading";
-    });
-    builder.addCase(fetchPostItem.fulfilled, (state, action) => {
-      state.status = "succeeded";
-      state.error = "";
-      state.products = state.products.filter((item) => item.product_id !== action.payload);
-    });
-    builder.addCase(fetchPostItem.rejected, (state, action) => {
-      state.status = "failed";
-      state.error = action.error.message || "Something is wrong";
-    });
-    //판매자 상품 수정
-    builder.addCase(fetchPatchSellerItem.pending, (state) => {
-      state.status = "loading";
-    });
-    builder.addCase(fetchPatchSellerItem.fulfilled, (state, action) => {
-      state.status = "succeeded";
-      state.error = "";
-      state.products = state.products
-        .filter((item) => item.product_id !== action.payload)
-        .splice(0, 0, action.payload);
-    });
-    builder.addCase(fetchPatchSellerItem.rejected, (state, action) => {
-      state.status = "failed";
-      state.error = action.error.message || "Something is wrong";
-    });
+    builder
+      .addCase(fetchGetSellerProduct.pending, (state) => {
+        state.status = "loading";
+        state.error = "";
+      })
+      .addCase(fetchGetSellerProduct.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.products = action.payload.results;
+      })
+      .addCase(fetchGetSellerProduct.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message || "Something is wrong";
+        state.products = [];
+      })
+      // 판매자 상품 삭제
+      .addCase(fetchDeleteSellerItem.pending, (state) => {
+        state.status = "loading";
+        state.error = "";
+      })
+      .addCase(fetchDeleteSellerItem.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.products = state.products.filter((item) => item.product_id !== action.payload);
+      })
+      .addCase(fetchDeleteSellerItem.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message || "Something is wrong";
+        state.products = [];
+      })
+      //판매자 상품 등록
+      .addCase(fetchPostItem.pending, (state) => {
+        state.status = "loading";
+        state.error = "";
+      })
+      .addCase(fetchPostItem.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.products = state.products.filter((item) => item.product_id !== action.payload);
+      })
+      .addCase(fetchPostItem.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message || "Something is wrong";
+      })
+      //판매자 상품 수정
+      .addCase(fetchPatchSellerItem.pending, (state) => {
+        state.status = "loading";
+        state.error = "";
+      })
+      .addCase(fetchPatchSellerItem.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.products = state.products
+          .filter((item) => item.product_id !== action.payload)
+          .splice(0, 0, action.payload);
+      })
+      .addCase(fetchPatchSellerItem.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message || "Something is wrong";
+      });
   },
 });
 

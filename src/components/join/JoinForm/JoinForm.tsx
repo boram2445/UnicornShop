@@ -27,54 +27,19 @@ import {
   phone2RegExp,
   phone3RegExp,
 } from "../../../utils/regExp";
-import * as S from "./joinFormStyle";
 import { JoinPost } from "../../../types/auth";
+import * as S from "./joinFormStyle";
 
 function JoinForm() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-
   const { userType, nameStatus, nameMessage, companyNumberStatus, companyMessage, status, error } =
     useAppSelector(getJoinState);
 
-  const initialValues = {
-    username: "",
-    password: "",
-    confirmPassword: "",
-    name: "",
-    phone1: "010",
-    phone2: "",
-    phone3: "",
-    email1: "",
-    email2: "",
-    checkBox: false,
-  };
-
-  const initialError = {
-    username: "",
-    password: "",
-    confirmPassword: "",
-    name: "",
-    phone: "",
-    email: "",
-    registrationNumber: "",
-  };
-
-  const initialSellerValues = {
-    registrationNumber: "",
-    storeName: "",
-  };
-
-  //아이디, 비밀번호, 이름, 전화번호, 이메일
   const [formValues, setFormValues] = useState(initialValues);
-  //오류 메세지 상태
   const [errorMessage, setErrorMessage] = useState(initialError);
-  //판매자 추가 정보
   const [sellerValues, setSellerValues] = useState(initialSellerValues);
-
-  //아이디 중복 확인 버튼
   const [onNameVaildBtn, setNameVaildBtn] = useState(false);
-  //사업자 등록번호 인증 버튼
   const [onRegistrationBtn, setRegistrationBtn] = useState(false);
 
   useEffect(() => {
@@ -336,3 +301,31 @@ function JoinForm() {
 }
 
 export default JoinForm;
+
+const initialValues = {
+  username: "",
+  password: "",
+  confirmPassword: "",
+  name: "",
+  phone1: "010",
+  phone2: "",
+  phone3: "",
+  email1: "",
+  email2: "",
+  checkBox: false,
+};
+
+const initialError = {
+  username: "",
+  password: "",
+  confirmPassword: "",
+  name: "",
+  phone: "",
+  email: "",
+  registrationNumber: "",
+};
+
+const initialSellerValues = {
+  registrationNumber: "",
+  storeName: "",
+};

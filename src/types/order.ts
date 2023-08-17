@@ -1,9 +1,11 @@
 import { Product } from "./product";
 
+export type OrderType = "cart_order" | "direct_order" | "cart_one_order" | null;
+
 export type OrderPost = {
   product_id?: number;
   quantity?: number;
-  order_kind: string;
+  order_kind: OrderType;
   receiver: string;
   receiver_phone_number: string;
   address: string;

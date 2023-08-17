@@ -24,17 +24,19 @@ const detailSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(fetchProductDetail.pending, (state) => {
-      state.status = "loading";
-    });
-    builder.addCase(fetchProductDetail.fulfilled, (state, action) => {
-      state.status = "succeeded";
-      state.detail = action.payload;
-    });
-    builder.addCase(fetchProductDetail.rejected, (state, action) => {
-      state.status = "failed";
-      state.error = action.error.message || "Something is wrong";
-    });
+    builder //
+      .addCase(fetchProductDetail.pending, (state) => {
+        state.status = "loading";
+        state.error = "";
+      })
+      .addCase(fetchProductDetail.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.detail = action.payload;
+      })
+      .addCase(fetchProductDetail.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message || "Something is wrong";
+      });
   },
 });
 

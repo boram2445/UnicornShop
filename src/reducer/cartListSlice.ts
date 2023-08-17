@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { RootState } from "./index";
-// import { successBuilder } from "../utils/builder";
 import { CartList } from "../types/cart";
 import {
   changeCartProductCount,
@@ -66,84 +65,78 @@ export const cartListSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(fetchPostCart.fulfilled, (state) => {
-      state.postStatus = "succeeded";
-      state.error = "";
-    });
-    // successBuilder<CartList, CartPost>(builder, fetchPostCart.fulfilled, "postStatus");
-    // builder.addCase(fetchPostCart.rejected, (state, action) => {
-    //   state.postStatus = "failed";
-    //   state.error = action.error.message || "Something is wrong";
-    // });
-    builder.addCase(fetchGetCartList.pending, (state) => {
-      state.status = "loading";
-      state.error = "";
-    });
-    //상품 가져오기
-    builder.addCase(fetchGetCartList.fulfilled, (state, action) => {
-      state.status = "succeeded";
-      state.cartItems = action.payload.results;
-    });
-    // successBuilder<CartList, string>(
-    //   builder,
-    //   fetchGetCartList.fulfilled,
-    //   "status",
-    //   (state, action) => {
-    //     state.cartItems = action.payload.results;
-    //   }
-    // );
-    builder.addCase(fetchGetCartList.rejected, (state, action) => {
-      state.status = "failed";
-      state.error = action.error.message || "Something was wrong";
-    });
-    //전체 디테일 가져오기
-    builder.addCase(fetchGetAllDetail.pending, (state) => {
-      state.detailStatus = "loading";
-      state.error = "";
-    });
-    builder.addCase(fetchGetAllDetail.fulfilled, (state, action) => {
-      state.detailStatus = "succeeded";
-      const { cartItems, cartDetails } = action.payload;
-      const res = cartItems.map((item, index) => ({
-        ...item,
-        item: cartDetails[index],
-        isChecked: cartDetails[index].stock ? true : false,
-      }));
-      state.cartItems = res;
-    });
-    builder.addCase(fetchGetAllDetail.rejected, (state, action) => {
-      state.detailStatus = "failed";
-      state.error = action.error.message || "Something was wrong";
-    });
-    //상품 삭제
-    builder.addCase(fetchDeleteCartItem.fulfilled, (state, action) => {
-      state.status = "succeeded";
-      state.error = "";
-      const deleteItemId = action.payload;
-      const newCartItems = state.cartItems.filter((item) => item.cart_item_id !== deleteItemId);
-      //가격 재 계산
-      state.cartItems.forEach((item) => {
-        if (item.cart_item_id === deleteItemId && item.isChecked)
-          state.totalPrice -= item.quantity * item.item.price;
-      });
-      state.cartItems = newCartItems;
-    });
-    //장바구니 수량 수정
-    builder.addCase(fetchPutCartQuantity.fulfilled, (state, action) => {
-      state.status = "succeeded";
-      const { product_id, quantity } = action.payload;
-      state.cartItems.forEach((item) => {
-        if (item.product_id === product_id) {
-          if (item.isChecked) {
+    builder //
+      //장바구니 상품 가져오기
+      .addCase(fetchGetCartList.pending, (state) => {
+        state.status = "loading";
+        state.error = "";
+      })
+      .addCase(fetchGetCartList.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.cartItems = action.payload.results;
+      })
+      .addCase(fetchGetCartList.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message || "Something is wrong";
+      })
+      //장바구니 전체 디테일 가져오기
+      .addCase(fetchGetAllDetail.pending, (state) => {
+        state.detailStatus = "loading";
+        state.error = "";
+      })
+      .addCase(fetchGetAllDetail.fulfilled, (state, action) => {
+        state.detailStatus = "succeeded";
+        const { cartItems, cartDetails } = action.payload;
+        const res = cartItems.map((item, index) => ({
+          ...item,
+          item: cartDetails[index],
+          isChecked: cartDetails[index].stock ? true : false,
+        }));
+        state.cartItems = res;
+      })
+      .addCase(fetchGetAllDetail.rejected, (state, action) => {
+        state.detailStatus = "failed";
+        state.error = action.error.message || "Something is wrong";
+      })
+      //장바구니에 상품 추가하기
+      .addCase(fetchPostCart.fulfilled, (state) => {
+        state.postStatus = "succeeded";
+        state.error = "";
+      })
+      .addCase(fetchPostCart.rejected, (state, action) => {
+        state.postStatus = "failed";
+        state.error = action.error.message || "Something is wrong";
+      })
+      //상품 삭제
+      .addCase(fetchDeleteCartItem.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.error = "";
+        const deleteItemId = action.payload;
+        const newCartItems = state.cartItems.filter((item) => item.cart_item_id !== deleteItemId);
+        //가격 재 계산
+        state.cartItems.forEach((item) => {
+          if (item.cart_item_id === deleteItemId && item.isChecked)
             state.totalPrice -= item.quantity * item.item.price;
-            item.quantity = quantity;
-            state.totalPrice += quantity * item.item.price;
-          } else {
-            item.quantity = quantity;
+        });
+        state.cartItems = newCartItems;
+      })
+      //장바구니 수량 수정
+      .addCase(fetchPutCartQuantity.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.error = "";
+        const { product_id, quantity } = action.payload;
+        state.cartItems.forEach((item) => {
+          if (item.product_id === product_id) {
+            if (item.isChecked) {
+              state.totalPrice -= item.quantity * item.item.price;
+              item.quantity = quantity;
+              state.totalPrice += quantity * item.item.price;
+            } else {
+              item.quantity = quantity;
+            }
           }
-        }
+        });
       });
-    });
   },
 });
 

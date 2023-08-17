@@ -4,8 +4,8 @@ import { RootState } from "./index";
 type ModalSlice = {
   open: boolean;
   btnText: {
-    yes: string;
-    no: string;
+    yes: "예" | "확인";
+    no: "아니오" | "취소";
   };
 };
 

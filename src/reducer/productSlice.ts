@@ -23,20 +23,21 @@ export const productSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(fetchGetProducts.pending, (state) => {
-      state.status = "loading";
-    });
-    builder.addCase(fetchGetProducts.fulfilled, (state, action) => {
-      state.status = "succeeded";
-      state.error = "";
-      state.totalPage = Math.floor(Number(Number(action.payload.count) / 15)) + 1;
-      state.products = action.payload.results;
-    });
-    builder.addCase(fetchGetProducts.rejected, (state, action) => {
-      state.status = "failed";
-      state.error = action.error.message || "Something is wrong";
-      state.products = [];
-    });
+    builder
+      .addCase(fetchGetProducts.pending, (state) => {
+        state.status = "loading";
+        state.error = "";
+      })
+      .addCase(fetchGetProducts.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.totalPage = Math.floor(Number(Number(action.payload.count) / 15)) + 1;
+        state.products = action.payload.results;
+      })
+      .addCase(fetchGetProducts.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message || "Something is wrong";
+        state.products = [];
+      });
   },
 });
 

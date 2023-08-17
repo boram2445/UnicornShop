@@ -49,19 +49,21 @@ const searchSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(fetchSearchProducts.pending, (state) => {
-      state.status = "loading";
-    }),
-      builder.addCase(fetchSearchProducts.fulfilled, (state, action) => {
+    builder
+      .addCase(fetchSearchProducts.pending, (state) => {
+        state.status = "loading";
+        state.error = "";
+      })
+      .addCase(fetchSearchProducts.fulfilled, (state, action) => {
         const { results, count } = action.payload;
         state.status = "succeeded";
         state.quantity = count;
         state.products = results;
+      })
+      .addCase(fetchSearchProducts.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message || "Something is wrong";
       });
-    builder.addCase(fetchSearchProducts.rejected, (state, action) => {
-      state.status = "failed";
-      state.error = action.error.message || "Something is wrong";
-    });
   },
 });
 

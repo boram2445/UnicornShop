@@ -1,13 +1,14 @@
 import { Product } from "./product";
+import { RequestStatus } from "./slice";
 
 export type CartList = {
-  status: string;
-  postStatus: string;
-  detailStatus: string;
+  status: RequestStatus;
+  postStatus: RequestStatus;
+  detailStatus: RequestStatus;
+  error: string;
   cartItems: CartProduct[];
   totalPrice: number;
   deliveryPrice: number;
-  error: string;
 };
 
 export type CartProduct = {
