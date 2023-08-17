@@ -3,9 +3,9 @@ import { useDaumPostcodePopup } from "react-daum-postcode";
 import { postcodeScriptUrl } from "react-daum-postcode/lib/loadPostcode";
 import { NormalBtn } from "../../common/Button/Button";
 
-interface PostAddressProps {
+type PostAddressProps = {
   getAddress: (zoneCode: string, address: string) => void;
-}
+};
 
 function PostAddress({ getAddress }: PostAddressProps) {
   const open = useDaumPostcodePopup(postcodeScriptUrl);

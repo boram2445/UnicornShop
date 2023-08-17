@@ -22,7 +22,6 @@ function OrderForm() {
 
   const TOKEN = useAppSelector(getToken) || "";
   const { status } = useAppSelector(getOrderState);
-
   const {
     orderItems,
     totalPrice,
@@ -36,11 +35,8 @@ function OrderForm() {
     };
   }, []);
 
-  //주문자 정보 - 이름, phone 넘버는 미리 받아오기
   const [ordererInfo, setOrdererInfo] = useState(orderInitialState);
-  //배송지 정보
   const [receiverInfo, setReceiverInfo] = useState(receiverInitialState);
-
   const [checkBox, setCheckBox] = useState({
     payMethod: "",
     finalCheck: false,
@@ -51,13 +47,11 @@ function OrderForm() {
     Object.values(receiverInfo).every(Boolean) &&
     Object.values(checkBox).every(Boolean);
 
-  //우편번호, 주소 팝업창에서 받아오기
   const getAddress = (zoneCode: string, address: string) => {
     setReceiverInfo({ ...receiverInfo, zoneCode, address });
     addressDetailRef.current.focus();
   };
 
-  //입력 제한
   const limitInputValue = (name: string, value: string) => {
     let newValue = "";
     if (name === "name") {

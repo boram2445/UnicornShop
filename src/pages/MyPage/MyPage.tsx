@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { getToken, getLoginUserType } from "../../reducer/loginSlice";
-import { fetchAllOrderedDetail, fetchPostOrderList, getOrderState } from "../../reducer/orderSlice";
+import { fetchOrderedDetails, fetchGetOrderList, getOrderState } from "../../reducer/orderSlice";
 import TabNav from "../../components/common/TabNav/TabNav";
 import Spinner from "../../components/common/Spinner/Spinner";
 import Chart from "../../components/common/Chart/Chart";
@@ -18,13 +18,13 @@ function MyPage() {
 
   useEffect(() => {
     if (TOKEN && userType === "BUYER") {
-      dispatch(fetchPostOrderList(TOKEN));
+      dispatch(fetchGetOrderList(TOKEN));
     }
   }, []);
 
   useEffect(() => {
     if (userType === "BUYER" && orderedInfo) {
-      dispatch(fetchAllOrderedDetail(orderedInfo));
+      dispatch(fetchOrderedDetails(orderedInfo));
     }
   }, [orderedInfo]);
 

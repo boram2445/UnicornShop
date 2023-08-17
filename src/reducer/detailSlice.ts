@@ -1,17 +1,14 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "./index";
-import { Product } from "./productSlice";
-import axios from "axios";
+import { Product } from "../types/product";
+import { Slice } from "../types/slice";
+import { getProductDetail } from "../api/product";
 
-const BASE_URL = "https://openmarket.weniv.co.kr";
-
-interface DetailSliceState {
-  status: string;
-  error: string;
+type DetailSlice = Slice & {
   detail: Product | null;
-}
+};
 
-const initialState: DetailSliceState = {
+const initialState: DetailSlice = {
   status: "idle",
   error: "",
   detail: null,
@@ -19,10 +16,7 @@ const initialState: DetailSliceState = {
 
 export const fetchProductDetail = createAsyncThunk(
   "products/fetchGetProductDetail",
-  async (productId: number | undefined) => {
-    const result = await axios.get(`${BASE_URL}/products/${productId}`);
-    return result.data;
-  }
+  getProductDetail
 );
 
 const detailSlice = createSlice({
@@ -30,17 +24,19 @@ const detailSlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(fetchProductDetail.pending, (state) => {
-      state.status = "loading";
-    });
-    builder.addCase(fetchProductDetail.fulfilled, (state, action) => {
-      state.status = "succeeded";
-      state.detail = action.payload;
-    });
-    builder.addCase(fetchProductDetail.rejected, (state, action) => {
-      state.status = "failed";
-      state.error = action.error.message || "Something is wrong";
-    });
+    builder //
+      .addCase(fetchProductDetail.pending, (state) => {
+        state.status = "loading";
+        state.error = "";
+      })
+      .addCase(fetchProductDetail.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.detail = action.payload;
+      })
+      .addCase(fetchProductDetail.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message || "Something is wrong";
+      });
   },
 });
 

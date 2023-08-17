@@ -1,9 +1,9 @@
 import React from "react";
 import * as S from "./payMethodStyle";
 
-interface PayMethodProps {
+type PayMethodProps = {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}
+};
 
 function PayMethod({ onChange }: PayMethodProps) {
   return (

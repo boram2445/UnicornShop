@@ -4,9 +4,9 @@ import { selectCheckAllState } from "../../../reducer/cartListSlice";
 import { CircleCheckBtn } from "../../common/CheckBtn/CheckBtn";
 import * as S from "./cartInfoStyle";
 
-interface CartInfoProps {
+type CartInfoProps = {
   onCheckInput: (e: React.ChangeEvent<HTMLInputElement>, productId?: number) => void;
-}
+};
 
 function CartInfo({ onCheckInput }: CartInfoProps) {
   const isAllChecked = useAppSelector(selectCheckAllState);

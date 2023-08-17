@@ -1,7 +1,7 @@
 import React from "react";
 import * as S from "./buttonStyle";
 
-interface NormalBtnProps {
+type NormalBtnProps = {
   children: React.ReactNode;
   type?: "button" | "submit"; //literal type
   disabled?: boolean;
@@ -15,14 +15,14 @@ interface NormalBtnProps {
   on?: string; //선택후 고정이어야 할 경우 'true'
   tab?: string; //탭 버튼일 경우 'true'
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
-}
+};
 
-interface TabMenuBtnProps {
+type TabMenuBtnProps = {
   children: React.ReactNode;
   fixed?: boolean;
   num?: number;
   onClick?: () => void;
-}
+};
 
 //기본 버튼
 export function NormalBtn({ children, ...props }: NormalBtnProps) {

@@ -1,68 +1,43 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { RootState } from "./index";
-import axios from "axios";
+import { Product } from "../types/product";
+import { Slice } from "../types/slice";
+import { getProductsPage } from "../api/product";
 
-const BASE_URL = "https://openmarket.weniv.co.kr";
-//state product 타입
-export interface Product {
-  image: string;
-  price: number;
-  product_id: number;
-  product_info: string;
-  product_name: string;
-  seller: number;
-  store_name: string;
-  shipping_fee: number;
-  shipping_method: string;
-  stock: number;
-  created_at: string;
-}
-
-//state 초기값 타입
-interface ProductSliceState {
-  status: string; //idle | loading | succeeded | failed
-  error: string;
+type ProductSlice = Slice & {
   totalPage: number;
   products: Product[];
-}
+};
 
-//state 초기값
-const initialState: ProductSliceState = {
+const initialState: ProductSlice = {
   status: "idle",
   error: "",
   totalPage: 1,
   products: [],
 };
 
-//페이지별 상품 가져오기
-export const fetchGetProducts = createAsyncThunk(
-  "products/fetchPostProducts",
-  async (pageParam: number) => {
-    const result = await axios.get(`${BASE_URL}/products/?page=${pageParam}`);
-    return result.data;
-  }
-);
+export const fetchGetProducts = createAsyncThunk("products/fetchPostProducts", getProductsPage);
 
-//state 저장
 export const productSlice = createSlice({
   name: "products",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(fetchGetProducts.pending, (state) => {
-      state.status = "loading";
-    });
-    builder.addCase(fetchGetProducts.fulfilled, (state, action) => {
-      state.status = "succeeded";
-      state.error = "";
-      state.totalPage = Math.floor(Number(Number(action.payload.count) / 15)) + 1;
-      state.products = action.payload.results;
-    });
-    builder.addCase(fetchGetProducts.rejected, (state, action) => {
-      state.status = "failed";
-      state.error = action.error.message || "Something is wrong";
-      state.products = [];
-    });
+    builder
+      .addCase(fetchGetProducts.pending, (state) => {
+        state.status = "loading";
+        state.error = "";
+      })
+      .addCase(fetchGetProducts.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.totalPage = Math.floor(Number(Number(action.payload.count) / 15)) + 1;
+        state.products = action.payload.results;
+      })
+      .addCase(fetchGetProducts.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message || "Something is wrong";
+        state.products = [];
+      });
   },
 });
 

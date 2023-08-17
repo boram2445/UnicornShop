@@ -8,7 +8,7 @@ import {
   selectSellerProducts,
 } from "../../../reducer/sellerSlice";
 import { getOrderState } from "../../../reducer/orderSlice";
-import { closeModal, openModal, selectOpenState } from "../../../reducer/modalSlice";
+import { useModal } from "../../../hooks/useModal";
 import ChartItem from "../ChartItem/ChartItem";
 import Modal from "../Modal/Modal";
 import * as S from "./chartStyle";
@@ -20,7 +20,7 @@ function Chart() {
 
   const sellerStatus = userType === "SELLER" && useAppSelector(getSellerStatus);
   const sellProducts = userType === "SELLER" ? useAppSelector(selectSellerProducts) : [];
-  const modal = useAppSelector(selectOpenState);
+  const { isOpen, open, close } = useModal();
   const { orderedDetail } = useAppSelector(getOrderState);
 
   const [selectedItemId, setSelectedItemId] = useState(0);
@@ -33,7 +33,7 @@ function Chart() {
 
   //상품 지우기 확인 모달 열기
   function OpenDeleteModal(product_id: number) {
-    dispatch(openModal("확인"));
+    open("확인");
     setSelectedItemId(product_id);
   }
 
@@ -41,7 +41,7 @@ function Chart() {
   function deleteItem() {
     if (TOKEN) {
       dispatch(fetchDeleteSellerItem({ TOKEN, product_id: selectedItemId }));
-      dispatch(closeModal());
+      close();
     }
   }
 
@@ -106,7 +106,7 @@ function Chart() {
   return (
     <>
       <S.ChartContainer>{content}</S.ChartContainer>
-      {modal ? <Modal onClickYes={deleteItem}>상품을 삭제하시겠습니까?</Modal> : null}
+      {isOpen ? <Modal onClickYes={deleteItem}>상품을 삭제하시겠습니까?</Modal> : null}
     </>
   );
 }

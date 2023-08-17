@@ -1,28 +1,22 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { RootState } from "./index";
-import axios from "axios";
-
-const BASE_URL = "https://openmarket.weniv.co.kr";
+import { Slice } from "../types/slice";
+import { login } from "../api/auth";
+import { LoginPost } from "../types/auth";
+import { handleAsyncThunkError } from "../utils/slice";
 
 const item = sessionStorage.getItem("userData");
 const TOKEN = item === null ? null : JSON.parse(item).token;
 const USER_TYPE = item === null ? null : JSON.parse(item).user_type;
 const USER_NAME = item === null ? null : JSON.parse(item).username;
-interface LoginPostData {
-  username: string;
-  password: string;
-  login_type: string;
-}
 
-interface LoginState {
+type LoginSlice = Slice & {
   userName: string;
   userType: string;
   TOKEN?: string | null;
-  status: string;
-  error: string;
-}
+};
 
-const initialState: LoginState = {
+const initialState: LoginSlice = {
   userName: USER_NAME ? USER_NAME : "",
   userType: USER_TYPE ? USER_TYPE : "BUYER",
   TOKEN: TOKEN ? TOKEN : null,
@@ -30,25 +24,16 @@ const initialState: LoginState = {
   error: "",
 };
 
-//로그인
 export const fetchPostLogin = createAsyncThunk(
   "login/fetchPostLogin",
-  async (data: LoginPostData, { rejectWithValue }) => {
+  async (data: LoginPost, { rejectWithValue }) => {
     try {
-      const { username } = data;
-      const result = await axios.post(`${BASE_URL}/accounts/login/`, data);
-
-      if (result.data) {
-        sessionStorage.setItem("userData", JSON.stringify({ username, ...result.data }));
-      }
-      return { username, ...result.data };
-    } catch (error: any) {
-      return rejectWithValue(error.response.data.FAIL_Message);
+      return await login(data);
+    } catch (err: any) {
+      return handleAsyncThunkError(err, rejectWithValue, "FAIL_Message");
     }
   }
 );
-
-//로그아웃
 export const logout = createAsyncThunk("login/logout", async () => {
   sessionStorage.clear();
 });
@@ -66,31 +51,32 @@ export const loginSlice = createSlice({
   },
   extraReducers: (builder) => {
     //로그인
-    builder.addCase(fetchPostLogin.pending, (state) => {
-      state.status = "loading";
-    });
-    builder.addCase(fetchPostLogin.fulfilled, (state, action) => {
-      state.status = "succeeded";
-      state.error = "";
-      state.userName = action.payload.username;
-      state.TOKEN = action.payload.token || "";
-    });
-    builder.addCase(fetchPostLogin.rejected, (state, action) => {
-      state.status = "failed";
-      if (action.payload) {
-        state.error = (action.payload as string) && "아이디 또는 패스워드가 일치하지 않습니다.";
-      } else {
-        state.error = action.error.message || "Something is wrong in Login:<";
-      }
-    });
-    //로그아웃
-    builder.addCase(logout.fulfilled, (state) => {
-      state.status = "idle";
-      state.error = "";
-      state.userName = "";
-      state.TOKEN = null;
-      state.userType = "BUYER";
-    });
+    builder
+      .addCase(fetchPostLogin.pending, (state) => {
+        state.status = "loading";
+        state.error = "";
+      })
+      .addCase(fetchPostLogin.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.userName = action.payload.username;
+        state.TOKEN = action.payload.token || "";
+      })
+      .addCase(fetchPostLogin.rejected, (state, action) => {
+        state.status = "failed";
+        if (action.payload) {
+          state.error = (action.payload as string) && "아이디 또는 패스워드가 일치하지 않습니다.";
+        } else {
+          state.error = action.error.message || "Something is wrong in Login:<";
+        }
+      })
+      //로그아웃
+      .addCase(logout.fulfilled, (state) => {
+        state.status = "idle";
+        state.error = "";
+        state.userName = "";
+        state.TOKEN = null;
+        state.userType = "BUYER";
+      });
   },
 });
 

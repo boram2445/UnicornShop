@@ -4,8 +4,7 @@ import { useAppDispatch, useAppSelector } from "../../hooks";
 import { fetchGetCartList, fetchPostCart, getCartState } from "../../reducer/cartListSlice";
 import { getToken, getLoginUserType } from "../../reducer/loginSlice";
 import { fetchProductDetail, getDetailState } from "../../reducer/detailSlice";
-import { openModal, selectOpenState } from "../../reducer/modalSlice";
-
+import { useModal } from "../../hooks/useModal";
 import ProductDetail from "../../components/detail/ProductDetail/ProductDetail";
 import ProductCount from "../../components/detail/ProductCount/ProductCount";
 import DetailTab from "../../components/detail/DetailTab/DetailTab";
@@ -18,13 +17,12 @@ function DetailPage() {
   const { productId } = useParams();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const { postStatus } = useAppSelector(getCartState);
+  const { status, detail } = useAppSelector(getDetailState);
+  const { isOpen, open } = useModal();
 
   const TOKEN = useAppSelector(getToken) || "";
   const USER_TYPE = useAppSelector(getLoginUserType);
-  const { postStatus } = useAppSelector(getCartState);
-
-  const { status, detail } = useAppSelector(getDetailState);
-  const modal = useAppSelector(selectOpenState);
 
   const [selectedCount, setSelectedCount] = useState(1);
 
@@ -57,8 +55,7 @@ function DetailPage() {
     dispatch(
       fetchPostCart({ TOKEN, product_id: detail?.product_id, quantity: selectedCount, check: true })
     );
-
-    dispatch(openModal("예"));
+    open("예");
   };
 
   const putInCartModal = (
@@ -77,8 +74,8 @@ function DetailPage() {
   if (status === "loading") return <Spinner />;
   return (
     <>
-      {!TOKEN && modal ? needLoginModal : null}
-      {TOKEN && modal ? putInCartModal : null}
+      {!TOKEN && isOpen ? needLoginModal : null}
+      {TOKEN && isOpen ? putInCartModal : null}
       {detail && (
         <S.DetailLayout>
           <S.ProductWrap>
@@ -94,7 +91,7 @@ function DetailPage() {
               {/* 상품 구매 버튼 */}
               <S.ButtonWrap>
                 <NormalBtn
-                  onClick={TOKEN ? getProductNow : () => dispatch(openModal("예"))}
+                  onClick={TOKEN ? getProductNow : () => open("예")}
                   padding="14px 0"
                   disabled={disableBtn}
                 >

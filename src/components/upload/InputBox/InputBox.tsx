@@ -2,12 +2,12 @@ import React, { useState } from "react";
 import * as S from "./inputBoxStyle";
 import limitLength from "../../../utils/limitLength";
 
-interface TextInputProps {
+type TextInputProps = {
   label: string;
   name: string;
   handleOnChange: (name: string, value: string | number) => void;
   value?: string;
-}
+};
 
 function TextInput({ label, name, value, handleOnChange }: TextInputProps) {
   const [inputText, setInputText] = useState(value);

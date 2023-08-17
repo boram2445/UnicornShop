@@ -1,16 +1,15 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "./index";
-import axios from "axios";
-import { Product } from "./productSlice";
+import { Product } from "../types/product";
+import { Slice } from "../types/slice";
+import { getSearchProducts } from "../api/product";
 
-interface SearchSliceState {
-  status: string;
-  error: string;
+type SearchSliceState = Slice & {
   quantity: number;
   sortType: string;
   postType: string;
   products: Product[];
-}
+};
 
 const initialState: SearchSliceState = {
   status: "idle",
@@ -21,13 +20,9 @@ const initialState: SearchSliceState = {
   products: [],
 };
 
-//검색 상품 가져오기
 export const fetchSearchProducts = createAsyncThunk(
   "search/fetchSearchProducts",
-  async (keyword: string) => {
-    const result = await axios.get(`https://openmarket.weniv.co.kr/products/?search=${keyword}`);
-    return result.data;
-  }
+  getSearchProducts
 );
 
 const searchSlice = createSlice({
@@ -54,19 +49,21 @@ const searchSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(fetchSearchProducts.pending, (state) => {
-      state.status = "loading";
-    }),
-      builder.addCase(fetchSearchProducts.fulfilled, (state, action) => {
+    builder
+      .addCase(fetchSearchProducts.pending, (state) => {
+        state.status = "loading";
+        state.error = "";
+      })
+      .addCase(fetchSearchProducts.fulfilled, (state, action) => {
         const { results, count } = action.payload;
         state.status = "succeeded";
         state.quantity = count;
         state.products = results;
+      })
+      .addCase(fetchSearchProducts.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message || "Something is wrong";
       });
-    builder.addCase(fetchSearchProducts.rejected, (state, action) => {
-      state.status = "failed";
-      state.error = action.error.message || "Something is wrong";
-    });
   },
 });
 

@@ -4,27 +4,26 @@ import { getToken } from "../../../reducer/loginSlice";
 import {
   fetchPostItem,
   fetchPatchSellerItem,
-  ItemPostType,
   reset,
   selectModifyId,
 } from "../../../reducer/sellerSlice";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
+import { useModal } from "../../../hooks/useModal";
 import { NormalBtn } from "../../common/Button/Button";
 import { NumInput, TextInput } from "../InputBox/InputBox";
-import { Product } from "../../../reducer/productSlice";
 import UploadImgBox from "../uploadImg/UploadImg";
 import Modal from "../../common/Modal/Modal";
-import { openModal, selectOpenState } from "../../../reducer/modalSlice";
 import * as S from "./uploadFormStyle";
+import { Product, ProductPost } from "../../../types/product";
 
 function UploadForm({ itemInfo }: { itemInfo?: Product }) {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const TOKEN = useAppSelector(getToken) || "";
   const modifyId = useAppSelector(selectModifyId);
-  const modal = useAppSelector(selectOpenState);
+  const { isOpen, open } = useModal();
 
-  const initialValues: ItemPostType = {
+  const initialValues: ProductPost = {
     product_name: itemInfo?.product_name,
     image: itemInfo?.image,
     price: itemInfo?.price,
@@ -64,8 +63,7 @@ function UploadForm({ itemInfo }: { itemInfo?: Product }) {
     } else {
       dispatch(fetchPostItem({ TOKEN, formValues }));
     }
-
-    dispatch(openModal("네"));
+    open("예");
   };
 
   let modalContent;
@@ -93,7 +91,7 @@ function UploadForm({ itemInfo }: { itemInfo?: Product }) {
 
   return (
     <>
-      {modal ? modalContent : null}
+      {isOpen ? modalContent : null}
       <S.UploadForm onSubmit={handleSubmit}>
         <S.TitleBtnWrap>
           <NormalBtn

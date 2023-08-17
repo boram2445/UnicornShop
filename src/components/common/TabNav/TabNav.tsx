@@ -2,12 +2,12 @@ import React from "react";
 import { TabMenuBtn } from "../Button/Button";
 import * as S from "../../../pages/CenterPage/centerPageStyle";
 
-interface TabNavProps {
+type TabNavProps = {
   quantity?: number;
   tabList: { name: string; label: string; num?: number }[];
   selectedTab: string;
   onTabNav: (type: string) => void;
-}
+};
 
 function TabNav({ quantity, onTabNav, tabList, selectedTab }: TabNavProps) {
   return (

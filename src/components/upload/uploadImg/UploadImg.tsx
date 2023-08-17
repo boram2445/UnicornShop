@@ -1,10 +1,10 @@
 import React, { useRef, useState } from "react";
 import * as S from "./uploadImgStyle";
 
-interface UploadImgProps {
+type UploadImgProps = {
   handleImgFile: (file: File) => void;
   image?: string;
-}
+};
 
 //이미지 업로드 박스
 function UploadImgBox({ handleImgFile, image }: UploadImgProps) {

@@ -1,15 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "./index";
 
-interface ModalProps {
+type ModalSlice = {
   open: boolean;
   btnText: {
-    yes: string;
-    no: string;
+    yes: "예" | "확인";
+    no: "아니오" | "취소";
   };
-}
+};
 
-const initialState: ModalProps = {
+const initialState: ModalSlice = {
   open: false,
   btnText: {
     yes: "예",

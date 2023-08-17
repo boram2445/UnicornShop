@@ -2,12 +2,12 @@ import React from "react";
 import * as S from "./productCountStyle";
 import AmountBtn from "../../common/AmountBtn/AmountBtn";
 
-interface ProductCountProps {
+type ProductCountProps = {
   getProductCount: (res: number) => void;
   stock: number;
   selectedCount: number;
   price: number;
-}
+};
 
 function ProductCount({ getProductCount, stock, selectedCount, price }: ProductCountProps) {
   return (

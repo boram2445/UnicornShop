@@ -1,11 +1,11 @@
 import React from "react";
-import { Product } from "../../../reducer/productSlice";
+import { Product } from "../../../types/product";
 import * as S from "./orderItemStyle";
 
-interface OrderProps {
+type OrderProps = {
   item: Product;
   quantity: number;
-}
+};
 
 function OrderItem({ item, quantity }: OrderProps) {
   const { image, price, product_name, store_name, shipping_fee } = item;

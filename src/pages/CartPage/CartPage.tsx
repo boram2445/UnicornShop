@@ -1,104 +1,39 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks";
-import { useNavigate } from "react-router-dom";
-import { getToken } from "../../reducer/loginSlice";
-import { closeModal, openModal, selectOpenState } from "../../reducer/modalSlice";
+import { getCartState, fetchGetAllDetail } from "../../reducer/cartListSlice";
+import { useCart } from "../../hooks/useCart";
+import { useModal } from "../../hooks/useModal";
 import { NormalBtn } from "../../components/common/Button/Button";
 import CartInfo from "../../components/cart/CartInfo/CartInfo";
 import CartItem from "../../components/cart/CartItem/CartItem";
 import TotalPrice from "../../components/cart/TotalPrice/TotalPrice";
-import {
-  fetchGetCartList,
-  fetchDeleteCartItem,
-  selectCheckAllState,
-  setTotalPrice,
-  checkAllItem,
-  checkItem,
-  reset,
-  selectCheckedItems,
-  getCartState,
-  fetchGetAllDetail,
-} from "../../reducer/cartListSlice";
 import Modal from "../../components/common/Modal/Modal";
 import Spinner from "../../components/common/Spinner/Spinner";
 import * as S from "./cartPageStyle";
 
 function CartPage() {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-  const TOKEN = useAppSelector(getToken) || "";
+  const {
+    OpenDeleteModal,
+    deleteCartItem,
+    OpenDeleteAllModal,
+    deleteSelectItems,
+    handleCheckInput,
+    handleOrderBtn,
+    deleteType,
+    checkedItems,
+    onReset,
+  } = useCart();
 
+  const { isOpen } = useModal();
   const { status: cartStatus, detailStatus, error, cartItems } = useAppSelector(getCartState);
-  const checkedItems = useAppSelector(selectCheckedItems);
-  const isAllChecked = useAppSelector(selectCheckAllState);
   const selectedItemNum = Object.keys(checkedItems).length;
-  //모달 설정
-  const modal = useAppSelector(selectOpenState);
-  const [cartItemId, setCartItemId] = useState(0);
-  const [deleteType, setDeleteType] = useState("");
-  const [onReset, setOnReset] = useState(false);
-
-  useEffect(() => {
-    dispatch(reset());
-    setOnReset(true);
-    dispatch(fetchGetCartList(TOKEN));
-  }, []);
 
   useEffect(() => {
     if (onReset && cartStatus === "succeeded" && detailStatus !== "succeeded") {
       dispatch(fetchGetAllDetail(cartItems));
     }
   }, [onReset, cartStatus, detailStatus]);
-
-  //개별 상품 지우기 재확인 모달 열기
-  function OpenDeleteModal(cart_item_id: number) {
-    dispatch(openModal("확인"));
-    setCartItemId(cart_item_id);
-    setDeleteType("one");
-  }
-
-  //개별 상품 삭제후 모달 닫기
-  function deleteCartItem() {
-    dispatch(fetchDeleteCartItem({ TOKEN, cart_item_id: cartItemId }));
-    dispatch(closeModal());
-    setDeleteType("");
-  }
-
-  //선택상품 모두 지우기 재확인 모달 열기
-  function OpenDeleteAllModal() {
-    dispatch(openModal("확인"));
-    setDeleteType("selected");
-  }
-
-  //선택상품 모두 지우기후 모달 닫기
-  function deleteSelectItems() {
-    checkedItems.forEach((item) => {
-      dispatch(fetchDeleteCartItem({ TOKEN, cart_item_id: item.cart_item_id }));
-    });
-    dispatch(closeModal());
-    setDeleteType("");
-  }
-
-  //체크 박스
-  const handleCheckInput = (e: React.ChangeEvent<HTMLInputElement>, productId?: number) => {
-    const { name, checked } = e.target;
-    if (name === "allSelect") {
-      dispatch(checkAllItem({ isChecked: checked }));
-    } else {
-      dispatch(checkItem({ productId, isChecked: checked }));
-    }
-    dispatch(setTotalPrice());
-  };
-
-  //결제 페이지로 넘어가기
-  const handleOrderBtn = () => {
-    const orderType = !isAllChecked ? "cart_one_order" : "cart_order";
-    sessionStorage.setItem(
-      "order",
-      JSON.stringify({ ["type"]: orderType, ["items"]: checkedItems })
-    );
-    navigate("/payment");
-  };
 
   //카트 상품 리스트
   let content;
@@ -146,7 +81,7 @@ function CartPage() {
 
   return (
     <>
-      {modal ? (
+      {isOpen ? (
         <Modal onClickYes={deleteType === "one" ? deleteCartItem : deleteSelectItems}>
           {deleteType === "one" || selectedItemNum === 1
             ? "상품을 삭제하시겠습니까?"

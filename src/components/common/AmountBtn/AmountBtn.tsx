@@ -1,19 +1,20 @@
 import React, { useState } from "react";
 import { getToken } from "../../../reducer/loginSlice";
-import { fetchPutCartQuantity, CartItem } from "../../../reducer/cartListSlice";
+import { fetchPutCartQuantity } from "../../../reducer/cartListSlice";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
 import { ReactComponent as PlusIcon } from "../../../assets/icons/icon-plus-line.svg";
 import { ReactComponent as MinusIcon } from "../../../assets/icons/icon-minus-line.svg";
 import * as S from "./amountStyle";
+import { CartProduct } from "../../../types/cart";
 
-interface AmountBtnProps {
+type AmountBtnProps = {
   selectAmount?: number;
   stock: number;
   product_id?: number;
   cart_item_id?: number;
-  item?: CartItem;
+  item?: CartProduct;
   getCount?: (res: number) => void; //선택 개수를 반환
-}
+};
 
 function AmountBtn({ selectAmount = 0, getCount, item, stock }: AmountBtnProps) {
   const dispatch = useAppDispatch();

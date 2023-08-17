@@ -1,115 +1,42 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { RootState } from "./index";
-import { Product } from "./productSlice";
-import axios from "axios";
+import { Product } from "../types/product";
+import { Slice } from "../types/slice";
+import {
+  deleteSellerProduct,
+  getSellerProducts,
+  patchSellerProduct,
+  postSellerProduct,
+} from "../api/seller";
 
-const BASE_URL = "https://openmarket.weniv.co.kr";
-
-export interface ItemPostType {
-  product_name?: string;
-  image?: File | string | null;
-  price?: number;
-  shipping_method?: string;
-  shipping_fee?: number;
-  stock?: number;
-  product_info?: string;
-  token?: string;
-}
-
-interface SellerProduct extends Product {
+type SellerProduct = Product & {
   store_name: string;
-}
-interface SellerType {
-  status: string;
-  error: string;
+};
+
+type SellerSlice = Slice & {
   products: SellerProduct[];
   modifyItemId: number;
-}
+};
 
-const initialState: SellerType = {
+const initialState: SellerSlice = {
   status: "idle",
   error: "",
   products: [],
   modifyItemId: 0,
 };
 
-//판매자 상품 가져오기
 export const fetchGetSellerProduct = createAsyncThunk(
   "seller/fetchGetSellerProduct",
-  async (TOKEN: string) => {
-    const config = {
-      headers: {
-        Authorization: `JWT ${TOKEN}`,
-      },
-    };
-    const result = await axios.get(`${BASE_URL}/seller/`, config);
-    return result.data;
-  }
+  getSellerProducts
 );
-
-//판매자 상품 삭제
 export const fetchDeleteSellerItem = createAsyncThunk(
   "seller/fetchDeleteSellerItem",
-  async ({ TOKEN, product_id }: { TOKEN: string; product_id: number }) => {
-    const config = {
-      headers: {
-        Authorization: `JWT ${TOKEN}`,
-      },
-    };
-    await axios.delete(`${BASE_URL}/products/${product_id}`, config);
-    return product_id;
-  }
+  deleteSellerProduct
 );
-
-//판매자 상품 등록하기
-export const fetchPostItem = createAsyncThunk(
-  "seller/fetchPostItem",
-  async ({ TOKEN, formValues }: { TOKEN: string; formValues: ItemPostType }) => {
-    try {
-      const config = {
-        headers: {
-          Authorization: `JWT ${TOKEN}`,
-          "Content-Type": "multipart/form-data",
-        },
-      };
-      const data = { ...formValues, token: TOKEN };
-      const result = await axios.post(`${BASE_URL}/products/`, data, config);
-      return result.data;
-    } catch (error: any) {
-      //서버 에러 메세지 받아오기 -개선 필요
-      console.log(error.response.data);
-      return error.response.data;
-    }
-  }
-);
-
-//판매자 상품 수정
+export const fetchPostItem = createAsyncThunk("seller/fetchPostItem", postSellerProduct);
 export const fetchPatchSellerItem = createAsyncThunk(
   "seller/fetchPatchSellerItem",
-  async ({
-    TOKEN,
-    product_id,
-    formValues,
-  }: {
-    TOKEN: string;
-    product_id: number;
-    formValues: ItemPostType;
-  }) => {
-    try {
-      const config = {
-        headers: {
-          Authorization: `JWT ${TOKEN}`,
-          "Content-Type": "multipart/form-data",
-        },
-      };
-      const result = await axios.patch(`${BASE_URL}/products/${product_id}/`, formValues, config);
-      return result.data;
-    } catch (error: any) {
-      //서버 에러 메세지 받아오기 -개선 필요
-      console.log(error.response.data);
-      return error.response.data;
-    }
-  }
+  patchSellerProduct
 );
 
 const sellerSlice = createSlice({
@@ -127,61 +54,62 @@ const sellerSlice = createSlice({
   },
   extraReducers: (builder) => {
     //상품 불러오기
-    builder.addCase(fetchGetSellerProduct.pending, (state) => {
-      state.status = "loading";
-    });
-    builder.addCase(fetchGetSellerProduct.fulfilled, (state, action) => {
-      state.status = "succeeded";
-      state.error = "";
-      state.products = action.payload.results;
-    });
-    builder.addCase(fetchGetSellerProduct.rejected, (state, action) => {
-      state.status = "failed";
-      state.error = action.error.message || "Something is wrong";
-      state.products = [];
-    });
-    // 판매자 상품 삭제
-    builder.addCase(fetchDeleteSellerItem.pending, (state) => {
-      state.status = "loading";
-    });
-    builder.addCase(fetchDeleteSellerItem.fulfilled, (state, action) => {
-      state.status = "succeeded";
-      state.error = "";
-      state.products = state.products.filter((item) => item.product_id !== action.payload);
-    });
-    builder.addCase(fetchDeleteSellerItem.rejected, (state, action) => {
-      state.status = "failed";
-      state.error = action.error.message || "Something is wrong";
-      state.products = [];
-    });
-    //판매자 상품 등록
-    builder.addCase(fetchPostItem.pending, (state) => {
-      state.status = "loading";
-    });
-    builder.addCase(fetchPostItem.fulfilled, (state, action) => {
-      state.status = "succeeded";
-      state.error = "";
-      state.products = state.products.filter((item) => item.product_id !== action.payload);
-    });
-    builder.addCase(fetchPostItem.rejected, (state, action) => {
-      state.status = "failed";
-      state.error = action.error.message || "Something is wrong";
-    });
-    //판매자 상품 수정
-    builder.addCase(fetchPatchSellerItem.pending, (state) => {
-      state.status = "loading";
-    });
-    builder.addCase(fetchPatchSellerItem.fulfilled, (state, action) => {
-      state.status = "succeeded";
-      state.error = "";
-      state.products = state.products
-        .filter((item) => item.product_id !== action.payload)
-        .splice(0, 0, action.payload);
-    });
-    builder.addCase(fetchPatchSellerItem.rejected, (state, action) => {
-      state.status = "failed";
-      state.error = action.error.message || "Something is wrong";
-    });
+    builder
+      .addCase(fetchGetSellerProduct.pending, (state) => {
+        state.status = "loading";
+        state.error = "";
+      })
+      .addCase(fetchGetSellerProduct.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.products = action.payload.results;
+      })
+      .addCase(fetchGetSellerProduct.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message || "Something is wrong";
+        state.products = [];
+      })
+      // 판매자 상품 삭제
+      .addCase(fetchDeleteSellerItem.pending, (state) => {
+        state.status = "loading";
+        state.error = "";
+      })
+      .addCase(fetchDeleteSellerItem.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.products = state.products.filter((item) => item.product_id !== action.payload);
+      })
+      .addCase(fetchDeleteSellerItem.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message || "Something is wrong";
+        state.products = [];
+      })
+      //판매자 상품 등록
+      .addCase(fetchPostItem.pending, (state) => {
+        state.status = "loading";
+        state.error = "";
+      })
+      .addCase(fetchPostItem.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.products = state.products.filter((item) => item.product_id !== action.payload);
+      })
+      .addCase(fetchPostItem.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message || "Something is wrong";
+      })
+      //판매자 상품 수정
+      .addCase(fetchPatchSellerItem.pending, (state) => {
+        state.status = "loading";
+        state.error = "";
+      })
+      .addCase(fetchPatchSellerItem.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.products = state.products
+          .filter((item) => item.product_id !== action.payload)
+          .splice(0, 0, action.payload);
+      })
+      .addCase(fetchPatchSellerItem.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message || "Something is wrong";
+      });
   },
 });
 
