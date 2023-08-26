@@ -5,21 +5,9 @@ import { login } from "../api/auth";
 import { LoginPost } from "../types/auth";
 import { handleAsyncThunkError } from "../utils/slice";
 
-const item = sessionStorage.getItem("userData");
-const TOKEN = item === null ? null : JSON.parse(item).token;
-const USER_TYPE = item === null ? null : JSON.parse(item).user_type;
-const USER_NAME = item === null ? null : JSON.parse(item).username;
-
-type LoginSlice = Slice & {
-  userName: string;
-  userType: string;
-  TOKEN?: string | null;
-};
+type LoginSlice = Slice;
 
 const initialState: LoginSlice = {
-  userName: USER_NAME ? USER_NAME : "",
-  userType: USER_TYPE ? USER_TYPE : "BUYER",
-  TOKEN: TOKEN ? TOKEN : null,
   status: "idle",
   error: "",
 };
@@ -34,17 +22,13 @@ export const fetchPostLogin = createAsyncThunk(
     }
   }
 );
-export const logout = createAsyncThunk("login/logout", async () => {
-  sessionStorage.clear();
-});
 
 export const loginSlice = createSlice({
   name: "login",
   initialState,
   reducers: {
     reset: () => initialState,
-    setLoginUserType: (state, action) => {
-      state.userType = action.payload;
+    logout: (state) => {
       state.status = "idle";
       state.error = "";
     },
@@ -56,10 +40,8 @@ export const loginSlice = createSlice({
         state.status = "loading";
         state.error = "";
       })
-      .addCase(fetchPostLogin.fulfilled, (state, action) => {
+      .addCase(fetchPostLogin.fulfilled, (state) => {
         state.status = "succeeded";
-        state.userName = action.payload.username;
-        state.TOKEN = action.payload.token || "";
       })
       .addCase(fetchPostLogin.rejected, (state, action) => {
         state.status = "failed";
@@ -68,22 +50,11 @@ export const loginSlice = createSlice({
         } else {
           state.error = action.error.message || "Something is wrong in Login:<";
         }
-      })
-      //로그아웃
-      .addCase(logout.fulfilled, (state) => {
-        state.status = "idle";
-        state.error = "";
-        state.userName = "";
-        state.TOKEN = null;
-        state.userType = "BUYER";
       });
   },
 });
 
 export const getAuthState = (state: RootState) => state.login;
-export const getToken = (state: RootState) => state.login.TOKEN;
-export const getLoginUserType = (state: RootState) => state.login.userType;
-
-export const { reset, setLoginUserType } = loginSlice.actions;
+export const { reset, logout } = loginSlice.actions;
 
 export default loginSlice.reducer;

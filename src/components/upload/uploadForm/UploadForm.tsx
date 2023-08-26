@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { getToken } from "../../../reducer/loginSlice";
 import {
   fetchPostItem,
   fetchPatchSellerItem,
@@ -9,28 +8,27 @@ import {
 } from "../../../reducer/sellerSlice";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
 import { useModal } from "../../../hooks/useModal";
+import { Product, ProductPost } from "../../../types/product";
 import { NormalBtn } from "../../common/Button/Button";
 import { NumInput, TextInput } from "../InputBox/InputBox";
 import UploadImgBox from "../uploadImg/UploadImg";
 import Modal from "../../common/Modal/Modal";
 import * as S from "./uploadFormStyle";
-import { Product, ProductPost } from "../../../types/product";
 
 function UploadForm({ itemInfo }: { itemInfo?: Product }) {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const TOKEN = useAppSelector(getToken) || "";
   const modifyId = useAppSelector(selectModifyId);
   const { isOpen, open } = useModal();
 
   const initialValues: ProductPost = {
-    product_name: itemInfo?.product_name,
-    image: itemInfo?.image,
-    price: itemInfo?.price,
-    shipping_method: itemInfo?.shipping_method,
-    shipping_fee: itemInfo?.shipping_fee,
-    stock: itemInfo?.stock,
-    product_info: itemInfo?.product_info,
+    product_name: itemInfo?.product_name || "",
+    image: itemInfo?.image || "",
+    price: itemInfo?.price || 0,
+    shipping_method: itemInfo?.shipping_method || "",
+    shipping_fee: itemInfo?.shipping_fee || 0,
+    stock: itemInfo?.stock || 0,
+    product_info: itemInfo?.product_info || "",
   };
   const [deliveryBtn, setDeliveryBtn] = useState(itemInfo?.shipping_method);
   const [formValues, setFormValues] = useState(initialValues);
@@ -59,9 +57,9 @@ function UploadForm({ itemInfo }: { itemInfo?: Product }) {
     if (modifyId) {
       const formData = { ...formValues };
       if (itemInfo?.image === formValues.image) delete formData.image;
-      dispatch(fetchPatchSellerItem({ TOKEN, product_id: modifyId, formValues: formData }));
+      dispatch(fetchPatchSellerItem({ product_id: modifyId, formValues: formData }));
     } else {
-      dispatch(fetchPostItem({ TOKEN, formValues }));
+      dispatch(fetchPostItem({ formValues }));
     }
     open("예");
   };

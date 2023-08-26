@@ -27,15 +27,16 @@ import {
   phone2RegExp,
   phone3RegExp,
 } from "../../../utils/regExp";
-import { JoinPost } from "../../../types/auth";
+import { JoinPost, UserType } from "../../../types/auth";
 import * as S from "./joinFormStyle";
 
 function JoinForm() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { userType, nameStatus, nameMessage, companyNumberStatus, companyMessage, status, error } =
+  const { nameStatus, nameMessage, companyNumberStatus, companyMessage, status, error } =
     useAppSelector(getJoinState);
 
+  const [toggleUserType, setToggleUserType] = useState<UserType>("BUYER");
   const [formValues, setFormValues] = useState(initialValues);
   const [errorMessage, setErrorMessage] = useState(initialError);
   const [sellerValues, setSellerValues] = useState(initialSellerValues);
@@ -176,7 +177,7 @@ function JoinForm() {
       alert("아이디 인증을 완료해 주세요.");
       return;
     }
-    if (userType === "SELLER" && companyNumberStatus !== "succeeded") {
+    if (toggleUserType === "SELLER" && companyNumberStatus !== "succeeded") {
       alert("사업자 등록 번호 인증을 완료해 주세요.");
       return;
     }
@@ -189,14 +190,14 @@ function JoinForm() {
       phone_number: `${phone1}${phone2}${phone3}`,
       name,
     };
-    if (userType === "SELLER") {
+    if (toggleUserType === "SELLER") {
       userData = {
         company_registration_number: sellerValues.registrationNumber,
         store_name: sellerValues.storeName,
         ...userData,
       };
     }
-    dispatch(fetchPostRegister({ userType, userData }));
+    dispatch(fetchPostRegister({ userType: toggleUserType, userData }));
   };
 
   //가입하기 버튼 클릭시 로딩 화면 보여주기
@@ -206,7 +207,7 @@ function JoinForm() {
 
   return (
     <S.JoinFormSection>
-      <ToggleBtn />
+      <ToggleBtn toggleUserType={toggleUserType} onToggle={setToggleUserType} />
       <S.JoinForm onSubmit={onSubmit}>
         <S.InputBoxs>
           <InputBox
@@ -266,7 +267,7 @@ function JoinForm() {
             value2={formValues.email2}
             error={errorMessage.email}
           />
-          {userType === "SELLER" ? (
+          {toggleUserType === "SELLER" ? (
             <>
               <InputBox
                 label="사업자 등록번호"

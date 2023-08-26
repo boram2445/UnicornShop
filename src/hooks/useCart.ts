@@ -11,7 +11,6 @@ import {
   selectCheckedItems,
   setTotalPrice,
 } from "../reducer/cartListSlice";
-import { getToken } from "../reducer/loginSlice";
 import { useModal } from "./useModal";
 
 export const useCart = () => {
@@ -25,12 +24,11 @@ export const useCart = () => {
 
   const isAllChecked = useAppSelector(selectCheckAllState);
   const checkedItems = useAppSelector(selectCheckedItems);
-  const TOKEN = useAppSelector(getToken) || "";
 
   useEffect(() => {
     dispatch(reset());
     setOnReset(true);
-    dispatch(fetchGetCartList(TOKEN));
+    dispatch(fetchGetCartList());
   }, []);
 
   //개별 상품 지우기 재확인 모달 열기
@@ -42,7 +40,7 @@ export const useCart = () => {
 
   //개별 상품 삭제후 모달 닫기
   function deleteCartItem() {
-    dispatch(fetchDeleteCartItem({ TOKEN, cart_item_id: cartItemId }));
+    dispatch(fetchDeleteCartItem({ cart_item_id: cartItemId }));
     close();
     setDeleteType("");
   }
@@ -56,7 +54,7 @@ export const useCart = () => {
   //선택상품 모두 지우기후 모달 닫기
   function deleteSelectItems() {
     checkedItems.forEach((item) => {
-      dispatch(fetchDeleteCartItem({ TOKEN, cart_item_id: item.cart_item_id }));
+      dispatch(fetchDeleteCartItem({ cart_item_id: item.cart_item_id }));
     });
     close();
     setDeleteType("");

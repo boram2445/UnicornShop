@@ -1,53 +1,40 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
-import { getLoginUserType, getToken } from "../../../reducer/loginSlice";
-import {
-  fetchDeleteSellerItem,
-  fetchGetSellerProduct,
-  getSellerStatus,
-  selectSellerProducts,
-} from "../../../reducer/sellerSlice";
-import { getOrderState } from "../../../reducer/orderSlice";
+import { fetchDeleteSellerItem, selectSellerProducts } from "../../../reducer/sellerSlice";
+import { getOrderedItems } from "../../../reducer/orderSlice";
 import { useModal } from "../../../hooks/useModal";
 import ChartItem from "../ChartItem/ChartItem";
 import Modal from "../Modal/Modal";
 import * as S from "./chartStyle";
 
-function Chart() {
-  const dispatch = useAppDispatch();
-  const TOKEN = useAppSelector(getToken);
-  const userType = useAppSelector(getLoginUserType);
+type Props = {
+  isLogined: boolean;
+  userType: string;
+};
 
-  const sellerStatus = userType === "SELLER" && useAppSelector(getSellerStatus);
-  const sellProducts = userType === "SELLER" ? useAppSelector(selectSellerProducts) : [];
+function Chart({ isLogined, userType }: Props) {
+  const dispatch = useAppDispatch();
   const { isOpen, open, close } = useModal();
-  const { orderedDetail } = useAppSelector(getOrderState);
+
+  const sellProducts = userType === "SELLER" ? useAppSelector(selectSellerProducts) : [];
+  const orderedDetail = userType === "BUYER" ? useAppSelector(getOrderedItems) : [];
 
   const [selectedItemId, setSelectedItemId] = useState(0);
 
-  useEffect(() => {
-    if (TOKEN && userType === "SELLER" && sellerStatus === "idle") {
-      dispatch(fetchGetSellerProduct(TOKEN));
-    }
-  }, [TOKEN, userType, sellerStatus]);
-
-  //상품 지우기 확인 모달 열기
   function OpenDeleteModal(product_id: number) {
     open("확인");
     setSelectedItemId(product_id);
   }
 
-  //상품 지우기 함수
   function deleteItem() {
-    if (TOKEN) {
-      dispatch(fetchDeleteSellerItem({ TOKEN, product_id: selectedItemId }));
+    if (isLogined) {
+      dispatch(fetchDeleteSellerItem({ product_id: selectedItemId }));
       close();
     }
   }
 
-  //사용자 종류에 따른 content 변경
   let content;
-  if (userType === "SELLER") {
+  if (userType === "SELLER" && sellProducts) {
     content = (
       <>
         <S.TopWrap>
@@ -64,7 +51,12 @@ function Chart() {
             </S.NoItemBox>
           ) : (
             sellProducts.map((item) => (
-              <ChartItem key={item.product_id} item={item} deleteModal={OpenDeleteModal} />
+              <ChartItem
+                key={item.product_id}
+                item={item}
+                deleteModal={OpenDeleteModal}
+                userType={userType}
+              />
             ))
           )}
         </S.ListWrap>
@@ -80,7 +72,7 @@ function Chart() {
           <strong>배송상태</strong>
         </S.TopWrap>
         <S.ListWrap>
-          {orderedDetail.length === 0 ? (
+          {orderedDetail?.length === 0 ? (
             <S.NoItemBox>
               <p>아직 구매한 상품이 없습니다.</p>
               <small>다양한 상품을 구매해 보세요 :)</small>
@@ -93,6 +85,7 @@ function Chart() {
                 orderDate={item.created_at}
                 item={item.detail}
                 deleteModal={OpenDeleteModal}
+                userType={userType}
               />
             ))
           )}

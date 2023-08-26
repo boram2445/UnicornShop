@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-import { getToken } from "../../../reducer/loginSlice";
 import { fetchPutCartQuantity } from "../../../reducer/cartListSlice";
-import { useAppDispatch, useAppSelector } from "../../../hooks";
+import { useAppDispatch } from "../../../hooks";
 import { ReactComponent as PlusIcon } from "../../../assets/icons/icon-plus-line.svg";
 import { ReactComponent as MinusIcon } from "../../../assets/icons/icon-minus-line.svg";
-import * as S from "./amountStyle";
 import { CartProduct } from "../../../types/cart";
+import * as S from "./amountStyle";
 
 type AmountBtnProps = {
   selectAmount?: number;
@@ -18,7 +17,6 @@ type AmountBtnProps = {
 
 function AmountBtn({ selectAmount = 0, getCount, item, stock }: AmountBtnProps) {
   const dispatch = useAppDispatch();
-  const TOKEN = useAppSelector(getToken) || "";
 
   const [amount, setAmount] = useState(selectAmount || 1);
   const [onIncreaseBtn, setOnIncreaseBtn] = useState(stock > 0 && selectAmount <= stock);
@@ -46,7 +44,7 @@ function AmountBtn({ selectAmount = 0, getCount, item, stock }: AmountBtnProps) 
   const handleCartQuantity = (quantity: number) => {
     if (item) {
       const { product_id, cart_item_id, is_active } = item;
-      dispatch(fetchPutCartQuantity({ TOKEN, product_id, quantity, cart_item_id, is_active }));
+      dispatch(fetchPutCartQuantity({ product_id, quantity, cart_item_id, is_active }));
     }
   };
 

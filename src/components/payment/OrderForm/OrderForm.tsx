@@ -1,7 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
-import { getToken } from "../../../reducer/loginSlice";
 import { fetchPostOrder, getOrderState, reset } from "../../../reducer/orderSlice";
 import { fetchGetCartList } from "../../../reducer/cartListSlice";
 import { emailRegExp, nameRegExp } from "../../../utils/regExp";
@@ -20,7 +19,6 @@ function OrderForm() {
   const navigate = useNavigate();
   const addressDetailRef = useRef() as React.MutableRefObject<HTMLInputElement>;
 
-  const TOKEN = useAppSelector(getToken) || "";
   const { status } = useAppSelector(getOrderState);
   const {
     orderItems,
@@ -104,7 +102,7 @@ function OrderForm() {
           address_message: message,
           payment_method: checkBox.payMethod,
         };
-        dispatch(fetchPostOrder({ TOKEN, info }));
+        dispatch(fetchPostOrder({ info }));
       });
     } //카트 상품 모두 주문
     else if (orderType === "cart_order") {
@@ -117,10 +115,10 @@ function OrderForm() {
         address_message: message,
         payment_method: checkBox.payMethod,
       };
-      dispatch(fetchPostOrder({ TOKEN, info }));
+      dispatch(fetchPostOrder({ info }));
     }
     sessionStorage.removeItem("order");
-    dispatch(fetchGetCartList(TOKEN));
+    dispatch(fetchGetCartList());
     navigate("/orderDone");
   };
 

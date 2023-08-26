@@ -22,7 +22,6 @@ export type CartProduct = {
 };
 
 export type CartProductCount = {
-  TOKEN: string;
   cart_item_id: number;
   product_id: number;
   quantity: number;

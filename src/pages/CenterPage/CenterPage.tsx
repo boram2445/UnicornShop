@@ -1,7 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAppSelector } from "../../hooks";
-import { getSellerStatus, selectSellerProducts } from "../../reducer/sellerSlice";
+import { useAppDispatch, useAppSelector } from "../../hooks";
+import { useUser } from "../../hooks/useUser";
+import {
+  fetchGetSellerProduct,
+  getSellerStatus,
+  selectSellerProducts,
+} from "../../reducer/sellerSlice";
 import { NormalBtn } from "../../components/common/Button/Button";
 import Chart from "../../components/common/Chart/Chart";
 import TabNav from "../../components/common/TabNav/TabNav";
@@ -12,13 +17,23 @@ import * as S from "./centerPageStyle";
 
 function CenterPage() {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   const status = useAppSelector(getSellerStatus);
   const products = useAppSelector(selectSellerProducts);
 
   const [selectedTab, setSelectedTab] = useState("products");
+  const { isLogined, userType } = useUser();
+
+  console.log("centerPage", isLogined, userType);
 
   const handleTabNav = (type: string) => setSelectedTab(type);
+
+  useEffect(() => {
+    if (isLogined && userType === "SELLER" && status === "idle") {
+      dispatch(fetchGetSellerProduct());
+    }
+  }, [isLogined, userType, status]);
 
   if (status === "loading") return <Spinner />;
   return (
@@ -45,7 +60,7 @@ function CenterPage() {
             selectedTab={selectedTab}
             quantity={1}
           />
-          {selectedTab === "products" && <Chart />}
+          {selectedTab === "products" && <Chart isLogined={isLogined} userType={userType} />}
           {!(selectedTab === "products") && dummyContent}
         </S.ContentWrap>
       </S.Container>

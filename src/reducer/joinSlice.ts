@@ -8,7 +8,6 @@ import { handleAsyncThunkError } from "../utils/slice";
 type JoinSlice = Slice & {
   nameStatus: RequestStatus;
   companyNumberStatus: RequestStatus;
-  userType: string;
   nameMessage: string;
   companyMessage: string;
 };
@@ -20,7 +19,6 @@ const initialState: JoinSlice = {
   companyNumberStatus: "idle",
   nameMessage: "",
   companyMessage: "",
-  userType: "BUYER",
 };
 
 export const fetchPostUserName = createAsyncThunk(
@@ -71,8 +69,7 @@ export const registerSlice = createSlice({
       state.status = "idle";
       state.error = "";
     },
-    setJoinUserType: (state, action) => {
-      state.userType = action.payload;
+    setJoinUserType: (state) => {
       state.nameStatus = "idle";
       state.nameMessage = "";
       state.companyNumberStatus = "idle";
@@ -126,6 +123,7 @@ export const registerSlice = createSlice({
       .addCase(fetchPostRegister.rejected, (state, action) => {
         state.status = "failed";
         if (action.payload) {
+          console.log(state.error);
           state.error = Object.values(action.payload as any)
             .map((message: any) => message.join().toString())
             .join("\n");
@@ -137,8 +135,6 @@ export const registerSlice = createSlice({
 });
 
 export const getJoinState = (state: RootState) => state.register;
-export const getJoinUserType = (state: RootState) => state.register.userType;
-
 export const { resetAll, resetName, resetCompany, resetRegister, setJoinUserType } =
   registerSlice.actions;
 export default registerSlice.reducer;

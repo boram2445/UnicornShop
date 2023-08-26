@@ -1,9 +1,7 @@
 import React, { useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../../../hooks";
-import { getAuthState, logout } from "../../../reducer/loginSlice";
-import { reset } from "../../../reducer/cartListSlice";
 import { useModal } from "../../../hooks/useModal";
+import { useUser } from "../../../hooks/useUser";
 import ArrowModal from "../ArrowModal/ArrowModal";
 import Modal from "../Modal/Modal";
 import { ReactComponent as CartIcon } from "../../../assets/icons/icon-shopping-cart.svg";
@@ -12,29 +10,27 @@ import { ReactComponent as BagIcon } from "../../../assets/icons/icon-shopping-b
 import * as S from "./iconNavStyle";
 
 function IconNav({ cartQuantity }: { cartQuantity: number }) {
-  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const { isOpen, open } = useModal();
-  const { TOKEN, userName, userType } = useAppSelector(getAuthState);
+  const { isLogined, userName, userType, onLogout } = useUser();
 
   const [onArrowModal, setArrowModal] = useState(false);
   const userBtnRef = useRef() as React.MutableRefObject<HTMLButtonElement>;
 
-  const clickCartIcon = TOKEN ? () => navigate("/cart") : () => open("예");
-  const clickUserIcon = TOKEN ? () => setArrowModal((prev) => !prev) : () => navigate("/login");
-  const onArrowIcon = !TOKEN ? undefined : onArrowModal ? "open" : "close"; //헤더 화살표 아이콘
+  const clickCartIcon = isLogined ? () => navigate("/cart") : () => open("예");
+  const clickUserIcon = isLogined ? () => setArrowModal((prev) => !prev) : () => navigate("/login");
+  const onArrowIcon = !isLogined ? undefined : onArrowModal ? "open" : "close"; //헤더 화살표 아이콘
 
   const handleArrowModal = (value: boolean) => setArrowModal(value);
   const arrowList = [
     { label: "마이페이지", onClick: () => navigate("/mypage") },
-    { label: "로그아웃", onClick: () => onLogout() },
+    { label: "로그아웃", onClick: () => handleLogout() },
   ];
 
-  const onLogout = () => {
-    dispatch(logout());
+  const handleLogout = () => {
+    onLogout();
     handleArrowModal(false);
-    userType === "BUYER" && dispatch(reset());
     navigate("/");
   };
 
@@ -49,7 +45,7 @@ function IconNav({ cartQuantity }: { cartQuantity: number }) {
       <S.UerModalWrap>
         <S.WideNavBtn type="button" onClick={clickUserIcon} arrow={onArrowIcon} ref={userBtnRef}>
           <UserIcon stroke="black" />
-          <small className="txt-ellipsis">{TOKEN ? userName : "로그인"}</small>
+          <small className="txt-ellipsis">{isLogined ? userName : "로그인"}</small>
         </S.WideNavBtn>
         {onArrowModal && (
           <ArrowModal
@@ -63,7 +59,7 @@ function IconNav({ cartQuantity }: { cartQuantity: number }) {
     </>
   );
 
-  if (TOKEN && userType === "SELLER")
+  if (isLogined && userType === "SELLER")
     return (
       <>
         {!pathname.includes("center") && (
@@ -77,7 +73,7 @@ function IconNav({ cartQuantity }: { cartQuantity: number }) {
     );
   return (
     <>
-      {!TOKEN && isOpen ? needLoginModal : null}
+      {!isLogined && isOpen ? needLoginModal : null}
       <S.NavBtn quantity={cartQuantity} onClick={clickCartIcon}>
         <CartIcon stroke="black" />
       </S.NavBtn>

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../hooks";
 import { fetchGetCartList, fetchPostCart, getCartState } from "../../reducer/cartListSlice";
-import { getToken, getLoginUserType } from "../../reducer/loginSlice";
 import { fetchProductDetail, getDetailState } from "../../reducer/detailSlice";
 import { useModal } from "../../hooks/useModal";
 import ProductDetail from "../../components/detail/ProductDetail/ProductDetail";
@@ -11,6 +10,7 @@ import DetailTab from "../../components/detail/DetailTab/DetailTab";
 import { NormalBtn } from "../../components/common/Button/Button";
 import Modal from "../../components/common/Modal/Modal";
 import Spinner from "../../components/common/Spinner/Spinner";
+import { useUser } from "../../hooks/useUser";
 import * as S from "./detailPageStyle";
 
 function DetailPage() {
@@ -20,9 +20,7 @@ function DetailPage() {
   const { postStatus } = useAppSelector(getCartState);
   const { status, detail } = useAppSelector(getDetailState);
   const { isOpen, open } = useModal();
-
-  const TOKEN = useAppSelector(getToken) || "";
-  const USER_TYPE = useAppSelector(getLoginUserType);
+  const { isLogined, userType } = useUser();
 
   const [selectedCount, setSelectedCount] = useState(1);
 
@@ -32,12 +30,12 @@ function DetailPage() {
 
   useEffect(() => {
     if (postStatus === "succeeded") {
-      dispatch(fetchGetCartList(TOKEN));
+      dispatch(fetchGetCartList());
     }
   }, [postStatus]);
 
   const getProductCount = (res: number) => setSelectedCount(res);
-  const disableBtn = USER_TYPE === "SELLER" || detail?.stock === 0;
+  const disableBtn = userType === "SELLER" || detail?.stock === 0;
 
   //주문, 결제시 새로고침해도 유지되도록 세션스토리지에 저장
   const getProductNow = () => {
@@ -53,7 +51,7 @@ function DetailPage() {
 
   const getProductCart = () => {
     dispatch(
-      fetchPostCart({ TOKEN, product_id: detail?.product_id, quantity: selectedCount, check: true })
+      fetchPostCart({ product_id: detail?.product_id, quantity: selectedCount, check: true })
     );
     open("예");
   };
@@ -74,8 +72,8 @@ function DetailPage() {
   if (status === "loading") return <Spinner />;
   return (
     <>
-      {!TOKEN && isOpen ? needLoginModal : null}
-      {TOKEN && isOpen ? putInCartModal : null}
+      {!isLogined && isOpen ? needLoginModal : null}
+      {isLogined && isOpen ? putInCartModal : null}
       {detail && (
         <S.DetailLayout>
           <S.ProductWrap>
@@ -91,7 +89,7 @@ function DetailPage() {
               {/* 상품 구매 버튼 */}
               <S.ButtonWrap>
                 <NormalBtn
-                  onClick={TOKEN ? getProductNow : () => open("예")}
+                  onClick={isLogined ? getProductNow : () => open("예")}
                   padding="14px 0"
                   disabled={disableBtn}
                 >
