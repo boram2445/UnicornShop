@@ -1,12 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
-import { getToken } from "../../../reducer/loginSlice";
 import { fetchPostOrder, getOrderState, reset } from "../../../reducer/orderSlice";
 import { fetchGetCartList } from "../../../reducer/cartListSlice";
 import { emailRegExp, nameRegExp } from "../../../utils/regExp";
 import limitLength from "../../../utils/limitLength";
-
 import { NormalBtn } from "../../common/Button/Button";
 import SelectBox from "../../common/SelectBox/SelectBox";
 import FinalPayCheck from "../FinalPayCheck/FinalPayCheck";
@@ -20,7 +18,6 @@ function OrderForm() {
   const navigate = useNavigate();
   const addressDetailRef = useRef() as React.MutableRefObject<HTMLInputElement>;
 
-  const TOKEN = useAppSelector(getToken) || "";
   const { status } = useAppSelector(getOrderState);
   const {
     orderItems,
@@ -66,27 +63,23 @@ function OrderForm() {
     return newValue;
   };
 
-  //주문자 정보 입력
   const onChangeOrdererInfo = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     const newValue = limitInputValue(name, value);
     setOrdererInfo({ ...ordererInfo, [name]: newValue });
   };
 
-  //배송지 정보 입력
   const onChangeReceiverInfo = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     const newValue = limitInputValue(name, value);
     setReceiverInfo({ ...receiverInfo, [name]: newValue });
   };
 
-  //주문자 정보와 동일 버튼 클릭
   const handleSameInfoBtn = () => {
     const { name, phone1, phone2, phone3 } = ordererInfo;
     setReceiverInfo({ ...receiverInfo, name, phone1, phone2, phone3 });
   };
 
-  //주문 폼 제출
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const { name, phone1, phone2, phone3, address, message } = receiverInfo;
@@ -104,7 +97,7 @@ function OrderForm() {
           address_message: message,
           payment_method: checkBox.payMethod,
         };
-        dispatch(fetchPostOrder({ TOKEN, info }));
+        dispatch(fetchPostOrder({ info }));
       });
     } //카트 상품 모두 주문
     else if (orderType === "cart_order") {
@@ -117,10 +110,10 @@ function OrderForm() {
         address_message: message,
         payment_method: checkBox.payMethod,
       };
-      dispatch(fetchPostOrder({ TOKEN, info }));
+      dispatch(fetchPostOrder({ info }));
     }
     sessionStorage.removeItem("order");
-    dispatch(fetchGetCartList(TOKEN));
+    dispatch(fetchGetCartList());
     navigate("/orderDone");
   };
 

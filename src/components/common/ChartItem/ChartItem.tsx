@@ -1,25 +1,24 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../../../hooks";
+import { useAppDispatch } from "../../../hooks";
 import { getModifyId } from "../../../reducer/sellerSlice";
-
-import { getLoginUserType } from "../../../reducer/loginSlice";
+import { UserType } from "../../../types/auth";
 import { convertDate } from "../../../utils/convertDate";
 import { NormalBtn } from "../Button/Button";
-import * as S from "./chartItemStyle";
 import { Product } from "../../../types/product";
+import * as S from "./chartItemStyle";
 
-type ChartItemProps = {
+type Props = {
   item: Product;
   quantity?: number;
   orderDate?: string;
   deleteModal: (id: number) => void;
+  userType: UserType;
 };
 
-function ChartItem({ item, quantity, orderDate, deleteModal }: ChartItemProps) {
+function ChartItem({ item, quantity, orderDate, deleteModal, userType }: Props) {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const userType = useAppSelector(getLoginUserType);
   const { product_id, product_name, stock, price, image } = item;
 
   const onModifyBtn = () => {
@@ -73,7 +72,6 @@ function ChartItem({ item, quantity, orderDate, deleteModal }: ChartItemProps) {
 
 export default ChartItem;
 
-//임시 배송 상태
 const deliveryState = (orderDate: string) => {
   const order = new Date(orderDate);
   const now = new Date();

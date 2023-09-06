@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks";
-import { getToken, getLoginUserType } from "../../reducer/loginSlice";
 import { fetchOrderedDetails, fetchGetOrderList, getOrderState } from "../../reducer/orderSlice";
+import { useUser } from "../../hooks/useUser";
 import TabNav from "../../components/common/TabNav/TabNav";
 import Spinner from "../../components/common/Spinner/Spinner";
 import Chart from "../../components/common/Chart/Chart";
@@ -10,31 +10,31 @@ import * as S from "../../pages/CenterPage/centerPageStyle";
 
 function MyPage() {
   const dispatch = useAppDispatch();
-  const TOKEN = useAppSelector(getToken);
-  const userType = useAppSelector(getLoginUserType);
-  const { status, orderedInfo, orderedDetail } = useAppSelector(getOrderState);
+  const { status, detailStatus, orderedInfo, orderedDetail } = useAppSelector(getOrderState);
+  const { isLogined, userType } = useUser();
 
   const [selectedTab, setSelectedTab] = useState(userType === "BUYER" ? "order" : "myInfo");
 
   useEffect(() => {
-    if (TOKEN && userType === "BUYER") {
-      dispatch(fetchGetOrderList(TOKEN));
+    if (isLogined && userType === "BUYER") {
+      dispatch(fetchGetOrderList());
     }
-  }, []);
+  }, [isLogined, userType]);
 
   useEffect(() => {
     if (userType === "BUYER" && orderedInfo) {
       dispatch(fetchOrderedDetails(orderedInfo));
     }
-  }, [orderedInfo]);
+  }, [orderedInfo, orderedInfo]);
 
   const handleTabNav = (type: string) => setSelectedTab(type);
 
   let content;
-  if (userType === "BUYER" && selectedTab === "order") content = <Chart />;
+  if (userType === "BUYER" && selectedTab === "order")
+    content = <Chart isLogined={isLogined} userType={userType} />;
   else content = dummyContent;
 
-  if (status === "loading") return <Spinner />;
+  if (status === "loading" || detailStatus === "loading") return <Spinner />;
   return (
     <S.Container>
       <S.TitleText>마이페이지</S.TitleText>

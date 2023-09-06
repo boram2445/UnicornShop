@@ -112,8 +112,10 @@ export const cartListSlice = createSlice({
         const newCartItems = state.cartItems.filter((item) => item.cart_item_id !== deleteItemId);
         //가격 재 계산
         state.cartItems.forEach((item) => {
-          if (item.cart_item_id === deleteItemId && item.isChecked)
+          if (item.cart_item_id === deleteItemId && item.isChecked) {
             state.totalPrice -= item.quantity * item.item.price;
+            state.deliveryPrice -= item.item.shipping_fee;
+          }
         });
         state.cartItems = newCartItems;
       })

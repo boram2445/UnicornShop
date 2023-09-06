@@ -27,15 +27,16 @@ import {
   phone2RegExp,
   phone3RegExp,
 } from "../../../utils/regExp";
-import { JoinPost } from "../../../types/auth";
+import { JoinPost, UserType } from "../../../types/auth";
 import * as S from "./joinFormStyle";
 
 function JoinForm() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { userType, nameStatus, nameMessage, companyNumberStatus, companyMessage, status, error } =
+  const { nameStatus, nameMessage, companyNumberStatus, companyMessage, status, error } =
     useAppSelector(getJoinState);
 
+  const [toggleUserType, setToggleUserType] = useState<UserType>("BUYER");
   const [formValues, setFormValues] = useState(initialValues);
   const [errorMessage, setErrorMessage] = useState(initialError);
   const [sellerValues, setSellerValues] = useState(initialSellerValues);
@@ -54,12 +55,10 @@ function JoinForm() {
     }
   }, [status]);
 
-  //아이디 중복 확인 버튼 클릭 이벤트
   const checkUserNameVaild = (username: string) => {
     dispatch(fetchPostUserName(username));
   };
 
-  //아이디
   const onChangeUsername = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (nameStatus !== "idle") dispatch(resetName());
     else {
@@ -73,7 +72,6 @@ function JoinForm() {
     }
   };
 
-  //비밀번호
   const onChangePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     const newValue = limitLength(value, 20);
@@ -87,7 +85,6 @@ function JoinForm() {
     }
   };
 
-  //비밀번호 재확인
   const onChangeConfirmPassword = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     const newValue = limitLength(value, 20);
@@ -97,7 +94,6 @@ function JoinForm() {
     setErrorMessage({ ...errorMessage, [name]: message });
   };
 
-  //이름
   const onChangeName = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     const newValue = limitLength(value, 10);
@@ -107,14 +103,12 @@ function JoinForm() {
     setErrorMessage({ ...errorMessage, [name]: error });
   };
 
-  //휴대폰 번호
   const onClickPhone = (selected: string) => {
     setFormValues({ ...formValues, ["phone1"]: selected });
   };
 
   const onChangePhone = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    //숫자 4자리만 입력 가능
     const newValue = limitLength(value, 4).replace(/[^0-9]/g, "");
     const message = "* 휴대폰번호 입력 형식을 확인해주세요";
     const regExp = name === "phone2" ? phone2RegExp : phone3RegExp;
@@ -123,7 +117,6 @@ function JoinForm() {
     setErrorMessage({ ...errorMessage, ["phone"]: error });
   };
 
-  //이메일 - 개선 필요
   const onChangeEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     const message = "* 이메일 형식을 확인해 주세요";
@@ -133,17 +126,14 @@ function JoinForm() {
     setErrorMessage({ ...errorMessage, ["email"]: error });
   };
 
-  //체크박스
   const onChangeCheckbox = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormValues({ ...formValues, ["checkBox"]: e.target.checked });
   };
 
-  //사업자 등록번호 인증 이벤트
   const checkRegistrationNumber = (number: string) => {
     dispatch(fetchPostCompanyNumber(number));
   };
 
-  //사업자 등록번호
   const onChangeRegistrationNumber = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (companyNumberStatus === "succeeded") dispatch(resetCompany());
     else {
@@ -164,19 +154,17 @@ function JoinForm() {
     }
   };
 
-  //스토어 이름
   const onChangeStoreName = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSellerValues({ ...sellerValues, ["storeName"]: e.target.value });
   };
 
-  //회원가입 폼 제출
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (nameStatus !== "succeeded") {
       alert("아이디 인증을 완료해 주세요.");
       return;
     }
-    if (userType === "SELLER" && companyNumberStatus !== "succeeded") {
+    if (toggleUserType === "SELLER" && companyNumberStatus !== "succeeded") {
       alert("사업자 등록 번호 인증을 완료해 주세요.");
       return;
     }
@@ -189,24 +177,22 @@ function JoinForm() {
       phone_number: `${phone1}${phone2}${phone3}`,
       name,
     };
-    if (userType === "SELLER") {
+    if (toggleUserType === "SELLER") {
       userData = {
         company_registration_number: sellerValues.registrationNumber,
         store_name: sellerValues.storeName,
         ...userData,
       };
     }
-    dispatch(fetchPostRegister({ userType, userData }));
+    dispatch(fetchPostRegister({ userType: toggleUserType, userData }));
   };
 
-  //가입하기 버튼 클릭시 로딩 화면 보여주기
   if (status === "loading") {
     return <Spinner />;
   }
-
   return (
     <S.JoinFormSection>
-      <ToggleBtn />
+      <ToggleBtn toggleUserType={toggleUserType} onToggle={setToggleUserType} />
       <S.JoinForm onSubmit={onSubmit}>
         <S.InputBoxs>
           <InputBox
@@ -266,7 +252,7 @@ function JoinForm() {
             value2={formValues.email2}
             error={errorMessage.email}
           />
-          {userType === "SELLER" ? (
+          {toggleUserType === "SELLER" ? (
             <>
               <InputBox
                 label="사업자 등록번호"

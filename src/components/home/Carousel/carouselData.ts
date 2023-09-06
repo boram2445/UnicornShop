@@ -1,4 +1,4 @@
-//캐러셀 임시 데이터 (원래는 서버에서 받아와야 한다!)
+//캐러셀 임시 데이터
 export const carouselData = [
   { id: 1, title: "image 1" },
   { id: 2, title: "image 2" },

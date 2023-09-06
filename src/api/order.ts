@@ -1,20 +1,20 @@
 import axios from "axios";
 import { OrderList, OrderPost } from "../types/order";
-import { authConfig, baseAPI } from "./baseInstance";
+import { baseAPI } from "./baseInstance";
 
-export const postOrder = async ({ TOKEN, info }: { TOKEN: string; info: OrderPost }) => {
+export const postOrder = async ({ info }: { info: OrderPost }) => {
   const data = info;
   const selectData =
     info.order_kind === "cart_order"
       ? data
       : { ...data, product_id: info.product_id, quantity: info.quantity };
 
-  const result = await baseAPI.post(`/order/`, selectData, authConfig(TOKEN));
+  const result = await baseAPI.post(`/order/`, selectData);
   return result.data;
 };
 
-export const getOrderList = async (TOKEN: string) => {
-  const result = await baseAPI.get(`/order/`, authConfig(TOKEN));
+export const getOrderList = async () => {
+  const result = await baseAPI.get(`/order/`);
   return result.data;
 };
 

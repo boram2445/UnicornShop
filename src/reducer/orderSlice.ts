@@ -32,7 +32,7 @@ const initialState: OrderSlice = {
 
 export const fetchPostOrder = createAsyncThunk(
   "order/fetchPostOrder",
-  async (data: { TOKEN: string; info: OrderPost }, { rejectWithValue }) => {
+  async (data: { info: OrderPost }, { rejectWithValue }) => {
     try {
       return await postOrder(data);
     } catch (err: any) {
@@ -116,6 +116,7 @@ export const orderSlice = createSlice({
   },
 });
 
+export const getOrderedItems = (state: RootState) => state.order.orderedDetail;
 export const getOrderState = (state: RootState) => state.order;
 export const { reset, setOrderItem } = orderSlice.actions;
 export default orderSlice.reducer;

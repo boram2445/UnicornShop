@@ -24,7 +24,6 @@ function Modal({ children, onClickYes }: ModalProps) {
     };
   }, []);
 
-  //배경화면 클릭시 모달창 닫기
   const onBackgroundClick = (e: React.MouseEvent<HTMLElement>) => {
     if (backgroundRef.current === e.target) {
       dispatch(closeModal());

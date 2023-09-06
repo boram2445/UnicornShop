@@ -4,6 +4,7 @@ import { fetchPostLogin, getAuthState } from "../../../reducer/loginSlice";
 import { useAppDispatch, useAppSelector } from "../../../hooks";
 import { NormalBtn } from "../../common/Button/Button";
 import ToggleBtn from "../../common/ToggleBtn/ToggleBtn";
+import { UserType } from "../../../types/auth";
 import * as S from "./loginFormStyle";
 
 function LoginForm() {
@@ -17,8 +18,8 @@ function LoginForm() {
   };
   const [formValues, setFormValues] = useState(initialValues);
   const [message, setMessage] = useState("");
-
-  const { status, error, userType } = useAppSelector(getAuthState);
+  const [toggleUserType, setToggleUserType] = useState<UserType>("BUYER");
+  const { status, error } = useAppSelector(getAuthState);
 
   useEffect(() => {
     if (status === "failed") {
@@ -32,14 +33,12 @@ function LoginForm() {
     }
   }, [status]);
 
-  //아이디 & 비밀번호 입력
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMessage("");
     const { name, value } = e.target;
     setFormValues({ ...formValues, [name]: value });
   };
 
-  //로그인 폼 제출
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (message) return;
@@ -47,14 +46,14 @@ function LoginForm() {
     const userData = {
       username,
       password,
-      login_type: userType,
+      login_type: toggleUserType,
     };
     dispatch(fetchPostLogin(userData));
   };
 
   return (
     <S.LoginSection>
-      <ToggleBtn />
+      <ToggleBtn toggleUserType={toggleUserType} onToggle={setToggleUserType} />
       <S.LoginForm onSubmit={onSubmit}>
         <S.LoginInput
           type="text"

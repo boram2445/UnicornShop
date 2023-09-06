@@ -14,3 +14,5 @@ export type LoginPost = {
   password: string;
   login_type: string;
 };
+
+export type UserType = "BUYER" | "SELLER";

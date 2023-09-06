@@ -11,11 +11,11 @@ import { CartProduct } from "../../../types/cart";
 type ItemProps = {
   item: CartProduct;
   detail: Product;
-  OpenDeleteModal: (id: number) => void;
+  openDeleteModal: (id: number) => void;
   onCheckInput: (e: React.ChangeEvent<HTMLInputElement>, productId?: number) => void;
 };
 
-function CartItem({ item, detail, OpenDeleteModal, onCheckInput }: ItemProps) {
+function CartItem({ item, detail, openDeleteModal, onCheckInput }: ItemProps) {
   const navigate = useNavigate();
   const { cart_item_id, product_id, quantity, isChecked } = item;
 
@@ -76,7 +76,7 @@ function CartItem({ item, detail, OpenDeleteModal, onCheckInput }: ItemProps) {
           </NormalBtn>
         </S.OrderBox>
       </S.RightWrap>
-      <S.DeleteBtn onClick={() => OpenDeleteModal(cart_item_id)} />
+      <S.DeleteBtn onClick={() => openDeleteModal(cart_item_id)} />
     </S.CartItemArticle>
   );
 }

@@ -16,17 +16,15 @@ type InputProps = {
   onButton?: boolean;
 };
 
-//일반, 버튼, 아이콘 입력 폼
 function InputBox({ onClick, onChange, onButton, error, value, ...props }: InputProps) {
   const inputRef = useRef() as React.MutableRefObject<HTMLInputElement>;
-  //페이지 렌더링시 아이디 input에 focus
+
   useEffect(() => {
     if (props.name === "username") {
       inputRef.current.focus();
     }
   }, []);
 
-  //입력 버튼 클릭 이벤트 함수
   const handleBtnClick = (e: React.MouseEvent<HTMLButtonElement>): void => {
     e.preventDefault();
     onClick?.(inputRef.current.value);
@@ -54,7 +52,6 @@ function InputBox({ onClick, onChange, onButton, error, value, ...props }: Input
   );
 }
 
-//휴대폰 번호 입력 폼
 interface InputPhoneProps {
   onClick: (selected: string) => void;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -105,7 +102,6 @@ function InputPhone({ onClick, onChange, value1, value2, value3, error }: InputP
   );
 }
 
-//이메일 입력 폼
 interface InputEmailProps {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   value1: string;

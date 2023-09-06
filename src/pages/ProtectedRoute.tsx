@@ -1,12 +1,11 @@
 import React from "react";
 import { Navigate, Outlet } from "react-router-dom";
-import { useAppSelector } from "../hooks";
-import { getToken } from "../reducer/loginSlice";
+import { setAccessToken } from "../api/baseInstance";
 
 function ProtectedRoute() {
-  const TOKEN = useAppSelector(getToken);
+  const token = setAccessToken()?.token;
 
-  if (!TOKEN) return <Navigate to="/" replace />;
+  if (!token) return <Navigate to="/" replace />;
 
   return <Outlet />;
 }

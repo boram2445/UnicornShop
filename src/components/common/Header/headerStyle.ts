@@ -45,7 +45,6 @@ const Input = styled.input<{ text?: string; icon?: string }>`
   border-radius: 5rem;
   font-size: 1.6rem;
 
-  //삭제 버튼 커스텀
   &[type="search"]::-webkit-search-cancel-button {
     -webkit-appearance: none;
     position: absolute;
@@ -76,7 +75,6 @@ const InputBtn = styled.button<{ icon: string }>`
   }
 `;
 
-// Center Header
 const CenterContents = styled(HeaderContents)`
   align-items: center;
   justify-content: start;
