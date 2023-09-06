@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import * as S from "./carouselStyle";
 import { carouselData } from "./carouselData";
 import { Link } from "react-router-dom";
 import { ReactComponent as LeftArrow } from "../../../assets/icons/icon-arrow-left.svg";
 import { ReactComponent as RightArrow } from "../../../assets/icons/icon-arrow-right.svg";
+import * as S from "./carouselStyle";
 
 function Carousel() {
   const [carouselIndex, setCarouselIndex] = useState(1);
@@ -18,7 +18,6 @@ function Carousel() {
     };
   }, [carouselIndex]);
 
-  // 화살표 버튼 이후 이미지
   const moveNextImg = () => {
     if (carouselIndex !== carouselData.length) {
       setCarouselIndex(carouselIndex + 1);
@@ -26,7 +25,7 @@ function Carousel() {
       setCarouselIndex(1);
     }
   };
-  // 화살표 버튼 이전 이미지
+
   const movePrevImg = () => {
     if (carouselIndex === 1) {
       setCarouselIndex(carouselData.length);
@@ -34,7 +33,7 @@ function Carousel() {
       setCarouselIndex(carouselIndex - 1);
     }
   };
-  // 닷 버튼 이동
+
   const moveDot = (index: number) => {
     setCarouselIndex(index);
   };

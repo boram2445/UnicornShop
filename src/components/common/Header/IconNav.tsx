@@ -20,7 +20,7 @@ function IconNav({ cartQuantity }: { cartQuantity: number }) {
 
   const clickCartIcon = isLogined ? () => navigate("/cart") : () => open("예");
   const clickUserIcon = isLogined ? () => setArrowModal((prev) => !prev) : () => navigate("/login");
-  const onArrowIcon = !isLogined ? undefined : onArrowModal ? "open" : "close"; //헤더 화살표 아이콘
+  const onArrowIcon = !isLogined ? undefined : onArrowModal ? "open" : "close";
 
   const handleArrowModal = (value: boolean) => setArrowModal(value);
   const arrowList = [

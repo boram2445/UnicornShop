@@ -72,7 +72,6 @@ function ChartItem({ item, quantity, orderDate, deleteModal, userType }: Props) 
 
 export default ChartItem;
 
-//임시 배송 상태
 const deliveryState = (orderDate: string) => {
   const order = new Date(orderDate);
   const now = new Date();

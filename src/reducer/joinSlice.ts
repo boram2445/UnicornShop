@@ -123,7 +123,6 @@ export const registerSlice = createSlice({
       .addCase(fetchPostRegister.rejected, (state, action) => {
         state.status = "failed";
         if (action.payload) {
-          console.log(state.error);
           state.error = Object.values(action.payload as any)
             .map((message: any) => message.join().toString())
             .join("\n");

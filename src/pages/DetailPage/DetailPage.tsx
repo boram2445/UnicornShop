@@ -86,7 +86,6 @@ function DetailPage() {
                 selectedCount={selectedCount}
                 price={detail?.price}
               />
-              {/* 상품 구매 버튼 */}
               <S.ButtonWrap>
                 <NormalBtn
                   onClick={isLogined ? getProductNow : () => open("예")}

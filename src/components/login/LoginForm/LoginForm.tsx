@@ -33,14 +33,12 @@ function LoginForm() {
     }
   }, [status]);
 
-  //아이디 & 비밀번호 입력
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMessage("");
     const { name, value } = e.target;
     setFormValues({ ...formValues, [name]: value });
   };
 
-  //로그인 폼 제출
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (message) return;

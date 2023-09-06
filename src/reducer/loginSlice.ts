@@ -2,12 +2,12 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { RootState } from "./index";
 import { Slice } from "../types/slice";
 import { login } from "../api/auth";
-import { LoginPost } from "../types/auth";
+import { LoginPost, UserType } from "../types/auth";
 import { handleAsyncThunkError } from "../utils/slice";
 
 type LoginSlice = Slice & {
   userName: string;
-  userType: "BUYER" | "SELLER";
+  userType: UserType;
 };
 
 const initialState: LoginSlice = {

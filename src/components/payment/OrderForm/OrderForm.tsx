@@ -5,7 +5,6 @@ import { fetchPostOrder, getOrderState, reset } from "../../../reducer/orderSlic
 import { fetchGetCartList } from "../../../reducer/cartListSlice";
 import { emailRegExp, nameRegExp } from "../../../utils/regExp";
 import limitLength from "../../../utils/limitLength";
-
 import { NormalBtn } from "../../common/Button/Button";
 import SelectBox from "../../common/SelectBox/SelectBox";
 import FinalPayCheck from "../FinalPayCheck/FinalPayCheck";
@@ -64,27 +63,23 @@ function OrderForm() {
     return newValue;
   };
 
-  //주문자 정보 입력
   const onChangeOrdererInfo = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     const newValue = limitInputValue(name, value);
     setOrdererInfo({ ...ordererInfo, [name]: newValue });
   };
 
-  //배송지 정보 입력
   const onChangeReceiverInfo = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     const newValue = limitInputValue(name, value);
     setReceiverInfo({ ...receiverInfo, [name]: newValue });
   };
 
-  //주문자 정보와 동일 버튼 클릭
   const handleSameInfoBtn = () => {
     const { name, phone1, phone2, phone3 } = ordererInfo;
     setReceiverInfo({ ...receiverInfo, name, phone1, phone2, phone3 });
   };
 
-  //주문 폼 제출
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const { name, phone1, phone2, phone3, address, message } = receiverInfo;

@@ -12,7 +12,7 @@ type AmountBtnProps = {
   product_id?: number;
   cart_item_id?: number;
   item?: CartProduct;
-  getCount?: (res: number) => void; //선택 개수를 반환
+  getCount?: (res: number) => void;
 };
 
 function AmountBtn({ selectAmount = 0, getCount, item, stock }: AmountBtnProps) {
@@ -40,7 +40,6 @@ function AmountBtn({ selectAmount = 0, getCount, item, stock }: AmountBtnProps) 
     handleCartQuantity(amount);
   };
 
-  //장바구니 수량 변경 처리
   const handleCartQuantity = (quantity: number) => {
     if (item) {
       const { product_id, cart_item_id, is_active } = item;

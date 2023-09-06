@@ -13,13 +13,10 @@ function PostAddress({ getAddress }: PostAddressProps) {
   const onCompletePost = (data: any) => {
     let fullAddr = data.address;
     let extraAddr = "";
-    //도로명 타입
     if (data.addressType === "R") {
-      //법정동명
       if (data.bname !== "") {
         extraAddr += data.bname;
       }
-      //건물명 or 주택명
       if (data.buildingName !== "") {
         extraAddr += extraAddr !== "" ? `, ${data.buildingName}` : data.buildingName;
       }

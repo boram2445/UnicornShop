@@ -25,8 +25,6 @@ function CenterPage() {
   const [selectedTab, setSelectedTab] = useState("products");
   const { isLogined, userType } = useUser();
 
-  console.log("centerPage", isLogined, userType);
-
   const handleTabNav = (type: string) => setSelectedTab(type);
 
   useEffect(() => {
