@@ -1,32 +1,30 @@
 import { useState } from "react";
 import { useEffect } from "react";
 import { removeAccessToken, setAccessToken } from "../api/baseInstance";
-import { logout } from "../reducer/loginSlice";
+import { getAuthState, reset, setUserData } from "../reducer/loginSlice";
 import { useDispatch } from "react-redux";
-import { reset } from "../reducer/cartListSlice";
+import { reset as cartReset } from "../reducer/cartListSlice";
+import { useAppSelector } from "../hooks";
 
 export const useUser = () => {
   const dispatch = useDispatch();
   const [isLogined, setIsLogined] = useState(false);
-  const [user, setUser] = useState(initialState);
+
+  const { userType, userName } = useAppSelector(getAuthState);
 
   useEffect(() => {
     const userData = setAccessToken();
-    userData.token && setUser({ userName: userData.userName, userType: userData.userType });
+    userData.token &&
+      dispatch(setUserData({ userName: userData.userName, userType: userData.userType }));
     setIsLogined(!!userData.token);
   }, []);
 
-  console.log(user);
-
   const onLogout = () => {
     removeAccessToken();
-    setUser(initialState);
     setIsLogined(false);
-    dispatch(logout());
-    user.userType === "BUYER" && dispatch(reset());
+    dispatch(reset());
+    userType === "BUYER" && dispatch(cartReset());
   };
 
-  return { userName: user.userName, userType: user.userType, isLogined, onLogout };
+  return { userName, userType, isLogined, onLogout };
 };
-
-const initialState = { userName: "", userType: "BUYER" };

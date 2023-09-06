@@ -5,11 +5,16 @@ import { login } from "../api/auth";
 import { LoginPost } from "../types/auth";
 import { handleAsyncThunkError } from "../utils/slice";
 
-type LoginSlice = Slice;
+type LoginSlice = Slice & {
+  userName: string;
+  userType: "BUYER" | "SELLER";
+};
 
 const initialState: LoginSlice = {
   status: "idle",
   error: "",
+  userName: "",
+  userType: "BUYER",
 };
 
 export const fetchPostLogin = createAsyncThunk(
@@ -28,13 +33,13 @@ export const loginSlice = createSlice({
   initialState,
   reducers: {
     reset: () => initialState,
-    logout: (state) => {
-      state.status = "idle";
-      state.error = "";
+    setUserData: (state, { payload }) => {
+      const { userName, userType } = payload;
+      state.userName = userName;
+      state.userType = userType;
     },
   },
   extraReducers: (builder) => {
-    //로그인
     builder
       .addCase(fetchPostLogin.pending, (state) => {
         state.status = "loading";
@@ -55,6 +60,6 @@ export const loginSlice = createSlice({
 });
 
 export const getAuthState = (state: RootState) => state.login;
-export const { reset, logout } = loginSlice.actions;
+export const { reset, setUserData } = loginSlice.actions;
 
 export default loginSlice.reducer;
