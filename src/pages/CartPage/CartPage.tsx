@@ -14,9 +14,9 @@ import * as S from "./cartPageStyle";
 function CartPage() {
   const dispatch = useAppDispatch();
   const {
-    OpenDeleteModal,
+    openDeleteModal,
     deleteCartItem,
-    OpenDeleteAllModal,
+    openDeleteAllModal,
     deleteSelectItems,
     handleCheckInput,
     handleOrderBtn,
@@ -49,11 +49,11 @@ function CartPage() {
                 key={item.cart_item_id}
                 item={item}
                 detail={item.item}
-                OpenDeleteModal={OpenDeleteModal}
+                openDeleteModal={openDeleteModal}
                 onCheckInput={handleCheckInput}
               />
             ))}
-            <NormalBtn color="white" width="11rem" fontSize="1.5rem" onClick={OpenDeleteAllModal}>
+            <NormalBtn color="white" width="11rem" fontSize="1.5rem" onClick={openDeleteAllModal}>
               선택상품 삭제
             </NormalBtn>
           </S.CartList>

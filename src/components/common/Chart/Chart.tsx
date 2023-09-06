@@ -21,7 +21,7 @@ function Chart({ isLogined, userType }: Props) {
 
   const [selectedItemId, setSelectedItemId] = useState(0);
 
-  function OpenDeleteModal(product_id: number) {
+  function openDeleteModal(product_id: number) {
     open("확인");
     setSelectedItemId(product_id);
   }
@@ -54,7 +54,7 @@ function Chart({ isLogined, userType }: Props) {
               <ChartItem
                 key={item.product_id}
                 item={item}
-                deleteModal={OpenDeleteModal}
+                deleteModal={openDeleteModal}
                 userType={userType}
               />
             ))
@@ -84,7 +84,7 @@ function Chart({ isLogined, userType }: Props) {
                 quantity={item.quantity}
                 orderDate={item.created_at}
                 item={item.detail}
-                deleteModal={OpenDeleteModal}
+                deleteModal={openDeleteModal}
                 userType={userType}
               />
             ))

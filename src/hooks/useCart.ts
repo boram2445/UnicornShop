@@ -32,33 +32,33 @@ export const useCart = () => {
   }, []);
 
   //개별 상품 지우기 재확인 모달 열기
-  function OpenDeleteModal(cart_item_id: number) {
+  const openDeleteModal = (cart_item_id: number) => {
     open("확인");
     setCartItemId(cart_item_id);
     setDeleteType("one");
-  }
+  };
 
   //개별 상품 삭제후 모달 닫기
-  function deleteCartItem() {
+  const deleteCartItem = () => {
     dispatch(fetchDeleteCartItem({ cart_item_id: cartItemId }));
     close();
     setDeleteType("");
-  }
+  };
 
   //선택상품 모두 지우기 재확인 모달 열기
-  function OpenDeleteAllModal() {
+  const openDeleteAllModal = () => {
     open("확인");
     setDeleteType("selected");
-  }
+  };
 
   //선택상품 모두 지우기후 모달 닫기
-  function deleteSelectItems() {
+  const deleteSelectItems = () => {
     checkedItems.forEach((item) => {
       dispatch(fetchDeleteCartItem({ cart_item_id: item.cart_item_id }));
     });
     close();
     setDeleteType("");
-  }
+  };
 
   //체크 박스
   const handleCheckInput = (e: React.ChangeEvent<HTMLInputElement>, productId?: number) => {
@@ -82,9 +82,9 @@ export const useCart = () => {
   };
 
   return {
-    OpenDeleteModal,
+    openDeleteModal,
     deleteCartItem,
-    OpenDeleteAllModal,
+    openDeleteAllModal,
     deleteSelectItems,
     handleCheckInput,
     handleOrderBtn,
