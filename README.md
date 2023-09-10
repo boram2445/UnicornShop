@@ -28,7 +28,7 @@
 
 ### [기술]
 
-- **Deployment:** : `Vercel`
+- **Deployment:** : `Netlify`
 - **FrontEnd** : `React`, `TypeScript`, `styled-components`, `Redux-Toolkit`
 - **BackEnd** : 제공된 API
 
