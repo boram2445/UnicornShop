@@ -80,7 +80,7 @@
 
 |                                               회원가입 - 구매자                                                |                                               회원가입 - 판매자                                                |
 | :------------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------: |
-| <img src="https://github.com/boram2445/nextjs-practice/assets/68495264/9af42875-f642-42bc-a38a-50b8bfb54aa3"/> | <img src="https://github.com/boram2445/nextjs-practice/assets/68495264/4d276b17-3372-4c1d-b491-caf1e0e94acd"/> |
+| <img src="https://github.com/boram2445/nextjs-practice/assets/68495264/b9b87c6b-5d91-4860-83ef-7eab0259d639"/> | <img src="https://github.com/boram2445/nextjs-practice/assets/68495264/c7b466a7-8c4b-4896-9705-a3666d0e6ca1"/> |
 
 <br/>
 
@@ -95,7 +95,7 @@
 
 |                                              상품 목록, 상품 상세                                              |
 | :------------------------------------------------------------------------------------------------------------: |
-| <img src="https://github.com/boram2445/instagram-clone/assets/68495264/7d413308-0be9-48dd-bde3-94647eeea032"/> |
+| <img src="https://github.com/boram2445/instagram-clone/assets/68495264/7d413308-0be9-48dd-bde3-94647eeea032" width="500px"/> |
 
 <br/>
 
@@ -107,7 +107,7 @@
 
 |                                                   상품 검색                                                    |
 | :------------------------------------------------------------------------------------------------------------: |
-| <img src="https://github.com/boram2445/instagram-clone/assets/68495264/d496ec29-c03e-4ddc-b47d-538c07dc739e"/> |
+| <img src="https://github.com/boram2445/instagram-clone/assets/68495264/d496ec29-c03e-4ddc-b47d-538c07dc739e" width="500px"/> |
 
 <br/>
 
@@ -119,7 +119,7 @@
 
 |                                                    장바구니                                                    |
 | :------------------------------------------------------------------------------------------------------------: |
-| <img src="https://github.com/boram2445/instagram-clone/assets/68495264/b0a4dc6b-cde0-4d99-a66c-e88aeb3f9a80"/> |
+| <img src="https://github.com/boram2445/instagram-clone/assets/68495264/b0a4dc6b-cde0-4d99-a66c-e88aeb3f9a80" width="500px"/> |
 
 <br/>
 
@@ -132,7 +132,7 @@
 
 |                                                  주문 / 결제                                                   |                                                         마이페이지                                                        |
 | :------------------------------------------------------------------------------------------------------------: | :------------------------------------------------------------------------------------------------------------: |
-| <img src="https://github.com/boram2445/nextjs-practice/assets/68495264/b825b3a2-5ed2-498a-b3d6-3febc4ea03c9"/> | <img src="https://github.com/boram2445/nextjs-practice/assets/68495264/cc36e97c-780f-4912-9fe2-bd7ed902e00f"/> |
+| <img src="https://github.com/boram2445/nextjs-practice/assets/68495264/3bf5f329-d97c-4565-8c86-875c1dbc3a52"/> | <img src="https://github.com/boram2445/nextjs-practice/assets/68495264/e9dedbbd-dd9d-4d6a-ab18-909169904d02"/> |
 
 
 <br/>
@@ -144,7 +144,7 @@
 
 |                                                  판매자 센터                                                   |
 | :------------------------------------------------------------------------------------------------------------: |
-| <img src="https://github.com/boram2445/instagram-clone/assets/68495264/491762e8-ae5c-4419-b509-6d0eb4a1f2d0"/> |
+| <img src="https://github.com/boram2445/instagram-clone/assets/68495264/491762e8-ae5c-4419-b509-6d0eb4a1f2d0" width="500px"/> |
 
 <br/>
 
@@ -157,4 +157,4 @@
 
 |                                                   상품 등록                                                    |
 | :------------------------------------------------------------------------------------------------------------: |
-| <img src="https://github.com/boram2445/nextjs-practice/assets/68495264/7cef3145-3a5a-4149-971c-0a02d6340c40" width="600px"/> |
+| <img src="https://github.com/boram2445/nextjs-practice/assets/68495264/7cef3145-3a5a-4149-971c-0a02d6340c40" width="500px"/> |
