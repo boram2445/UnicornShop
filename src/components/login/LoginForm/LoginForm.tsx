@@ -12,13 +12,13 @@ function LoginForm() {
   const dispatch = useAppDispatch();
   const passwordRef = useRef() as React.MutableRefObject<HTMLInputElement>;
 
+  const [toggleUserType, setToggleUserType] = useState<UserType>("BUYER");
   const initialValues = {
     username: "",
     password: "",
   };
   const [formValues, setFormValues] = useState(initialValues);
   const [message, setMessage] = useState("");
-  const [toggleUserType, setToggleUserType] = useState<UserType>("BUYER");
   const { status, error } = useAppSelector(getAuthState);
 
   useEffect(() => {
@@ -32,6 +32,14 @@ function LoginForm() {
       navigate("/");
     }
   }, [status]);
+
+  useEffect(() => {
+    const newData =
+      toggleUserType === "BUYER"
+        ? { username: "unicorn12", password: "unicorn12" }
+        : { username: "unicorn123", password: "unicorn123" };
+    setFormValues(newData);
+  }, [toggleUserType]);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMessage("");
